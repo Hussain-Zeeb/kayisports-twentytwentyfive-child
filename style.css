@@ -12,3 +12,7 @@ Text Domain: twentytwentyfive-child
 */
 
 /* Add your custom CSS below this line */
+
+.wp-block-post-title {
+  display: none;
+}
