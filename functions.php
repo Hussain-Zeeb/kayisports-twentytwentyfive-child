@@ -9,3 +9,7 @@ add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_style( 'twentytwentyfive-child-tailwind', $tailwind_css, array('twentytwentyfive-child-style'), filemtime( get_stylesheet_directory() . '/dist/tailwind-output.css' ) );
 });
 
+// this is to test git deployment to cloudways, you can remove it later
+add_action( 'wp_footer', function() {
+    echo '<!-- This is a test comment to verify git deployment to Cloudways -->';
+});
