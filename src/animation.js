@@ -17,37 +17,68 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
     document.documentElement.classList.remove("dz-loader-pending");
   }
 
-  function initFirstVisitLoader() {
+  function initHomepageLoader() {
     const loader = document.querySelector("#dz-loader");
     if (!loader) {
       return;
     }
 
     const logo = loader.querySelector(".dz-loader__logo");
+    const orbit = loader.querySelector(".dz-loader__orbit");
+    const loaderWord = loader.querySelector(".dz-loader__word");
 
     try {
-      const hasSeenLoader = sessionStorage.getItem("dz_loader_seen") === "1";
       const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-      if (hasSeenLoader || reduceMotion || !logo) {
+      if (reduceMotion || !logo) {
         removeLoaderNow(loader);
         return;
       }
 
       const tl = gsap.timeline({
         onComplete: () => {
-          sessionStorage.setItem("dz_loader_seen", "1");
           removeLoaderNow(loader);
         },
       });
 
+      const logoIntroDuration = 0.7;
+      const logoExitDuration = 0.8;
+      const loaderFadeDuration = 0.35;
+      const rotatingWords = ["KayiSports.", "Boxing.", "Sports Gear.", "Coaching."];
+
       tl.fromTo(
         logo,
-        { autoAlpha: 0, y: 18, scale: 0.96 },
-        { autoAlpha: 1, y: 0, scale: 1, duration: 0.65, ease: "power3.out" }
-      )
-        .to(logo, { autoAlpha: 0, y: -12, duration: 0.3, delay: 0.28, ease: "power2.in" })
-        .to(loader, { autoAlpha: 0, duration: 0.35, ease: "power2.inOut" });
+        { autoAlpha: 0, y: 10, scale: 0.25 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: logoIntroDuration, ease: "back.out(1.7)" }
+      );
+
+      if (orbit) {
+        tl.fromTo(orbit, { autoAlpha: 0, scale: 0.85 }, { autoAlpha: 1, scale: 1, duration: 0.35, ease: "power2.out" }, "<0.05");
+      }
+
+      if (loaderWord) {
+        rotatingWords.forEach((word) => {
+          tl.call(() => {
+            loaderWord.textContent = word;
+            loaderWord.classList.toggle("is-emphasis", word === "Coaching");
+          })
+            .fromTo(loaderWord, { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.18, ease: "power2.out" })
+            .to(loaderWord, { autoAlpha: 1, y: 0, duration: 0.62 })
+            .to(loaderWord, { autoAlpha: 0, y: -8, duration: 0.2, ease: "power1.in" });
+        });
+      } else {
+        tl.to(logo, { autoAlpha: 1, duration: 4.0 });
+      }
+
+      if (orbit) {
+        tl.to(orbit, { autoAlpha: 0, duration: 0.2, ease: "power1.in" }, "<");
+      }
+
+      tl.to(logo, { autoAlpha: 0, scale: 0, duration: logoExitDuration, ease: "elastic.in(1, 0.55)" }).to(loader, {
+        autoAlpha: 0,
+        duration: loaderFadeDuration,
+        ease: "power2.inOut",
+      });
     } catch (error) {
       removeLoaderNow(loader);
     }
@@ -127,13 +158,13 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
   }
 
   window.DZAnimations = {
-    initFirstVisitLoader,
+    initHomepageLoader,
     initFadeInAnimations,
     animateIn,
   };
 
   document.addEventListener("DOMContentLoaded", function () {
-    initFirstVisitLoader();
+    initHomepageLoader();
     initFadeInAnimations();
   });
 })();

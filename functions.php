@@ -19,14 +19,17 @@ add_action( 'wp_enqueue_scripts', function() {
 });
 
 add_action( 'wp_head', function() {
+        if ( ! is_front_page() && ! is_home() ) {
+            return;
+        }
+
         ?>
         <script>
             (function () {
                 try {
-                    var hasSeenLoader = sessionStorage.getItem("dz_loader_seen") === "1";
                     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-                    if (!hasSeenLoader && !reduceMotion) {
+                    if (!reduceMotion) {
                         document.documentElement.classList.add("dz-loader-pending");
                     }
                 } catch (error) {
@@ -38,11 +41,23 @@ add_action( 'wp_head', function() {
 }, 1 );
 
 add_action( 'wp_body_open', function() {
+    if ( ! is_front_page() && ! is_home() ) {
+        return;
+    }
+
         $loader_logo_uri = get_stylesheet_directory_uri() . '/src/assets/loader-logo.svg';
         ?>
         <div id="dz-loader" class="dz-loader" aria-hidden="true">
-            <div class="dz-loader__logo-wrap">
-                <img class="dz-loader__logo" src="<?php echo esc_url( $loader_logo_uri ); ?>" alt="Loading" />
+            <div class="dz-loader__content">
+                <div class="dz-loader__logo-wrap">
+                    <span class="dz-loader__orbit" aria-hidden="true">
+                        <span class="dz-loader__atom"></span>
+                    </span>
+                    <img class="dz-loader__logo" src="<?php echo esc_url( $loader_logo_uri ); ?>" alt="Loading" />
+                </div>
+                <p class="dz-loader__words" aria-live="polite" aria-atomic="true">
+                    <span class="dz-loader__word">KayiSports</span>
+                </p>
             </div>
         </div>
         <?php
