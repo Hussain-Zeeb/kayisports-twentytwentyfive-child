@@ -1,12 +1,57 @@
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 (function () {
   "use strict";
+  gsap.registerPlugin(ScrollTrigger);
+
   const defaults = {
     duration: 0.8,
     ease: "power2.out",
     threshold: 0.15,
   };
+
+  function removeLoaderNow(loader) {
+    loader.classList.add("is-hidden");
+    loader.remove();
+    document.documentElement.classList.remove("dz-loader-pending");
+  }
+
+  function initFirstVisitLoader() {
+    const loader = document.querySelector("#dz-loader");
+    if (!loader) {
+      return;
+    }
+
+    const logo = loader.querySelector(".dz-loader__logo");
+
+    try {
+      const hasSeenLoader = sessionStorage.getItem("dz_loader_seen") === "1";
+      const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (hasSeenLoader || reduceMotion || !logo) {
+        removeLoaderNow(loader);
+        return;
+      }
+
+      const tl = gsap.timeline({
+        onComplete: () => {
+          sessionStorage.setItem("dz_loader_seen", "1");
+          removeLoaderNow(loader);
+        },
+      });
+
+      tl.fromTo(
+        logo,
+        { autoAlpha: 0, y: 18, scale: 0.96 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 0.65, ease: "power3.out" }
+      )
+        .to(logo, { autoAlpha: 0, y: -12, duration: 0.3, delay: 0.28, ease: "power2.in" })
+        .to(loader, { autoAlpha: 0, duration: 0.35, ease: "power2.inOut" });
+    } catch (error) {
+      removeLoaderNow(loader);
+    }
+  }
 
   function getAnimationConfig(element) {
     const duration = parseFloat(element.dataset.animDuration || defaults.duration);
@@ -82,9 +127,13 @@ import { gsap } from "gsap";
   }
 
   window.DZAnimations = {
+    initFirstVisitLoader,
     initFadeInAnimations,
     animateIn,
   };
 
-  document.addEventListener("DOMContentLoaded", initFadeInAnimations);
+  document.addEventListener("DOMContentLoaded", function () {
+    initFirstVisitLoader();
+    initFadeInAnimations();
+  });
 })();

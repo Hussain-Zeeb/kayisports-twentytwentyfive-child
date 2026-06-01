@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.dz-loader-pending,
+.dz-loader-pending body {
+	overflow: hidden;
+}
+
+.dz-loader {
+	position: fixed;
+	inset: 0;
+	z-index: 9999;
+	display: grid;
+	place-items: center;
+	background: radial-gradient(circle at 10% 20%, #f5f3ff 0%, #f4f9ff 35%, #ffffff 100%);
+	opacity: 1;
+	visibility: visible;
+}
+
+.dz-loader.is-hidden {
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+}
+
+.dz-loader__logo-wrap {
+	width: clamp(180px, 26vw, 280px);
+}
+
+.dz-loader__logo {
+	width: 100%;
+	height: auto;
+	display: block;
+}

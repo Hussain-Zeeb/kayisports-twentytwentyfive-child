@@ -18,6 +18,36 @@ add_action( 'wp_enqueue_scripts', function() {
     }
 });
 
+add_action( 'wp_head', function() {
+        ?>
+        <script>
+            (function () {
+                try {
+                    var hasSeenLoader = sessionStorage.getItem("dz_loader_seen") === "1";
+                    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+                    if (!hasSeenLoader && !reduceMotion) {
+                        document.documentElement.classList.add("dz-loader-pending");
+                    }
+                } catch (error) {
+                    document.documentElement.classList.add("dz-loader-pending");
+                }
+            })();
+        </script>
+        <?php
+}, 1 );
+
+add_action( 'wp_body_open', function() {
+        $loader_logo_uri = get_stylesheet_directory_uri() . '/src/assets/loader-logo.svg';
+        ?>
+        <div id="dz-loader" class="dz-loader" aria-hidden="true">
+            <div class="dz-loader__logo-wrap">
+                <img class="dz-loader__logo" src="<?php echo esc_url( $loader_logo_uri ); ?>" alt="Loading" />
+            </div>
+        </div>
+        <?php
+} );
+
 // this is to test git deployment to cloudways, you can remove it later
 add_action( 'wp_footer', function() {
     echo '<!-- This is a test comment to verify git deployment to Cloudways -->';
