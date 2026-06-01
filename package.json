@@ -5,7 +5,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind-output.css --minify"
+    "build:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind-output.css --minify",
+    "watch:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind-output.css --watch",
+    "build:js": "esbuild ./src/animation.js --bundle --minify --outfile=./dist/animations.js",
+    "watch:js": "esbuild ./src/animation.js --bundle --outfile=./dist/animations.js --watch",
+    "build": "npm run build:css && npm run build:js",
+    "watch": "concurrently \"npm:watch:css\" \"npm:watch:js\""
   },
   "keywords": [],
   "author": "",
@@ -13,7 +18,12 @@
   "type": "commonjs",
   "devDependencies": {
     "autoprefixer": "^10.5.0",
+    "concurrently": "^10.0.1",
+    "esbuild": "^0.28.0",
     "postcss": "^8.5.14",
     "tailwindcss": "^3.4.3"
+  },
+  "dependencies": {
+    "gsap": "^3.15.0"
   }
 }
