@@ -16,6 +16,12 @@ add_action( 'wp_enqueue_scripts', function() {
     if ( file_exists( $animations_path ) ) {
         wp_enqueue_script( 'twentytwentyfive-child-animations', $animations_uri, array(), filemtime( $animations_path ), true );
     }
+
+    $mega_menu_path = get_stylesheet_directory() . '/dist/mega-menu.js';
+    $mega_menu_uri  = get_stylesheet_directory_uri() . '/dist/mega-menu.js';
+    if ( file_exists( $mega_menu_path ) ) {
+        wp_enqueue_script( 'twentytwentyfive-child-mega-menu', $mega_menu_uri, array(), filemtime( $mega_menu_path ), true );
+    }
 });
 
 add_action( 'wp_head', function() {
@@ -67,3 +73,21 @@ add_action( 'wp_body_open', function() {
 add_action( 'wp_footer', function() {
     echo '<!-- This is a test comment to verify git deployment to Cloudways -->';
 });
+
+// Allow SVG uploads
+add_filter( 'upload_mimes', function( $mimes ) {
+    $mimes['svg']  = 'image/svg+xml';
+    $mimes['svgz'] = 'image/svg+xml';
+    return $mimes;
+});
+
+add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mimes ) {
+    if ( ! $data['type'] ) {
+        $ext = strtolower( pathinfo( $filename, PATHINFO_EXTENSION ) );
+        if ( $ext === 'svg' || $ext === 'svgz' ) {
+            $data['type'] = 'image/svg+xml';
+            $data['ext']  = $ext;
+        }
+    }
+    return $data;
+}, 10, 4 );

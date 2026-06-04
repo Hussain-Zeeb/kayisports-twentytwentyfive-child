@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Remove the top margin Twenty Twenty-Five sets on <main> via theme.json */
+.wp-site-blocks > main {
+	margin-top: 0 !important;
+}
+
+.wp-site-blocks > main > .wp-block-group {
+	padding-top: 0 !important;
+	padding-bottom: 0 !important;
+}
+
 .dz-loader-pending,
 .dz-loader-pending body {
 	overflow: hidden;
@@ -99,5 +109,130 @@
 	100% {
 		border-color: #2f7df6;
 		box-shadow: 0 0 8px rgba(47, 125, 246, 0.35), 0 0 20px rgba(47, 125, 246, 0.22), inset 0 0 8px rgba(47, 125, 246, 0.18);
+	}
+}
+
+/* ── Sticky Header ──────────────────────────────────────────────────────────── */
+
+header.wp-block-template-part {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	transition: transform 0.35s ease;
+	background-color: #fff;
+}
+
+/* Account for WordPress admin bar */
+html.admin-bar header.wp-block-template-part {
+	top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+	html.admin-bar header.wp-block-template-part {
+		top: 46px;
+	}
+}
+
+header.wp-block-template-part.dz-header--hidden {
+	transform: translateY(-100%);
+}
+
+/* ── Mega Menu ──────────────────────────────────────────────────────────────── */
+
+/* Allow submenu to overflow the nav container */
+.wp-block-navigation .wp-block-navigation__container {
+	overflow: visible !important;
+}
+
+/* Remove default relative positioning from top-level items so the panel
+   positions relative to the viewport (we use position: fixed on the panel) */
+.wp-block-navigation__container > .wp-block-navigation-item.has-child {
+	position: static;
+}
+
+/* ── Mega panel ── */
+.wp-block-navigation__container > .wp-block-navigation-item.has-child
+	> .wp-block-navigation__submenu-container {
+	/* Full-width fixed panel flush below the sticky header */
+	position: fixed;
+	top: var(--dz-header-h, 80px);
+	left: 0;
+	width: 100%;
+
+	/* Multi-column grid layout */
+	display: grid !important;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 0.5rem 1.5rem;
+	padding: 2rem clamp(1.5rem, 6vw, 5rem);
+
+	/* Panel appearance */
+	background: #ffffff;
+	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+	border-top: 3px solid #FFEE58;
+
+	/* Hidden by default */
+	opacity: 0;
+	visibility: hidden;
+	pointer-events: none;
+	transform: translateY(-6px);
+	transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
+}
+
+/* Show state — triggered by JS (.dz-mega--open) or CSS focus-within fallback */
+.wp-block-navigation__container > .wp-block-navigation-item.has-child.dz-mega--open
+	> .wp-block-navigation__submenu-container,
+.wp-block-navigation__container > .wp-block-navigation-item.has-child:focus-within
+	> .wp-block-navigation__submenu-container {
+	opacity: 1;
+	visibility: visible;
+	pointer-events: auto;
+	transform: translateY(0);
+	transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0s;
+}
+
+/* Sub-item links inside the panel */
+.wp-block-navigation__container > .wp-block-navigation-item.has-child
+	> .wp-block-navigation__submenu-container
+	.wp-block-navigation-item__content {
+	display: block;
+	padding: 0.45rem 0;
+	color: #111111;
+	font-weight: 500;
+	font-size: 0.925rem;
+	text-decoration: none;
+	border-bottom: 1px solid transparent;
+	transition: color 0.15s ease, border-color 0.15s ease;
+}
+
+.wp-block-navigation__container > .wp-block-navigation-item.has-child
+	> .wp-block-navigation__submenu-container
+	.wp-block-navigation-item__content:hover {
+	color: #b8930a;
+	border-bottom-color: #FFEE58;
+}
+
+/* ── Responsive: disable mega layout on mobile / tablet ── */
+@media (max-width: 768px) {
+	header.wp-block-template-part {
+		/* Keep sticky but revert to normal stacking */
+		position: sticky;
+	}
+
+	.wp-block-navigation__container > .wp-block-navigation-item.has-child {
+		position: relative;
+	}
+
+	.wp-block-navigation__container > .wp-block-navigation-item.has-child
+		> .wp-block-navigation__submenu-container {
+		position: static !important;
+		display: block !important;
+		opacity: 1 !important;
+		visibility: visible !important;
+		transform: none !important;
+		box-shadow: none;
+		border-top: none;
+		padding: 0;
+		grid-template-columns: 1fr;
+		transition: none;
 	}
 }
