@@ -7,8 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind-output.css --minify",
     "watch:css": "tailwindcss -i ./src/tailwind.css -o ./dist/tailwind-output.css --watch",
-    "build:js": "esbuild ./src/animation.js --bundle --minify --outfile=./dist/animations.js && esbuild ./src/mega-menu.js --bundle --minify --outfile=./dist/mega-menu.js",
-    "watch:js": "concurrently \"esbuild ./src/animation.js --bundle --outfile=./dist/animations.js --watch\" \"esbuild ./src/mega-menu.js --bundle --outfile=./dist/mega-menu.js --watch\"",
+    "build:js": "esbuild ./src/animation.js --bundle --minify --outfile=./dist/animations.js && esbuild ./src/mega-menu.js --bundle --minify --outfile=./dist/mega-menu.js && esbuild ./src/smooth-scroll.js --bundle --minify --outfile=./dist/smooth-scroll.js",
+    "watch:js": "concurrently \"esbuild ./src/animation.js --bundle --outfile=./dist/animations.js --watch\" \"esbuild ./src/mega-menu.js --bundle --outfile=./dist/mega-menu.js --watch\" \"esbuild ./src/smooth-scroll.js --bundle --outfile=./dist/smooth-scroll.js --watch\"",
     "build": "npm run build:css && npm run build:js",
     "watch": "concurrently \"npm:watch:css\" \"npm:watch:js\""
   },

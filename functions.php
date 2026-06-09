@@ -22,6 +22,12 @@ add_action( 'wp_enqueue_scripts', function() {
     if ( file_exists( $mega_menu_path ) ) {
         wp_enqueue_script( 'twentytwentyfive-child-mega-menu', $mega_menu_uri, array(), filemtime( $mega_menu_path ), true );
     }
+
+    $smooth_scroll_path = get_stylesheet_directory() . '/dist/smooth-scroll.js';
+    $smooth_scroll_uri  = get_stylesheet_directory_uri() . '/dist/smooth-scroll.js';
+    if ( file_exists( $smooth_scroll_path ) ) {
+        wp_enqueue_script( 'twentytwentyfive-child-smooth-scroll', $smooth_scroll_uri, array(), filemtime( $smooth_scroll_path ), true );
+    }
 });
 
 add_action( 'wp_head', function() {
@@ -91,3 +97,73 @@ add_filter( 'wp_check_filetype_and_ext', function( $data, $file, $filename, $mim
     }
     return $data;
 }, 10, 4 );
+
+// Register child-theme block patterns explicitly (child themes are not auto-scanned).
+add_action( 'init', function() {
+    // Register a custom pattern category for this theme.
+    register_block_pattern_category(
+        'kayisports',
+        array( 'label' => __( 'KayiSports', 'twentytwentyfive-child' ) )
+    );
+
+    // Scan every .php file inside the child theme's patterns/ directory.
+    $patterns_dir = get_stylesheet_directory() . '/patterns';
+    if ( ! is_dir( $patterns_dir ) ) {
+        return;
+    }
+
+    $pattern_files = glob( $patterns_dir . '/*.php' );
+    if ( empty( $pattern_files ) ) {
+        return;
+    }
+
+    foreach ( $pattern_files as $file ) {
+        $pattern_data = get_file_data( $file, array(
+            'title'         => 'Title',
+            'slug'          => 'Slug',
+            'description'   => 'Description',
+            'categories'    => 'Categories',
+            'keywords'      => 'Keywords',
+            'viewport_width' => 'Viewport Width',
+            'inserter'      => 'Inserter',
+        ) );
+
+        if ( empty( $pattern_data['title'] ) || empty( $pattern_data['slug'] ) ) {
+            continue;
+        }
+
+        // Skip patterns explicitly marked as non-inserter.
+        if ( isset( $pattern_data['inserter'] ) && 'false' === strtolower( trim( $pattern_data['inserter'] ) ) ) {
+            continue;
+        }
+
+        $categories = ! empty( $pattern_data['categories'] )
+            ? array_map( 'trim', explode( ',', $pattern_data['categories'] ) )
+            : array( 'kayisports' );
+
+        $keywords = ! empty( $pattern_data['keywords'] )
+            ? array_map( 'trim', explode( ',', $pattern_data['keywords'] ) )
+            : array();
+
+        ob_start();
+        include $file;
+        $content = ob_get_clean();
+
+        $args = array(
+            'title'      => $pattern_data['title'],
+            'content'    => $content,
+            'categories' => $categories,
+            'keywords'   => $keywords,
+        );
+
+        if ( ! empty( $pattern_data['description'] ) ) {
+            $args['description'] = $pattern_data['description'];
+        }
+
+        if ( ! empty( $pattern_data['viewport_width'] ) ) {
+            $args['viewportWidth'] = (int) $pattern_data['viewport_width'];
+        }
+
+        register_block_pattern( $pattern_data['slug'], $args );
+    }
+} );

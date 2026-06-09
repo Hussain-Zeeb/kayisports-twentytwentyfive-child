@@ -22,3 +22,127 @@ Text Domain: twentytwentyfive-child
   height: auto;
 
 }
+
+/* ==========================================================================
+   Pinned Scroll Slider
+   ========================================================================== */
+
+/**
+ * Outer wrapper — overflow hidden so off-screen slides are clipped.
+ * JS pins this element via ScrollTrigger and calculates its total scroll
+ * distance from the number of slides inside.
+ */
+.js-pinned-slider {
+  overflow: hidden;
+  position: relative;
+  /* Break out of any theme content-width container */
+  width: 100vw !important;
+  max-width: 100vw !important;
+  margin-left: calc(50% - 50vw) !important;
+  margin-right: calc(50% - 50vw) !important;
+  left: 0 !important;
+  right: 0 !important;
+}
+
+/**
+ * Horizontal track that GSAP translates on the X axis.
+ * Width is set dynamically by JS: numSlides × 100vw.
+ */
+.js-pinned-slider__track {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: stretch;
+  /* GPU-composited layer for smooth scrubbing */
+  will-change: transform;
+}
+
+/**
+ * Each slide — always exactly one viewport wide and tall.
+ * Works for wp:cover, wp:image, or any block added as a slide.
+ */
+.js-pinned-slider__slide {
+  flex: 0 0 100vw !important;
+  width: 100vw !important;
+  min-height: 100vh !important;
+  position: relative;
+}
+
+/* Ensure cover block image fills the slide */
+.js-pinned-slider__slide.wp-block-cover,
+.js-pinned-slider__slide > .wp-block-cover {
+  width: 100vw !important;
+  min-height: 100vh !important;
+}
+
+.js-pinned-slider__slide .wp-block-cover__image-background {
+  object-fit: cover;
+}
+
+/**
+ * Progress dots injected by JS.
+ */
+.js-pinned-slider__dots {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 10;
+  pointer-events: none;
+}
+
+.js-pinned-slider__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.4);
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.js-pinned-slider__dot.is-active {
+  background: #ffffff;
+  transform: scale(1.35);
+}
+
+/* ==========================================================================
+   Mobile Responsive
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  .js-pinned-slider__track {
+    /* Ensure track spans full width on mobile */
+    width: 100% !important;
+  }
+
+  .js-pinned-slider__slide {
+    /* Slides scale with mobile viewport */
+    flex: 0 0 100vw !important;
+    width: 100vw !important;
+  }
+
+  .js-pinned-slider__slide .wp-block-cover__inner-container {
+    /* Ensure text container is readable on smaller screens */
+    padding: 1.5rem;
+  }
+
+  /* Smaller heading size on mobile */
+  .js-pinned-slider__slide .wp-block-heading {
+    font-size: clamp(1.5rem, 4vw, 2.5rem) !important;
+  }
+
+  /* Adjust paragraph size on mobile */
+  .js-pinned-slider__slide .wp-block-paragraph {
+    font-size: 0.95rem !important;
+  }
+
+  /* Position dots lower on mobile to avoid thumb zone */
+  .js-pinned-slider__dots {
+    bottom: 1rem;
+  }
+
+  .js-pinned-slider__dot {
+    width: 6px;
+    height: 6px;
+  }
+}

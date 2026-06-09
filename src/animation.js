@@ -157,14 +157,169 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
     targets.forEach((target) => observer.observe(target));
   }
 
+  // ---------------------------------------------------------------------------
+  // Pinned Scroll Slider
+  // ---------------------------------------------------------------------------
+  // Each .js-pinned-slider is pinned for (numSlides - 1) × 100vh of scroll.
+  // The .js-pinned-slider__track translates horizontally by the same distance.
+  // Add/duplicate .js-pinned-slider__slide blocks in the editor — the JS
+  // automatically adapts the pin duration and track width.
+  // ---------------------------------------------------------------------------
+
+  function initPinnedScrollSlider() {
+    const sliders = document.querySelectorAll(".js-pinned-slider");
+    if (!sliders.length) return;
+
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    sliders.forEach(function (slider) {
+      const track = slider.querySelector(".js-pinned-slider__track");
+      const slides = slider.querySelectorAll(".js-pinned-slider__slide");
+      const dotsContainer = slider.querySelector(".js-pinned-slider__dots");
+
+      if (!track || slides.length < 2) return;
+
+      const numSlides = slides.length;
+
+      // --- Build progress dots ---
+      if (dotsContainer) {
+        dotsContainer.innerHTML = "";
+        slides.forEach(function (_, i) {
+          const dot = document.createElement("span");
+          dot.className = "js-pinned-slider__dot" + (i === 0 ? " is-active" : "");
+          dot.setAttribute("aria-hidden", "true");
+          dotsContainer.appendChild(dot);
+        });
+      }
+
+      const dots = dotsContainer ? dotsContainer.querySelectorAll(".js-pinned-slider__dot") : [];
+
+      function updateDots(activeIndex) {
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle("is-active", i === activeIndex);
+        });
+      }
+
+      // --- Reduced-motion fallback: simple fade between slides ---
+      if (reduceMotion) {
+        let current = 0;
+
+        ScrollTrigger.create({
+          trigger: slider,
+          start: "top top",
+          end: function () {
+            return "+=" + (numSlides - 1) * window.innerHeight;
+          },
+          pin: true,
+          scrub: false,
+          onUpdate: function (self) {
+            const index = Math.round(self.progress * (numSlides - 1));
+            if (index !== current) {
+              gsap.set(slides[current], { autoAlpha: 0 });
+              gsap.set(slides[index], { autoAlpha: 1 });
+              current = index;
+              updateDots(current);
+            }
+          },
+          invalidateOnRefresh: true,
+        });
+
+        return;
+      }
+
+      // --- Full horizontal scrub animation with fade + blur transitions ---
+
+      // Force the track to span all slides side-by-side
+      gsap.set(track, {
+        width: function () {
+          return numSlides * window.innerWidth;
+        },
+      });
+
+      // Set initial state: slides 1+ start off-screen with blur and opacity 0
+      slides.forEach(function (slide, i) {
+        if (i > 0) {
+          gsap.set(slide, { autoAlpha: 0, filter: "blur(8px)" });
+        }
+      });
+
+      const tween = gsap.to(track, {
+        x: function () {
+          return -(numSlides - 1) * window.innerWidth;
+        },
+        ease: "none",
+        scrollTrigger: {
+          trigger: slider,
+          start: "top top",
+          end: function () {
+            return "+=" + (numSlides - 1) * window.innerHeight;
+          },
+          pin: true,
+          scrub: 1,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
+          onUpdate: function (self) {
+            const rawIndex = self.progress * (numSlides - 1);
+            const activeIndex = Math.round(rawIndex);
+            const slideProgress = rawIndex - Math.floor(rawIndex);
+
+            // Update progress dots
+            updateDots(activeIndex);
+
+            // Smooth fade + blur for incoming slides only
+            slides.forEach(function (slide, i) {
+              let opacity, blur;
+
+              if (i <= Math.floor(rawIndex)) {
+                // Current and all previous slides: fully visible, no blur
+                opacity = 1;
+                blur = 0;
+              } else if (i === Math.ceil(rawIndex)) {
+                // Next incoming slide only: fade in and blur in
+                opacity = slideProgress;
+                blur = 8 - slideProgress * 8;
+              } else {
+                // Future slides: hidden with blur
+                opacity = 0;
+                blur = 8;
+              }
+
+              gsap.set(slide, {
+                autoAlpha: opacity,
+                filter: "blur(" + blur + "px)",
+              });
+            });
+          },
+        },
+      });
+
+      // Recalculate sizes on resize and orientation change
+      ScrollTrigger.addEventListener("refreshInit", function () {
+        gsap.set(track, { width: numSlides * window.innerWidth });
+        gsap.set(tween, {
+          x: -(numSlides - 1) * window.innerWidth,
+        });
+      });
+
+      // Handle mobile orientation changes
+      window.addEventListener("orientationchange", function () {
+        ScrollTrigger.getAll().forEach(function (trigger) {
+          trigger.refresh();
+        });
+      });
+    });
+  }
+
   window.DZAnimations = {
     initHomepageLoader,
     initFadeInAnimations,
+    initPinnedScrollSlider,
     animateIn,
   };
 
   document.addEventListener("DOMContentLoaded", function () {
     initHomepageLoader();
     initFadeInAnimations();
+    initPinnedScrollSlider();
   });
 })();
