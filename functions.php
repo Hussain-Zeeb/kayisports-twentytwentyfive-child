@@ -30,6 +30,7 @@ add_action( 'wp_enqueue_scripts', function() {
     }
 });
 
+/* Loader disabled — uncomment to re-enable
 add_action( 'wp_head', function() {
         if ( ! is_front_page() && ! is_home() ) {
             return;
@@ -51,7 +52,9 @@ add_action( 'wp_head', function() {
         </script>
         <?php
 }, 1 );
+*/
 
+/* Loader disabled — uncomment to re-enable
 add_action( 'wp_body_open', function() {
     if ( ! is_front_page() && ! is_home() ) {
         return;
@@ -74,6 +77,7 @@ add_action( 'wp_body_open', function() {
         </div>
         <?php
 } );
+*/
 
 // this is to test git deployment to cloudways, you can remove it later
 add_action( 'wp_footer', function() {

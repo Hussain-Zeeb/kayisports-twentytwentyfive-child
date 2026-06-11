@@ -22,6 +22,11 @@
 <!-- wp:paragraph {"align":"center"} -->
 <p class="has-text-align-center">Supporting copy for slide one. Replace with your content.</p>
 <!-- /wp:paragraph -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Shop Now</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->
 </div></div>
 <!-- /wp:cover -->
 
@@ -33,6 +38,11 @@
 <!-- wp:paragraph {"align":"center"} -->
 <p class="has-text-align-center">Supporting copy for slide two. Replace with your content.</p>
 <!-- /wp:paragraph -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Shop Now</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->
 </div></div>
 <!-- /wp:cover -->
 
@@ -44,6 +54,11 @@
 <!-- wp:paragraph {"align":"center"} -->
 <p class="has-text-align-center">Supporting copy for slide three. Replace with your content.</p>
 <!-- /wp:paragraph -->
+<!-- wp:buttons {"layout":{"type":"flex","justifyContent":"center"}} -->
+<div class="wp-block-buttons"><!-- wp:button -->
+<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Shop Now</a></div>
+<!-- /wp:button --></div>
+<!-- /wp:buttons -->
 </div></div>
 <!-- /wp:cover -->
 
