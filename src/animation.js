@@ -156,7 +156,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
     // Elements with js-scrub are handled by ScrollTrigger in initScrubAnimations
     const targets = Array.from(document.querySelectorAll(
       ".js-fade-in, .js-fade-in-up, .js-fade-in-down, .js-fade-in-left, .js-fade-in-right, .js-reveal-wall, .js-slide-image, [data-animate]"
-    )).filter(function (el) { return !el.classList.contains("js-scrub"); });
+    )).filter(function (el) {
+      return !el.classList.contains("js-scrub") && !el.classList.contains("js-reveal-wall");
+    });
 
     if (!targets.length) {
       return;
@@ -485,6 +487,42 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
   }
 
   // ---------------------------------------------------------------------------
+  // Reveal-wall animations — clip-path wipe that reverses on scroll back up.
+  // ---------------------------------------------------------------------------
+
+  function initRevealWallAnimations() {
+    var targets = document.querySelectorAll(".js-reveal-wall");
+    if (!targets.length) return;
+
+    targets.forEach(function (el) {
+      var duration = parseFloat(el.dataset.animDuration || 0.75);
+      var delay = parseFloat(el.dataset.animDelay || 0);
+
+      gsap.set(el, { y: 56, clipPath: "inset(110% 0 -20% 0)", autoAlpha: 1 });
+
+      var tween = gsap.fromTo(el,
+        { y: 56, clipPath: "inset(110% 0 -20% 0)" },
+        {
+          y: 0,
+          clipPath: "inset(0% 0 0% 0)",
+          duration: duration,
+          delay: delay,
+          ease: "power3.out",
+          paused: true,
+        }
+      );
+
+      ScrollTrigger.create({
+        trigger: el,
+        start: "top 85%",
+        toggleActions: "play reverse play reverse",
+        invalidateOnRefresh: true,
+        animation: tween,
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------------------
   // Scrub animations — opacity/transform tied directly to scroll progress.
   // Add js-scrub alongside any fade class: e.g. "js-fade-in js-scrub"
   // or standalone on any element. Works with all existing animation types.
@@ -513,7 +551,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
           end: "top 30%",
           scrub: 0.5,
           invalidateOnRefresh: true,
-          markers:true,
+          markers:false,
         },
       }));
     });
@@ -522,6 +560,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
   window.DZAnimations = {
     initHomepageLoader,
     initFadeInAnimations,
+    initRevealWallAnimations,
     initScrubAnimations,
     initPinnedScrollSlider,
     animateIn,
@@ -530,10 +569,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
   document.addEventListener("DOMContentLoaded", function () {
     initHomepageLoader();
     initFadeInAnimations();
-    // Pinned slider must init first so its spacer exists before scrub
-    // animations calculate their scroll positions
     initPinnedScrollSlider();
     ScrollTrigger.refresh();
+    initRevealWallAnimations();
     initScrubAnimations();
   });
 })();
