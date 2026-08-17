@@ -29,11 +29,24 @@ add_action( 'wp_enqueue_scripts', function() {
         wp_enqueue_script( 'twentytwentyfive-child-smooth-scroll', $smooth_scroll_uri, array(), filemtime( $smooth_scroll_path ), true );
     }
 
-    if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() || is_product_category() ) ) {
-        $product_gallery_path = get_stylesheet_directory() . '/dist/product-gallery.js';
-        $product_gallery_uri  = get_stylesheet_directory_uri() . '/dist/product-gallery.js';
-        if ( file_exists( $product_gallery_path ) ) {
-            wp_enqueue_script( 'twentytwentyfive-child-product-gallery', $product_gallery_uri, array(), filemtime( $product_gallery_path ), true );
+    // Load WooCommerce's own single-product gallery assets (flexslider, zoom,
+    // photoswipe) on shop/category archives too, since we reuse that gallery
+    // markup inside the product loop via woocommerce_show_product_images().
+    if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) {
+        if ( wp_style_is( 'woocommerce-general', 'registered' ) ) {
+            wp_enqueue_style( 'woocommerce-general' );
+        }
+
+        foreach ( array( 'flexslider', 'photoswipe-ui-default', 'photoswipe', 'zoom-vendor', 'wc-single-product' ) as $handle ) {
+            if ( wp_script_is( $handle, 'registered' ) ) {
+                wp_enqueue_script( $handle );
+            }
+        }
+
+        foreach ( array( 'photoswipe', 'photoswipe-default-skin' ) as $handle ) {
+            if ( wp_style_is( $handle, 'registered' ) ) {
+                wp_enqueue_style( $handle );
+            }
         }
     }
 });
@@ -180,75 +193,72 @@ add_action( 'init', function() {
     }
 } );
 
-// Render a large product image with a small thumbnail gallery beneath it for use
-// inside the WooCommerce product loop (archive / category grids).
+// Render WooCommerce's own single-product image gallery (large image + flexslider
+// thumbnails + zoom/photoswipe) for use inside the product loop (archive / category
+// grids), so the archive grid gallery matches the single product page exactly.
 add_shortcode( 'kayi_product_gallery', function() {
-    if ( ! class_exists( 'WooCommerce' ) ) {
+    if ( ! class_exists( 'WooCommerce' ) || ! function_exists( 'woocommerce_show_product_images' ) ) {
         return '';
     }
 
-    global $product;
-
-    $current_product = $product instanceof WC_Product ? $product : wc_get_product( get_the_ID() );
+    $current_product = $GLOBALS['product'] instanceof WC_Product ? $GLOBALS['product'] : wc_get_product( get_the_ID() );
 
     if ( ! $current_product instanceof WC_Product ) {
         return '';
     }
 
-    $main_image_id = $current_product->get_image_id();
-    $gallery_ids   = $current_product->get_gallery_image_ids();
-    $all_ids       = array_values( array_unique( array_filter( array_merge( array( $main_image_id ), $gallery_ids ) ) ) );
+    // Temporarily set the global $product so WooCommerce's template functions
+    // (wc_get_gallery_image_ids(), get_post_thumbnail_id(), etc.) resolve to the
+    // product currently being rendered in the loop.
+    $previous_product   = isset( $GLOBALS['product'] ) ? $GLOBALS['product'] : null;
+    $GLOBALS['product'] = $current_product;
 
-    if ( empty( $all_ids ) ) {
+    ob_start();
+    woocommerce_show_product_images();
+    $output = ob_get_clean();
+
+    $GLOBALS['product'] = $previous_product;
+
+    return $output;
+} );
+
+// Render a full-width banner for WooCommerce product category archives, using
+// the category's thumbnail image (set under Products > Categories) as a cover
+// background with the category name and description overlaid on top.
+add_shortcode( 'kayi_category_banner', function() {
+    if ( ! function_exists( 'is_product_taxonomy' ) || ! is_product_taxonomy() ) {
         return '';
     }
 
-    $permalink = get_permalink( $current_product->get_id() );
+    $term = get_queried_object();
+
+    if ( ! $term instanceof WP_Term ) {
+        return '';
+    }
+
+    $thumbnail_id    = get_term_meta( $term->term_id, 'thumbnail_id', true );
+    $background_url  = $thumbnail_id ? wp_get_attachment_image_url( $thumbnail_id, 'full' ) : '';
+    $description     = term_description( $term->term_id, $term->taxonomy );
+
+    $section_classes = 'kayi-category-banner relative flex min-h-[40vh] md:min-h-[55vh] w-full items-center justify-center overflow-hidden bg-cover bg-center bg-no-repeat text-center';
+    $section_classes .= $background_url ? '' : ' bg-neutral-900';
 
     ob_start();
     ?>
-    <div class="kayi-product-gallery relative" data-product-id="<?php echo esc_attr( $current_product->get_id() ); ?>">
-        <a href="<?php echo esc_url( $permalink ); ?>" class="kayi-product-gallery__main block overflow-hidden rounded-lg bg-neutral-100 aspect-square">
-            <?php
-            echo wp_get_attachment_image(
-                $all_ids[0],
-                'woocommerce_single',
-                false,
-                array(
-                    'class'          => 'kayi-product-gallery__main-image w-full h-full object-cover transition-opacity duration-200',
-                    'data-main-image' => '',
-                )
-            );
-            ?>
-        </a>
-
-        <?php if ( count( $all_ids ) > 1 ) : ?>
-            <div class="kayi-product-gallery__thumbs flex gap-2 mt-2 overflow-x-auto">
-                <?php foreach ( $all_ids as $index => $attachment_id ) :
-                    $large_src = wp_get_attachment_image_url( $attachment_id, 'woocommerce_single' );
-                    if ( ! $large_src ) {
-                        continue;
-                    }
-                    ?>
-                    <button
-                        type="button"
-                        class="kayi-product-gallery__thumb shrink-0 w-12 h-12 rounded-md overflow-hidden border <?php echo 0 === $index ? 'is-active border-neutral-900' : 'border-transparent'; ?>"
-                        data-full="<?php echo esc_url( $large_src ); ?>"
-                        aria-label="<?php esc_attr_e( 'View product image', 'twentytwentyfive-child' ); ?> <?php echo esc_attr( $index + 1 ); ?>"
-                    >
-                        <?php
-                        echo wp_get_attachment_image(
-                            $attachment_id,
-                            'woocommerce_gallery_thumbnail',
-                            false,
-                            array( 'class' => 'w-full h-full object-cover' )
-                        );
-                        ?>
-                    </button>
-                <?php endforeach; ?>
-            </div>
+    <section
+        class="<?php echo esc_attr( $section_classes ); ?>"
+        <?php if ( $background_url ) : ?>
+            style="background-image:url('<?php echo esc_url( $background_url ); ?>');"
         <?php endif; ?>
-    </div>
+    >
+        <div class="absolute inset-0 bg-black/50"></div>
+        <div class="relative z-10 mx-auto max-w-3xl px-6 py-16 text-white">
+            <h1 class="mb-4 text-4xl font-bold md:text-5xl"><?php echo esc_html( $term->name ); ?></h1>
+            <?php if ( $description ) : ?>
+                <div class="text-lg md:text-xl [&_p]:mb-0"><?php echo wp_kses_post( $description ); ?></div>
+            <?php endif; ?>
+        </div>
+    </section>
     <?php
     return ob_get_clean();
 } );

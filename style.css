@@ -13,9 +13,9 @@ Text Domain: twentytwentyfive-child
 
 /* Add your custom CSS below this line */
 
-.wp-block-post-title {
+/* .wp-block-post-title {
   display: none;
-}
+} */
 
 .header-logo img {
   width: 80px;
@@ -225,3 +225,4 @@ Text Domain: twentytwentyfive-child
     height: 6px;
   }
 }
+
