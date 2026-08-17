@@ -28,6 +28,14 @@ add_action( 'wp_enqueue_scripts', function() {
     if ( file_exists( $smooth_scroll_path ) ) {
         wp_enqueue_script( 'twentytwentyfive-child-smooth-scroll', $smooth_scroll_uri, array(), filemtime( $smooth_scroll_path ), true );
     }
+
+    if ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() || is_product_category() ) ) {
+        $product_gallery_path = get_stylesheet_directory() . '/dist/product-gallery.js';
+        $product_gallery_uri  = get_stylesheet_directory_uri() . '/dist/product-gallery.js';
+        if ( file_exists( $product_gallery_path ) ) {
+            wp_enqueue_script( 'twentytwentyfive-child-product-gallery', $product_gallery_uri, array(), filemtime( $product_gallery_path ), true );
+        }
+    }
 });
 
 /* Loader disabled — uncomment to re-enable
@@ -170,4 +178,77 @@ add_action( 'init', function() {
 
         register_block_pattern( $pattern_data['slug'], $args );
     }
+} );
+
+// Render a large product image with a small thumbnail gallery beneath it for use
+// inside the WooCommerce product loop (archive / category grids).
+add_shortcode( 'kayi_product_gallery', function() {
+    if ( ! class_exists( 'WooCommerce' ) ) {
+        return '';
+    }
+
+    global $product;
+
+    $current_product = $product instanceof WC_Product ? $product : wc_get_product( get_the_ID() );
+
+    if ( ! $current_product instanceof WC_Product ) {
+        return '';
+    }
+
+    $main_image_id = $current_product->get_image_id();
+    $gallery_ids   = $current_product->get_gallery_image_ids();
+    $all_ids       = array_values( array_unique( array_filter( array_merge( array( $main_image_id ), $gallery_ids ) ) ) );
+
+    if ( empty( $all_ids ) ) {
+        return '';
+    }
+
+    $permalink = get_permalink( $current_product->get_id() );
+
+    ob_start();
+    ?>
+    <div class="kayi-product-gallery relative" data-product-id="<?php echo esc_attr( $current_product->get_id() ); ?>">
+        <a href="<?php echo esc_url( $permalink ); ?>" class="kayi-product-gallery__main block overflow-hidden rounded-lg bg-neutral-100 aspect-square">
+            <?php
+            echo wp_get_attachment_image(
+                $all_ids[0],
+                'woocommerce_single',
+                false,
+                array(
+                    'class'          => 'kayi-product-gallery__main-image w-full h-full object-cover transition-opacity duration-200',
+                    'data-main-image' => '',
+                )
+            );
+            ?>
+        </a>
+
+        <?php if ( count( $all_ids ) > 1 ) : ?>
+            <div class="kayi-product-gallery__thumbs flex gap-2 mt-2 overflow-x-auto">
+                <?php foreach ( $all_ids as $index => $attachment_id ) :
+                    $large_src = wp_get_attachment_image_url( $attachment_id, 'woocommerce_single' );
+                    if ( ! $large_src ) {
+                        continue;
+                    }
+                    ?>
+                    <button
+                        type="button"
+                        class="kayi-product-gallery__thumb shrink-0 w-12 h-12 rounded-md overflow-hidden border <?php echo 0 === $index ? 'is-active border-neutral-900' : 'border-transparent'; ?>"
+                        data-full="<?php echo esc_url( $large_src ); ?>"
+                        aria-label="<?php esc_attr_e( 'View product image', 'twentytwentyfive-child' ); ?> <?php echo esc_attr( $index + 1 ); ?>"
+                    >
+                        <?php
+                        echo wp_get_attachment_image(
+                            $attachment_id,
+                            'woocommerce_gallery_thumbnail',
+                            false,
+                            array( 'class' => 'w-full h-full object-cover' )
+                        );
+                        ?>
+                    </button>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+    </div>
+    <?php
+    return ob_get_clean();
 } );
