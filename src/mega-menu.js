@@ -39,91 +39,141 @@
   }
 
   // ── Mega Menu ──────────────────────────────────────────────────────────────
+  // Hover-intent: a short delay before opening (so sweeping across the nav
+  // doesn't flash panels) and before closing (so moving down into the panel,
+  // or briefly overshooting it, never closes it). Switching between top-level
+  // items while a panel is already open is instant.
+  var OPEN_DELAY = 90;
+  var CLOSE_DELAY = 220;
+  var MIN_WIDTH = 600; // matches the CSS breakpoint; below this the core overlay menu is used
+
   var openItem = null;
+  var openTimer = null;
+  var closeTimer = null;
+  var backdrop = null;
+
+  function isDesktop() {
+    return window.innerWidth >= MIN_WIDTH;
+  }
+
+  function clearTimers() {
+    clearTimeout(openTimer);
+    clearTimeout(closeTimer);
+  }
+
+  function setExpanded(item, expanded) {
+    var toggle = item.querySelector(':scope > .wp-block-navigation-submenu__toggle, :scope > .wp-block-navigation__submenu-icon');
+    if (toggle) toggle.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+  }
 
   function closeAllMenus() {
+    clearTimers();
     if (openItem) {
       openItem.classList.remove('dz-mega--open');
-      var toggle = openItem.querySelector(':scope > .wp-block-navigation-submenu__toggle');
-      if (toggle) toggle.setAttribute('aria-expanded', 'false');
+      setExpanded(openItem, false);
       openItem = null;
     }
+    if (backdrop) backdrop.classList.remove('is-visible');
   }
 
   function openMenu(item) {
-    closeAllMenus();
+    clearTimers();
+    if (openItem === item) return;
+    if (openItem) {
+      openItem.classList.remove('dz-mega--open');
+      setExpanded(openItem, false);
+    }
     item.classList.add('dz-mega--open');
-    var toggle = item.querySelector(':scope > .wp-block-navigation-submenu__toggle');
-    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    setExpanded(item, true);
     openItem = item;
+    if (backdrop) backdrop.classList.add('is-visible');
   }
 
   function initMegaMenu() {
     var header = document.querySelector('header.wp-block-template-part');
     if (!header) return;
 
-    // Keep the CSS var for the fixed mega panel's top offset up to date
-    function updatePanelTop() {
+    var topItems = header.querySelectorAll(
+      '.wp-block-navigation__container > .wp-block-navigation-item.has-child'
+    );
+    if (!topItems.length) return;
+
+    backdrop = document.createElement('div');
+    backdrop.className = 'dz-mega-backdrop';
+    backdrop.setAttribute('aria-hidden', 'true');
+    document.body.appendChild(backdrop);
+    backdrop.addEventListener('mouseenter', function () {
+      clearTimeout(openTimer);
+      closeTimer = setTimeout(closeAllMenus, CLOSE_DELAY);
+    });
+    backdrop.addEventListener('click', closeAllMenus);
+
+    // Panel sits flush under the header; the bridge covers the gap between
+    // the nav label and the header's bottom edge.
+    function updateGeometry() {
       var bottom = header.getBoundingClientRect().bottom;
       if (bottom > 0) {
         document.documentElement.style.setProperty('--dz-header-h', bottom + 'px');
       }
+      var first = topItems[0].getBoundingClientRect();
+      document.documentElement.style.setProperty('--dz-mega-bridge', Math.max(0, bottom - first.bottom) + 2 + 'px');
     }
 
-    updatePanelTop();
-    window.addEventListener('resize', updatePanelTop, { passive: true });
-    window.addEventListener('scroll', updatePanelTop, { passive: true });
-
-    // Only target direct children of the top-level container
-    var topItems = header.querySelectorAll(
-      '.wp-block-navigation__container > .wp-block-navigation-item.has-child'
-    );
+    updateGeometry();
+    window.addEventListener('resize', updateGeometry, { passive: true });
+    window.addEventListener('scroll', updateGeometry, { passive: true });
 
     topItems.forEach(function (item) {
-      var submenu = item.querySelector(':scope > .wp-block-navigation__submenu-container');
-      if (!submenu) return;
+      if (!item.querySelector(':scope > .wp-block-navigation__submenu-container')) return;
 
-      // Hover
       item.addEventListener('mouseenter', function () {
-        openMenu(item);
+        if (!isDesktop()) return;
+        clearTimeout(closeTimer);
+        if (openItem) {
+          openMenu(item);
+        } else {
+          clearTimeout(openTimer);
+          openTimer = setTimeout(function () { openMenu(item); }, OPEN_DELAY);
+        }
       });
+
       item.addEventListener('mouseleave', function () {
-        closeAllMenus();
+        if (!isDesktop()) return;
+        clearTimeout(openTimer);
+        closeTimer = setTimeout(closeAllMenus, CLOSE_DELAY);
       });
 
-      // Keyboard: top-level link/button toggles the panel
-      var focusTarget = item.querySelector(
-        ':scope > .wp-block-navigation-item__content, :scope > .wp-block-navigation-submenu__toggle'
-      );
-      if (focusTarget) {
-        focusTarget.addEventListener('keydown', function (e) {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            if (item.classList.contains('dz-mega--open')) {
-              closeAllMenus();
-            } else {
-              openMenu(item);
-            }
-          }
-          if (e.key === 'Escape') {
-            closeAllMenus();
-            focusTarget.focus();
-          }
-        });
-      }
+      // Keyboard: focusing into the item opens it (CSS :focus-within also does);
+      // leaving the item with Tab closes it.
+      item.addEventListener('focusin', function () {
+        if (isDesktop()) openMenu(item);
+      });
+      item.addEventListener('focusout', function (e) {
+        if (!item.contains(e.relatedTarget)) closeAllMenus();
+      });
     });
 
-    // Close on outside click
+    // Plain top-level links (no panel) close any open panel when hovered.
+    header.querySelectorAll('.wp-block-navigation__container > .wp-block-navigation-item:not(.has-child)').forEach(function (item) {
+      item.addEventListener('mouseenter', function () {
+        if (openItem) closeAllMenus();
+      });
+    });
+
     document.addEventListener('click', function (e) {
-      if (!e.target.closest('.wp-block-navigation-item.has-child')) {
-        closeAllMenus();
-      }
+      if (!e.target.closest('.wp-block-navigation-item.has-child')) closeAllMenus();
     });
 
-    // Close on Escape from anywhere
     document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape') closeAllMenus();
+      if (e.key !== 'Escape' || !openItem) return;
+      var link = openItem.querySelector(':scope > .wp-block-navigation-item__content');
+      closeAllMenus();
+      if (link) link.focus();
     });
+
+    window.addEventListener('resize', function () {
+      if (!isDesktop()) closeAllMenus();
+    }, { passive: true });
   }
 
   document.addEventListener('DOMContentLoaded', function () {

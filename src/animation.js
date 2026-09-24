@@ -189,11 +189,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
   // ---------------------------------------------------------------------------
   // Pinned Scroll Slider
   // ---------------------------------------------------------------------------
-  // Desktop (>= 768px): pinned horizontal scroll with fade+blur transitions.
-  // Mobile (< 768px):   full-height tap carousel with prev/next chevron buttons.
+  // Tablet & desktop (>= 600px): pinned horizontal scroll with fade+blur transitions.
+  // Phones (< 600px):             full-height tap carousel with prev/next chevron buttons.
   // ---------------------------------------------------------------------------
 
-  var MOBILE_BP = 768;
+  var MOBILE_BP = 600; // keep in sync with the max-width: 599px block in style.css
 
   function initPinnedScrollSlider() {
     var sliders = document.querySelectorAll(".js-pinned-slider");
@@ -201,6 +201,20 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var isMobile = window.innerWidth < MOBILE_BP;
+
+    // Ignore wrappers without a track (e.g. a dots group that was moved outside
+    // the slider in the editor — CSS hides those), and make sure every real
+    // slider has a dots container for the progress dots / mobile nav.
+    sliders = Array.prototype.filter.call(sliders, function (slider) {
+      return !!slider.querySelector(".js-pinned-slider__track");
+    });
+    sliders.forEach(function (slider) {
+      if (!slider.querySelector(".js-pinned-slider__dots")) {
+        var dots = document.createElement("div");
+        dots.className = "js-pinned-slider__dots";
+        slider.appendChild(dots);
+      }
+    });
 
     // Pre-hide content on all slides so first slide also reveals on entry
     sliders.forEach(function (slider) {
@@ -278,8 +292,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
     });
 
     // Make outer wrapper the positioning context for absolute slides
+    // (height comes from CSS: 100svh so the browser toolbar doesn't crop it).
     slider.style.position = "relative";
-    slider.style.height = "100vh";
     slider.style.overflow = "hidden";
 
     // Reveal first slide content on load
@@ -298,9 +312,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
       var dotsWrap = document.createElement("div");
       dotsWrap.className = "js-pinned-slider__dots-inner";
       slides.forEach(function (_, i) {
-        var dot = document.createElement("span");
+        var dot = document.createElement("button");
+        dot.type = "button";
         dot.className = "js-pinned-slider__dot" + (i === 0 ? " is-active" : "");
-        dot.setAttribute("aria-hidden", "true");
+        dot.setAttribute("aria-label", "Go to slide " + (i + 1));
+        dot.addEventListener("click", function () { goTo(i); });
         dotsWrap.appendChild(dot);
       });
 
@@ -355,13 +371,19 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
       updateDots(current);
     }
 
-    // Touch swipe support
+    // Touch swipe support — only mostly-horizontal swipes change slide, so
+    // scrolling the page past the slider never flips it by accident.
     var touchStartX = 0;
-    slider.addEventListener("touchstart", function (e) { touchStartX = e.touches[0].clientX; }, { passive: true });
+    var touchStartY = 0;
+    slider.addEventListener("touchstart", function (e) {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
     slider.addEventListener("touchend", function (e) {
-      var diff = touchStartX - e.changedTouches[0].clientX;
-      if (Math.abs(diff) > 50) {
-        goTo(diff > 0 ? current + 1 : current - 1);
+      var dx = touchStartX - e.changedTouches[0].clientX;
+      var dy = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        goTo(dx > 0 ? current + 1 : current - 1);
       }
     }, { passive: true });
   }

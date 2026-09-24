@@ -182,102 +182,741 @@ header.wp-block-template-part.dz-header--hidden {
 	transform: translateY(-100%);
 }
 
-/* ── Mega Menu ──────────────────────────────────────────────────────────────── */
+/* ── Mega Menu (Adidas-style) ─────────────────────────────────────────────────
+   Desktop/tablet: each top-level item with children opens a full-width white
+   panel flush under the header, with a "Shop all" heading + links on the left
+   and image tiles on the right (tiles/heading injected in functions.php).
+   Selectors are scoped under `header` so they beat core navigation styles,
+   which otherwise shrink/right-align the panel on :hover. */
 
-/* Allow submenu to overflow the nav container */
-.wp-block-navigation .wp-block-navigation__container {
-	overflow: visible !important;
-}
-
-/* Remove default relative positioning from top-level items so the panel
-   positions relative to the viewport (we use position: fixed on the panel) */
-.wp-block-navigation__container > .wp-block-navigation-item.has-child {
-	position: static;
-}
-
-/* ── Mega panel ── */
-.wp-block-navigation__container > .wp-block-navigation-item.has-child
-	> .wp-block-navigation__submenu-container {
-	/* Full-width fixed panel flush below the sticky header */
-	position: fixed;
-	top: var(--dz-header-h, 80px);
-	left: 0;
-	width: 100%;
-
-	/* Multi-column grid layout */
-	display: grid !important;
-	grid-template-columns: repeat(4, 1fr);
-	gap: 0.5rem 1.5rem;
-	padding: 2rem clamp(1.5rem, 6vw, 5rem);
-
-	/* Panel appearance */
-	background: #ffffff;
-	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
-	border-top: 3px solid #FFEE58;
-
-	/* Hidden by default */
-	opacity: 0;
-	visibility: hidden;
-	pointer-events: none;
-	transform: translateY(-6px);
-	transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0.22s;
-}
-
-/* Show state — triggered by JS (.dz-mega--open) or CSS focus-within fallback */
-.wp-block-navigation__container > .wp-block-navigation-item.has-child.dz-mega--open
-	> .wp-block-navigation__submenu-container,
-.wp-block-navigation__container > .wp-block-navigation-item.has-child:focus-within
-	> .wp-block-navigation__submenu-container {
-	opacity: 1;
-	visibility: visible;
-	pointer-events: auto;
-	transform: translateY(0);
-	transition: opacity 0.22s ease, transform 0.22s ease, visibility 0s linear 0s;
-}
-
-/* Sub-item links inside the panel */
-.wp-block-navigation__container > .wp-block-navigation-item.has-child
-	> .wp-block-navigation__submenu-container
-	.wp-block-navigation-item__content {
-	display: block;
-	padding: 0.45rem 0;
-	color: #111111;
-	font-weight: 500;
-	font-size: 0.925rem;
-	text-decoration: none;
-	border-bottom: 1px solid transparent;
-	transition: color 0.15s ease, border-color 0.15s ease;
-}
-
-.wp-block-navigation__container > .wp-block-navigation-item.has-child
-	> .wp-block-navigation__submenu-container
-	.wp-block-navigation-item__content:hover {
-	color: #b8930a;
-	border-bottom-color: #FFEE58;
-}
-
-/* ── Responsive: disable mega layout on mobile / tablet ── */
-@media (max-width: 768px) {
-	header.wp-block-template-part {
-		/* Keep sticky but revert to normal stacking */
-		position: sticky;
+@media (min-width: 600px) {
+	header .wp-block-navigation .wp-block-navigation__container {
+		overflow: visible !important;
 	}
 
-	.wp-block-navigation__container > .wp-block-navigation-item.has-child {
+	/* Top-level labels: bolder, with an underline on the open item. */
+	header .wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content {
+		font-weight: 600;
+		text-decoration: none;
+		text-underline-offset: 0.5em;
+		text-decoration-thickness: 2px;
+	}
+
+	header .wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content:hover,
+	header .wp-block-navigation__container > .dz-mega--open > .wp-block-navigation-item__content {
+		text-decoration-line: underline;
+	}
+
+	/* No chevrons — the whole label opens the panel, as on Adidas. */
+	header .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-icon {
+		display: none;
+	}
+
+	/* Invisible bridge from the label down to the panel so the pointer never
+	   "leaves" the item while travelling into the panel. */
+	header .wp-block-navigation__container > .has-child {
 		position: relative;
 	}
 
-	.wp-block-navigation__container > .wp-block-navigation-item.has-child
-		> .wp-block-navigation__submenu-container {
-		position: static !important;
-		display: block !important;
+	header .wp-block-navigation__container > .has-child::after {
+		content: "";
+		position: absolute;
+		left: -1rem;
+		right: -1rem;
+		top: 100%;
+		height: var(--dz-mega-bridge, 48px);
+	}
+
+	/* The panel. */
+	header .wp-block-navigation .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container {
+		position: fixed !important;
+		top: var(--dz-header-h, 80px) !important;
+		left: 0 !important;
+		right: 0 !important;
+		width: 100% !important;
+		height: auto !important;
+		min-width: 0 !important;
+		max-height: calc(100vh - var(--dz-header-h, 80px));
+		overflow-y: auto !important;
+		display: grid !important;
+		grid-template-columns: minmax(200px, 260px) 1fr;
+		grid-auto-rows: min-content;
+		column-gap: clamp(2rem, 5vw, 5rem);
+		align-content: start;
+		padding: 2.5rem var(--wp--style--root--padding-right, 50px) 3rem var(--wp--style--root--padding-left, 50px) !important;
+		margin: 0;
+		background: #ffffff !important;
+		color: #111111 !important;
+		border: 0 !important;
+		border-top: 1px solid #e5e5e5 !important;
+		box-shadow: none;
+		z-index: 90;
+		opacity: 0 !important;
+		visibility: hidden !important;
+		pointer-events: none;
+		transform: translateY(-8px);
+		transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0.2s;
+	}
+
+	header .wp-block-navigation .wp-block-navigation__container > .dz-mega--open > .wp-block-navigation__submenu-container,
+	header .wp-block-navigation .wp-block-navigation__container > .has-child:focus-within > .wp-block-navigation__submenu-container {
 		opacity: 1 !important;
 		visibility: visible !important;
-		transform: none !important;
-		box-shadow: none;
-		border-top: none;
-		padding: 0;
-		grid-template-columns: 1fr;
-		transition: none;
+		pointer-events: auto;
+		transform: none;
+		transition: opacity 0.2s ease, transform 0.2s ease, visibility 0s linear 0s;
+	}
+
+	/* Link column. */
+	header .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container > .wp-block-navigation-item {
+		grid-column: 1;
+		display: block;
+		width: auto;
+	}
+
+	header .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+		display: inline-block;
+		padding: 0.35rem 0 !important;
+		color: #111111;
+		font-size: 0.95rem;
+		font-weight: 400;
+		text-decoration: none;
+	}
+
+	header .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container .wp-block-navigation-item__content:hover,
+	header .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container .wp-block-navigation-item__content:focus-visible {
+		text-decoration: underline;
+		text-underline-offset: 0.3em;
+	}
+
+	header .dz-mega__all > .wp-block-navigation-item__content {
+		margin-bottom: 0.75rem;
+		font-weight: 700 !important;
+		font-size: 1rem !important;
+	}
+
+	/* Image tiles. */
+	header .dz-mega__promo {
+		grid-column: 2;
+		grid-row: 1 / span 20;
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: 1rem;
+		align-self: start;
+		list-style: none;
+	}
+
+	header .dz-mega__tile {
+		display: block;
+		color: #111111;
+		text-decoration: none;
+	}
+
+	header .dz-mega__tile-img {
+		display: block;
+		aspect-ratio: 4 / 3;
+		overflow: hidden;
+		background: #f5f5f5;
+	}
+
+	header .dz-mega__tile-img img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	header .dz-mega__tile:hover .dz-mega__tile-img img {
+		transform: scale(1.04);
+	}
+
+	header .dz-mega__tile-label {
+		display: block;
+		margin-top: 0.6rem;
+		font-weight: 600;
+		font-size: 0.95rem;
+	}
+
+	/* Page dim behind the open panel (element added by mega-menu.js). */
+	.dz-mega-backdrop {
+		position: fixed;
+		inset: var(--dz-header-h, 80px) 0 0 0;
+		z-index: 80;
+		background: rgba(0, 0, 0, 0.35);
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.2s ease, visibility 0s linear 0.2s;
+	}
+
+	.dz-mega-backdrop.is-visible {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 0.2s ease, visibility 0s linear 0s;
+	}
+}
+
+/* Tablet: fewer tiles. */
+@media (min-width: 600px) and (max-width: 1023px) {
+	header .dz-mega__promo {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	header .dz-mega__tile:nth-child(n + 3) {
+		display: none;
+	}
+}
+
+/* Phone: core overlay menu — submenus listed inline, no tiles. */
+@media (max-width: 599px) {
+	header .dz-mega__promo,
+	.dz-mega-backdrop {
+		display: none !important;
+	}
+
+	header .dz-mega__all > .wp-block-navigation-item__content {
+		font-weight: 700;
+	}
+}
+
+/* ── Product cards (shop, categories, "You may also like") ─────────────────────
+   Nike/Adidas-style listing: square image on a soft grey tile, no borders,
+   title + price underneath, subtle zoom on hover. */
+.kayi-product-cards .wc-block-components-product-image,
+.kayi-product-cards .wp-block-woocommerce-product-image {
+	background: #f5f5f5;
+	overflow: hidden;
+	margin-bottom: 0;
+}
+
+.kayi-product-cards .wc-block-components-product-image img,
+.kayi-product-cards .wp-block-woocommerce-product-image img {
+	transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kayi-product-cards li:hover .wc-block-components-product-image img,
+.kayi-product-cards li:hover .wp-block-woocommerce-product-image img {
+	transform: scale(1.04);
+}
+
+.kayi-product-cards .wp-block-post-title a {
+	text-decoration: none;
+}
+
+.kayi-product-cards .kayi-card__cats,
+.kayi-product-cards .kayi-card__cats a {
+	color: var(--wp--preset--color--accent-4);
+	text-decoration: none;
+	pointer-events: none;
+}
+
+.kayi-product-cards .wc-block-components-product-sale-badge,
+.kayi-product .wc-block-product-gallery-large-image .wc-block-components-product-sale-badge {
+	border: 0;
+	border-radius: 0;
+	background: var(--wp--preset--color--contrast);
+	color: var(--wp--preset--color--base);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	padding: 0.35em 0.75em;
+}
+
+.kayi-shop__toolbar select {
+	border: 1px solid #d4d4d4;
+	border-radius: 0;
+	padding: 0.5rem 2rem 0.5rem 0.75rem;
+	background-color: transparent;
+}
+
+/* ── Single product ─────────────────────────────────────────────────────────── */
+
+/* Buy panel stays in view while the gallery scrolls (desktop only). */
+@media (min-width: 782px) {
+	.kayi-product__summary {
+		position: sticky;
+		top: 2rem;
+		align-self: flex-start;
+	}
+}
+
+/* Gallery: vertical thumbnail rail on the left, large image on a grey tile. */
+.kayi-product .wc-block-product-gallery {
+	display: flex;
+	gap: 1rem;
+	align-items: flex-start;
+}
+
+.kayi-product__layout > .wp-block-column {
+	min-width: 0;
+}
+
+.kayi-product .wc-block-product-gallery-large-image {
+	flex: 1 1 0;
+	min-width: 0;
+	overflow: hidden;
+	background: #f5f5f5;
+}
+
+.kayi-product .wc-block-product-gallery-thumbnails__thumbnail {
+	background: #f5f5f5;
+}
+
+@media (max-width: 781px) {
+	.kayi-product .wc-block-product-gallery {
+		flex-direction: column-reverse;
+		align-items: stretch;
+	}
+
+	.kayi-product .wc-block-product-gallery-large-image {
+		flex: 0 0 auto;
+		width: 100%;
+	}
+
+	.kayi-product .wc-block-product-gallery-thumbnails {
+		width: 100%;
+		min-width: 0;
+		overflow-x: auto;
+	}
+}
+
+.kayi-product__eyebrow,
+.kayi-product__eyebrow a {
+	color: var(--wp--preset--color--accent-4);
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.kayi-product__price {
+	margin-top: 0.5rem;
+	font-weight: 600;
+}
+
+.kayi-product__price del {
+	color: var(--wp--preset--color--accent-4);
+	font-weight: 400;
+}
+
+.kayi-product__excerpt {
+	color: var(--wp--preset--color--accent-4);
+	margin-top: 1.25rem;
+}
+
+/* Size / colour options as square buttons (WooCommerce "chips"). */
+.kayi-product__buy .wc-block-add-to-cart-with-options-variation-selector-attribute-name {
+	font-weight: 600;
+}
+
+.kayi-product__buy .wc-block-product-filter-chips {
+	align-self: stretch;
+	width: 100%;
+}
+
+.kayi-product__buy .wc-block-product-filter-chips__items {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.5rem;
+}
+
+.kayi-product__buy .wc-block-product-filter-chips__item {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 4.25rem;
+	min-height: 3rem;
+	padding: 0 1rem;
+	font-size: 0.95rem;
+	white-space: nowrap;
+	border: 1px solid #d4d4d4;
+	border-radius: 0.25rem;
+	background: var(--wp--preset--color--base);
+	color: var(--wp--preset--color--contrast);
+	font-weight: 500;
+	transition: border-color 0.15s ease;
+}
+
+.kayi-product__buy .wc-block-product-filter-chips__item:hover {
+	border-color: var(--wp--preset--color--contrast);
+}
+
+.kayi-product__buy .wc-block-product-filter-chips__item[aria-checked="true"] {
+	border-color: var(--wp--preset--color--contrast);
+	box-shadow: inset 0 0 0 1px var(--wp--preset--color--contrast);
+}
+
+.kayi-product__buy .wc-block-product-filter-chips__item:disabled {
+	opacity: 0.35;
+	text-decoration: line-through;
+}
+
+/* Full-width pill "Add to basket" button. */
+.kayi-product__buy .wp-block-woocommerce-product-button,
+.kayi-product__buy .wp-block-woocommerce-product-button .wp-block-button__link,
+.kayi-product__buy .wc-block-components-product-button__button {
+	flex: 1 1 auto;
+	width: 100%;
+}
+
+.kayi-product__buy .wc-block-components-product-button__button {
+	min-height: 3.5rem;
+	border-radius: 999px;
+	background: var(--wp--preset--color--contrast);
+	color: var(--wp--preset--color--base);
+	font-weight: 600;
+}
+
+.kayi-product__buy .wc-block-components-product-button__button:hover {
+	opacity: 0.85;
+}
+
+.kayi-product__perks {
+	list-style: none;
+	padding: 0;
+	margin-top: 1.5rem;
+	display: grid;
+	gap: 0.4rem;
+}
+
+.kayi-product__perks li::before {
+	content: "✓";
+	display: inline-block;
+	width: 1.25rem;
+	font-weight: 700;
+}
+
+/* Accordions (core Details block) — hairline dividers, plus/minus icon. */
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details {
+	border-top: 1px solid #e5e5e5;
+	padding: 0;
+}
+
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details:last-child {
+	border-bottom: 1px solid #e5e5e5;
+}
+
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details summary {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1.25rem 0;
+	font-weight: 600;
+	font-size: var(--wp--preset--font-size--medium);
+	cursor: pointer;
+	list-style: none;
+}
+
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details summary::-webkit-details-marker {
+	display: none;
+}
+
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details summary::after {
+	content: "+";
+	font-size: 1.5rem;
+	font-weight: 300;
+	line-height: 1;
+}
+
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details[open] summary::after {
+	content: "−";
+}
+
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details > :not(summary) {
+	margin-top: 0;
+	font-size: var(--wp--preset--font-size--small);
+	padding-bottom: 1.25rem;
+}
+
+/* "You may also like": 2-up grid of four on mobile. (A horizontal scroll rail
+   widened the mobile layout viewport, so it's deliberately avoided here.) */
+@media (max-width: 781px) {
+	.kayi-product-rail .wc-block-product-template {
+		display: grid !important;
+		grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+		gap: 1.25rem 0.75rem;
+	}
+
+	.kayi-product-rail .wc-block-product-template > li:nth-child(n + 5) {
+		display: none;
+	}
+}
+
+/* Long SEO copy under category grids — readable, low-key. */
+.kayi-category-about {
+	color: var(--wp--preset--color--accent-4);
+}
+
+.kayi-category-about h2,
+.kayi-category-about h3,
+.kayi-category-about strong {
+	color: var(--wp--preset--color--contrast);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────────── */
+.kayi-footer__links {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: grid;
+	gap: 0.45rem;
+	font-size: var(--wp--preset--font-size--small);
+}
+
+.kayi-footer__links a,
+footer .wp-block-group.alignfull .has-small-font-size a {
+	text-decoration: none;
+}
+
+.kayi-footer__links a:hover,
+.kayi-footer__links a:focus-visible,
+footer .wp-block-group.alignfull .has-small-font-size a:hover {
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+}
+
+.kayi-footer__title {
+	margin-bottom: 0.75rem;
+}
+
+/* Anchor jumps (e.g. /#faqs) land below the sticky header. */
+#faqs {
+	scroll-margin-top: 6rem;
+}
+
+/* Phone: "Shop" and "Help" link lists side by side. */
+@media (max-width: 781px) {
+	.kayi-footer__cols {
+		display: grid !important;
+		grid-template-columns: 1fr 1fr;
+	}
+
+	.kayi-footer__cols > .wp-block-column:first-child,
+	.kayi-footer__cols > .wp-block-column:last-child {
+		grid-column: 1 / -1;
+	}
+}
+
+/* ── Contact form ───────────────────────────────────────────────────────────── */
+.kayi-form {
+	display: grid;
+	gap: 1rem;
+}
+
+.kayi-form p {
+	margin: 0;
+}
+
+.kayi-form__row {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 1rem;
+}
+
+.kayi-form__field label {
+	display: block;
+	margin-bottom: 0.4rem;
+	font-size: var(--wp--preset--font-size--small);
+	font-weight: 600;
+}
+
+.kayi-form input[type="text"],
+.kayi-form input[type="email"],
+.kayi-form textarea {
+	width: 100%;
+	padding: 0.85rem 1rem;
+	border: 1px solid #d4d4d4;
+	border-radius: 0.25rem;
+	background: var(--wp--preset--color--base);
+	color: var(--wp--preset--color--contrast);
+	font: inherit;
+	transition: border-color 0.15s ease;
+}
+
+.kayi-form input:focus,
+.kayi-form textarea:focus {
+	outline: none;
+	border-color: var(--wp--preset--color--contrast);
+	box-shadow: inset 0 0 0 1px var(--wp--preset--color--contrast);
+}
+
+.kayi-form__hp {
+	position: absolute !important;
+	left: -9999px !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+
+.kayi-form__consent {
+	font-size: var(--wp--preset--font-size--small);
+	color: var(--wp--preset--color--accent-4);
+}
+
+.kayi-form__submit {
+	cursor: pointer;
+	border: 0;
+	border-radius: 999px;
+	padding: 1rem 2.25rem;
+	background: var(--wp--preset--color--contrast);
+	color: var(--wp--preset--color--base);
+	font-weight: 500;
+}
+
+.kayi-form__submit:hover {
+	opacity: 0.85;
+}
+
+.kayi-form__notice {
+	padding: 0.85rem 1rem;
+	border-radius: 0.25rem;
+	font-weight: 600;
+}
+
+.kayi-form__notice.is-success {
+	background: #e8f5e9;
+	color: #1b5e20;
+}
+
+.kayi-form__notice.is-error {
+	background: #fdecea;
+	color: #8a1c14;
+}
+
+#kayi-contact-form {
+	scroll-margin-top: 7rem;
+}
+
+/* Contact detail cards. */
+.kayi-contact-card {
+	border-top: 1px solid #e5e5e5;
+	padding-top: 1.25rem;
+}
+
+.kayi-contact-card a {
+	text-decoration: none;
+}
+
+.kayi-contact-card a:hover {
+	text-decoration: underline;
+	text-underline-offset: 0.25em;
+}
+
+/* Legal pages: restore heading/list styling (Tailwind's preflight resets them). */
+.kayi-legal h2 {
+	margin-top: 2.5rem;
+	font-size: var(--wp--preset--font-size--large);
+	font-weight: 600;
+}
+
+.kayi-legal ul {
+	list-style: disc;
+	padding-left: 1.25rem;
+}
+
+.kayi-legal li + li {
+	margin-top: 0.35rem;
+}
+
+/* Sale banner: yellow badge so it stands out on the black background. */
+.kayi-sale .kayi-product-cards .wc-block-components-product-sale-badge {
+	background: var(--wp--preset--color--accent-1);
+	color: var(--wp--preset--color--contrast);
+}
+
+.kayi-sale .kayi-product-cards del {
+	color: #a3a3a3;
+}
+
+/* ── Category grid cards (gallery cards on product category pages) ───────────
+   Equal-height cards: square main image, one row of thumbnails (space reserved
+   when a product has none), titles held to two lines, and price + button pushed
+   to the bottom so they line up across each row. */
+.kayi-cat-cards > li {
+	display: flex !important;
+	flex-direction: column;
+	container-type: inline-size;
+}
+
+.kayi-cat-cards .woocommerce-product-gallery {
+	width: 100% !important;
+	margin: 0 0 0.75rem !important;
+	float: none !important;
+}
+
+.kayi-cat-cards .woocommerce-product-gallery__image img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	background: #f5f5f5;
+}
+
+/* flexslider animates the viewport height to each slide — all slides are
+   square now, so pin it to the card width. */
+.kayi-cat-cards .flex-viewport {
+	height: 100cqw !important;
+}
+
+/* One row of four thumbnails max. */
+.kayi-cat-cards .woocommerce-product-gallery .flex-control-thumbs {
+	flex-wrap: nowrap;
+	overflow: hidden;
+}
+
+.kayi-cat-cards .woocommerce-product-gallery .flex-control-thumbs li:nth-child(n + 5) {
+	display: none;
+}
+
+.kayi-cat-cards .woocommerce-product-gallery .flex-control-thumbs li img {
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+}
+
+/* Products with a single image have no thumbnail row — reserve the same space. */
+.kayi-cat-cards .woocommerce-product-gallery:not(:has(.flex-control-thumbs))::after {
+	content: "";
+	display: block;
+	height: calc((100cqw - 1.5rem) / 4 + 0.5rem);
+}
+
+.kayi-cat-cards .wp-block-post-title {
+	line-height: 1.2;
+	min-height: 2.4em;
+	margin-top: 0 !important;
+}
+
+.kayi-cat-cards .wp-block-post-excerpt__excerpt {
+	display: -webkit-box;
+	-webkit-line-clamp: 3;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+/* Push price + button to the bottom of every card. */
+.kayi-cat-cards .wp-block-woocommerce-product-price {
+	margin-top: auto !important;
+	padding-top: 0.75rem;
+}
+
+/* Narrow two-up cards on phones: smaller titles, single-line full-width buttons. */
+@media (max-width: 599px) {
+	.kayi-cat-cards .wp-block-post-title {
+		font-size: 1rem !important;
+	}
+
+	.kayi-cat-cards .wp-block-post-excerpt {
+		font-size: 0.9rem !important;
+	}
+
+	.kayi-cat-cards .wp-block-woocommerce-product-button,
+	.kayi-cat-cards .wp-block-woocommerce-product-button .wp-block-button__link {
+		width: 100%;
+	}
+
+	.kayi-cat-cards .wp-block-woocommerce-product-button .wp-block-button__link {
+		justify-content: center;
+		padding: 0.75rem 0.5rem;
+		font-size: 0.9rem;
+		white-space: nowrap;
 	}
 }

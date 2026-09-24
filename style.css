@@ -79,6 +79,14 @@ Text Domain: twentytwentyfive-child
   width: 100vw !important;
   min-height: 100vh !important;
   position: relative;
+  /* WordPress adds block-gap margins between sibling blocks; slides must sit flush. */
+  margin: 0 !important;
+}
+
+/* A slider wrapper with no track (e.g. the dots group got moved outside the
+   slider in the editor) would otherwise render as an empty full-height block. */
+.js-pinned-slider:not(:has(.js-pinned-slider__track)) {
+  display: none !important;
 }
 
 /* Ensure cover block image fills the slide */
@@ -124,6 +132,8 @@ Text Domain: twentytwentyfive-child
 .js-pinned-slider__dot {
   width: 8px;
   height: 8px;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.4);
   transition: background 0.3s ease, transform 0.3s ease;
@@ -135,13 +145,15 @@ Text Domain: twentytwentyfive-child
 }
 
 /* ==========================================================================
-   Mobile Responsive
+   Mobile Responsive — phones only. Tablets and desktops keep the pinned,
+   scroll-driven slider. Keep in sync with MOBILE_BP in src/animation.js.
    ========================================================================== */
 
-@media (max-width: 768px) {
+@media (max-width: 599px) {
   /* On mobile the slider becomes a stacked carousel — no horizontal track */
   .js-pinned-slider {
     height: 100vh !important;
+    height: 100svh !important; /* ignore the mobile browser toolbar */
   }
 
   .js-pinned-slider__track {
@@ -156,19 +168,34 @@ Text Domain: twentytwentyfive-child
     flex: none !important;
     width: 100vw !important;
     height: 100vh !important;
-    min-height: 100vh !important;
+    height: 100svh !important;
+    min-height: 0 !important;
   }
 
   .js-pinned-slider__slide .wp-block-cover__inner-container {
     padding: 1.5rem 1.5rem 6rem; /* bottom padding clears the nav buttons */
   }
 
+  /* Big, punchy slide headlines on phones too (desktop uses 10rem). */
   .js-pinned-slider__slide .wp-block-heading {
-    font-size: clamp(1.5rem, 6vw, 2.5rem) !important;
+    font-size: clamp(3rem, 16vw, 5.5rem) !important;
+    line-height: 0.95;
   }
 
-  .js-pinned-slider__slide .wp-block-paragraph {
-    font-size: 0.95rem !important;
+  .js-pinned-slider__slide p {
+    font-size: 1.05rem !important;
+  }
+
+  /* Dots are tappable on mobile — give them a bigger hit area. */
+  .js-pinned-slider__dots.is-mobile-nav .js-pinned-slider__dot {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .js-pinned-slider__dots.is-mobile-nav .js-pinned-slider__dot::before {
+    content: "";
+    position: absolute;
+    inset: -10px;
   }
 
   /* Mobile nav bar — replaces dots, sits at bottom of slider */
@@ -188,6 +215,12 @@ Text Domain: twentytwentyfive-child
     display: flex;
     gap: 0.4rem;
     align-items: center;
+    /* Dark pill keeps the white dots visible on light slides too. */
+    padding: 0.55rem 0.8rem;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
   }
 
   /* Circular prev/next buttons */
@@ -199,7 +232,7 @@ Text Domain: twentytwentyfive-child
     height: 44px;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.8);
-    background: rgba(0, 0, 0, 0.35);
+    background: rgba(0, 0, 0, 0.55);
     color: #ffffff;
     cursor: pointer;
     backdrop-filter: blur(4px);

@@ -1,0 +1,53 @@
+<!-- wp:template-part {"slug":"header","tagName":"header"} /-->
+
+<!-- wp:group {"tagName":"main","className":"kayi-shop","style":{"spacing":{"padding":{"top":"var:preset|spacing|50","bottom":"var:preset|spacing|60","left":"var:preset|spacing|40","right":"var:preset|spacing|40"}}},"layout":{"type":"constrained"}} -->
+<main class="wp-block-group kayi-shop" style="padding-top:var(--wp--preset--spacing--50);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--40)">
+
+	<!-- wp:group {"align":"wide","layout":{"type":"default"}} -->
+	<div class="wp-block-group alignwide">
+		<!-- wp:woocommerce/breadcrumbs {"fontSize":"small"} /-->
+
+		<!-- wp:query-title {"type":"archive","showPrefix":false,"className":"js-reveal-wall","style":{"typography":{"fontSize":"clamp(3rem, 8vw, 7.5rem)","fontWeight":"700","lineHeight":"0.95"},"spacing":{"margin":{"top":"var:preset|spacing|30","bottom":"var:preset|spacing|30"}}}} /-->
+
+		<!-- wp:term-description /-->
+
+		<!-- wp:woocommerce/store-notices /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:woocommerce/product-collection {"align":"wide","className":"kayi-shop__grid","queryId":0,"query":{"perPage":12,"pages":0,"offset":0,"postType":"product","order":"desc","orderBy":"date","search":"","exclude":[],"inherit":true,"taxQuery":{},"isProductCollectionBlock":true,"featured":false,"woocommerceOnSale":false,"woocommerceStockStatus":["instock","outofstock","onbackorder"],"woocommerceAttributes":[],"woocommerceHandPickedProducts":[]},"tagName":"div","displayLayout":{"type":"flex","columns":3,"shrinkColumns":true},"dimensions":{"widthType":"fill"},"collection":"woocommerce/product-collection/product-catalog","queryContextIncludes":["collection"]} -->
+	<div class="wp-block-woocommerce-product-collection alignwide kayi-shop__grid">
+		<!-- wp:group {"className":"kayi-shop__toolbar","style":{"spacing":{"margin":{"bottom":"var:preset|spacing|40"}}},"layout":{"type":"flex","flexWrap":"wrap","justifyContent":"space-between","verticalAlignment":"center"}} -->
+		<div class="wp-block-group kayi-shop__toolbar" style="margin-bottom:var(--wp--preset--spacing--40)">
+			<!-- wp:woocommerce/product-results-count /-->
+			<!-- wp:woocommerce/catalog-sorting /-->
+		</div>
+		<!-- /wp:group -->
+
+		<!-- wp:woocommerce/product-template {"className":"kayi-product-cards"} -->
+			<!-- wp:woocommerce/product-image {"showSaleBadge":false,"imageSizing":"single","isDescendentOfQueryLoop":true,"aspectRatio":"1","scale":"cover"} -->
+				<!-- wp:woocommerce/product-sale-badge {"isDescendentOfQueryLoop":true,"align":"left"} /-->
+			<!-- /wp:woocommerce/product-image -->
+			<!-- wp:post-title {"level":3,"isLink":true,"style":{"typography":{"fontWeight":"600"},"spacing":{"margin":{"top":"0.75rem","bottom":"0.25rem"}}},"fontSize":"medium","__woocommerceNamespace":"woocommerce/product-collection/product-title"} /-->
+			<!-- wp:post-terms {"term":"product_cat","className":"kayi-card__cats","fontSize":"small"} /-->
+			<!-- wp:woocommerce/product-price {"isDescendentOfQueryLoop":true,"fontSize":"small"} /-->
+		<!-- /wp:woocommerce/product-template -->
+
+		<!-- wp:woocommerce/product-collection-no-results -->
+			<!-- wp:paragraph -->
+			<p>No products were found matching your selection.</p>
+			<!-- /wp:paragraph -->
+		<!-- /wp:woocommerce/product-collection-no-results -->
+
+		<!-- wp:query-pagination {"paginationArrow":"arrow","layout":{"type":"flex","justifyContent":"center"},"style":{"spacing":{"margin":{"top":"var:preset|spacing|50"}}}} -->
+			<!-- wp:query-pagination-previous /-->
+			<!-- wp:query-pagination-numbers /-->
+			<!-- wp:query-pagination-next /-->
+		<!-- /wp:query-pagination -->
+	</div>
+	<!-- /wp:woocommerce/product-collection -->
+
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer","tagName":"footer"} /-->
