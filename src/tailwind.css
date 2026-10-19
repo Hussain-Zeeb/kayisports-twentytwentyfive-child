@@ -366,15 +366,193 @@ header.wp-block-template-part.dz-header--hidden {
 	}
 }
 
-/* Phone: core overlay menu — submenus listed inline, no tiles. */
+/* ── Phone header + menu (Adidas-style) ──────────────────────────────────────
+   Header: menu icon left, logo centred, account/basket right.
+   Menu overlay: full-width, left-aligned bold rows with chevrons; tapping a
+   category expands its links (behaviour in mega-menu.js). */
 @media (max-width: 599px) {
 	header .dz-mega__promo,
 	.dz-mega-backdrop {
 		display: none !important;
 	}
 
-	header .dz-mega__all > .wp-block-navigation-item__content {
+	/* Header row: [menu] [logo] [icons] */
+	header .wp-block-group.alignwide:has(> .header-logo) {
+		display: grid !important;
+		grid-template-columns: 1fr auto 1fr;
+		align-items: center;
+		padding-top: 0.75rem !important;
+		padding-bottom: 0.75rem !important;
+	}
+
+	header .wp-block-group.alignwide:has(> .header-logo) > .header-logo {
+		grid-column: 2;
+		grid-row: 1;
+		justify-self: center;
+		margin: 0;
+	}
+
+	header .header-logo img {
+		width: 58px;
+	}
+
+	header .wp-block-group.alignwide:has(> .header-logo) > .wp-block-group:has(.wp-block-navigation) {
+		grid-column: 1;
+		grid-row: 1;
+		justify-self: start;
+	}
+
+	header .wp-block-group.alignwide:has(> .header-logo) > .wp-block-group:has(.wc-block-mini-cart, .wp-block-woocommerce-customer-account) {
+		grid-column: 3;
+		grid-row: 1;
+		justify-self: end;
+	}
+
+	/* Bigger tap target for the menu icon. */
+	header .wp-block-navigation__responsive-container-open {
+		padding: 8px;
+		margin-left: -8px;
+	}
+
+	header .wp-block-navigation__responsive-container-open svg {
+		width: 28px;
+		height: 28px;
+	}
+
+	/* ── Overlay menu ── */
+	header .wp-block-navigation__responsive-container.is-menu-open {
+		padding: 1.25rem 1.5rem 2rem !important;
+		animation: dz-menu-in 0.28s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content {
+		align-items: stretch !important;
+		padding-top: 3.5rem !important;
+	}
+
+	header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__container {
+		width: 100%;
+		align-items: stretch !important;
+		gap: 0 !important;
+	}
+
+	/* Top-level rows */
+	header .is-menu-open .wp-block-navigation__container > .wp-block-navigation-item {
+		width: 100%;
+		align-items: stretch !important;
+		border-bottom: 1px solid #e5e5e5;
+	}
+
+	header .is-menu-open .wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content {
+		display: flex !important;
+		justify-content: space-between;
+		align-items: center;
+		width: 100%;
+		padding: 1.1rem 0 !important;
+		font-size: 1.15rem;
 		font-weight: 700;
+		letter-spacing: 0.04em;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+
+	/* Chevron: points right for links, down/up for expandable categories. */
+	header .is-menu-open .wp-block-navigation__container > .wp-block-navigation-item > .wp-block-navigation-item__content::after {
+		content: "";
+		flex: none;
+		width: 9px;
+		height: 9px;
+		margin-left: 1rem;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(-45deg);
+		transition: transform 0.3s ease;
+	}
+
+	header .is-menu-open .wp-block-navigation__container > .has-child > .wp-block-navigation-item__content::after {
+		transform: rotate(45deg) translate(-2px, -2px);
+	}
+
+	header .is-menu-open .wp-block-navigation__container > .has-child.dz-m-open > .wp-block-navigation-item__content::after {
+		transform: rotate(-135deg) translate(-2px, -2px);
+	}
+
+	/* Core's submenu toggle isn't needed — the whole row toggles. */
+	header .is-menu-open .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-icon {
+		display: none !important;
+	}
+
+	/* Sub-links: collapsed until the category is tapped. */
+	header .is-menu-open .wp-block-navigation__container > .has-child > .wp-block-navigation__submenu-container {
+		display: none !important;
+		padding: 0 0 1rem !important;
+		margin: 0 !important;
+		gap: 0 !important;
+		overflow: hidden;
+	}
+
+	header .is-menu-open .wp-block-navigation__container > .has-child.dz-m-open > .wp-block-navigation__submenu-container {
+		display: flex !important;
+		flex-direction: column;
+		align-items: stretch !important;
+	}
+
+	header .is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item {
+		align-items: stretch !important;
+	}
+
+	header .is-menu-open .wp-block-navigation__submenu-container .wp-block-navigation-item__content {
+		display: block;
+		padding: 0.6rem 0 !important;
+		font-size: 1rem;
+		font-weight: 400;
+		text-align: left;
+		text-decoration: none;
+	}
+
+	header .is-menu-open .dz-mega__all > .wp-block-navigation-item__content {
+		font-weight: 700 !important;
+		text-decoration: underline !important;
+		text-underline-offset: 0.3em;
+	}
+
+	/* No focus box on tap (theme default); keyboard users get an underline. */
+	header .is-menu-open .wp-block-navigation-item__content:focus {
+		outline: none !important;
+	}
+
+	header .is-menu-open .wp-block-navigation-item__content:focus-visible {
+		text-decoration: underline !important;
+		text-underline-offset: 0.3em;
+	}
+
+	/* Close button: top-left, where the menu icon was. */
+	header .is-menu-open .wp-block-navigation__responsive-container-close {
+		left: 1.25rem;
+		right: auto;
+		top: 1.25rem;
+	}
+
+	header .is-menu-open .wp-block-navigation__responsive-container-close svg {
+		width: 28px;
+		height: 28px;
+	}
+}
+
+@keyframes dz-menu-in {
+	from {
+		opacity: 0;
+		transform: translateX(-24px);
+	}
+	to {
+		opacity: 1;
+		transform: none;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	header .wp-block-navigation__responsive-container.is-menu-open {
+		animation: none;
 	}
 }
 
@@ -429,14 +607,98 @@ header.wp-block-template-part.dz-header--hidden {
 	background-color: transparent;
 }
 
+/* ── Archive header (shop + categories, Adidas-style) ────────────────────────
+   No hero image: breadcrumb, bold uppercase title with a grey product count,
+   and a short intro (see [kayi_archive_header] in functions.php). */
+.kayi-archive-top {
+	padding-top: var(--wp--preset--spacing--40);
+}
+
+.kayi-shop > .kayi-archive-top {
+	padding-top: 0;
+}
+
+/* Sort dropdown sits tight under the header, right-aligned. */
+.kayi-archive-top + .wp-block-woocommerce-product-collection,
+.kayi-archive-top ~ .wp-block-woocommerce-product-collection .kayi-shop__toolbar {
+	margin-top: 0 !important;
+}
+
+.kayi-archive-header__title {
+	margin: 1.25rem 0 0;
+	font-size: clamp(2.5rem, 1.6rem + 3vw, 4.5rem);
+	font-weight: 400;
+	line-height: 0.95;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.kayi-archive-header__count {
+	font-size: 0.875rem;
+	font-weight: 400;
+	letter-spacing: 0;
+	color: var(--wp--preset--color--accent-4);
+	vertical-align: middle;
+}
+
+.kayi-archive-header__intro {
+	max-width: 44rem;
+	margin: 0.875rem 0 0;
+	font-size: 1rem;
+	line-height: 1.6;
+}
+
+.kayi-archive-header__intro a {
+	font-weight: 600;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	white-space: nowrap;
+}
+
+#kayi-category-about {
+	scroll-margin-top: 120px;
+}
+
 /* ── Single product ─────────────────────────────────────────────────────────── */
 
-/* Buy panel stays in view while the gallery scrolls (desktop only). */
+/* Desktop: the gallery stays in view while the details column scrolls past.
+   It sits just under the sticky header, moves up when the header hides on
+   scroll-down, and the large image is capped so the whole gallery fits on
+   screen (a sticky element taller than the viewport would get cut off).
+   --kayi-header-offset / --kayi-header-bottom are set by mega-menu.js. */
 @media (min-width: 782px) {
-	.kayi-product__summary {
+	.kayi-product {
+		--kayi-sticky-gap: 1.5rem;
+	}
+
+	.kayi-product__media {
 		position: sticky;
-		top: 2rem;
+		top: calc(var(--kayi-header-bottom, 117px) + var(--kayi-sticky-gap));
 		align-self: flex-start;
+		transition: top 0.35s ease;
+	}
+
+	body:has(header.wp-block-template-part.dz-header--hidden) .kayi-product__media {
+		top: calc(var(--kayi-header-offset, 0px) + var(--kayi-sticky-gap));
+	}
+
+	.kayi-product .wc-block-product-gallery {
+		--kayi-gallery-max: calc(100vh - var(--kayi-header-bottom, 117px) - 2 * var(--kayi-sticky-gap));
+	}
+
+	.kayi-product .wc-block-product-gallery-large-image {
+		max-width: var(--kayi-gallery-max);
+	}
+
+	/* Long thumbnail rails scroll on their own instead of stretching the gallery. */
+	.kayi-product .wc-block-product-gallery-thumbnails {
+		max-height: var(--kayi-gallery-max);
+		overflow-y: auto;
+		scrollbar-width: none;
+	}
+
+	.kayi-product .wc-block-product-gallery-thumbnails::-webkit-scrollbar {
+		display: none;
 	}
 }
 
@@ -551,7 +813,7 @@ header.wp-block-template-part.dz-header--hidden {
 	text-decoration: line-through;
 }
 
-/* Full-width pill "Add to basket" button. */
+/* Full-width square "Add to basket" button. */
 .kayi-product__buy .wp-block-woocommerce-product-button,
 .kayi-product__buy .wp-block-woocommerce-product-button .wp-block-button__link,
 .kayi-product__buy .wc-block-components-product-button__button {
@@ -561,14 +823,15 @@ header.wp-block-template-part.dz-header--hidden {
 
 .kayi-product__buy .wc-block-components-product-button__button {
 	min-height: 3.5rem;
-	border-radius: 999px;
+	border-radius: 0;
 	background: var(--wp--preset--color--contrast);
 	color: var(--wp--preset--color--base);
-	font-weight: 600;
+	font-weight: 700;
 }
 
 .kayi-product__buy .wc-block-components-product-button__button:hover {
-	opacity: 0.85;
+	background: var(--wp--preset--color--accent-1);
+	color: var(--wp--preset--color--contrast);
 }
 
 .kayi-product__perks {
@@ -611,15 +874,34 @@ header.wp-block-template-part.dz-header--hidden {
 	display: none;
 }
 
+/* Plus icon drawn with two bars; the vertical bar collapses into a minus. */
 :is(.kayi-product__accordions, .kayi-accordions) .wp-block-details summary::after {
-	content: "+";
-	font-size: 1.5rem;
-	font-weight: 300;
-	line-height: 1;
+	content: "";
+	flex: none;
+	width: 14px;
+	height: 14px;
+	margin-left: 1rem;
+	background:
+		linear-gradient(currentColor, currentColor) center / 100% 2px no-repeat,
+		linear-gradient(currentColor, currentColor) center / 2px 100% no-repeat;
+	transition: background-size 0.35s ease, transform 0.35s ease;
 }
 
 :is(.kayi-product__accordions, .kayi-accordions) .wp-block-details[open] summary::after {
-	content: "−";
+	background-size: 100% 2px, 2px 0;
+	transform: rotate(180deg);
+}
+
+/* No focus box when clicked with a mouse (theme default), but keep a clear
+   ring for keyboard users. */
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details summary:focus {
+	outline: none;
+}
+
+:is(.kayi-product__accordions, .kayi-accordions) .wp-block-details summary:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 4px;
+	border-radius: 2px;
 }
 
 :is(.kayi-product__accordions, .kayi-accordions) .wp-block-details > :not(summary) {
@@ -756,15 +1038,16 @@ footer .wp-block-group.alignfull .has-small-font-size a:hover {
 .kayi-form__submit {
 	cursor: pointer;
 	border: 0;
-	border-radius: 999px;
+	border-radius: 0;
 	padding: 1rem 2.25rem;
 	background: var(--wp--preset--color--contrast);
 	color: var(--wp--preset--color--base);
-	font-weight: 500;
+	font-weight: 700;
 }
 
 .kayi-form__submit:hover {
-	opacity: 0.85;
+	background: var(--wp--preset--color--accent-1);
+	color: var(--wp--preset--color--contrast);
 }
 
 .kayi-form__notice {
@@ -880,14 +1163,19 @@ footer .wp-block-group.alignfull .has-small-font-size a:hover {
 }
 
 .kayi-cat-cards .wp-block-post-title {
-	line-height: 1.2;
-	min-height: 2.4em;
 	margin-top: 0 !important;
 }
 
+.kayi-cat-cards .wp-block-post-excerpt {
+	margin: 0;
+	color: var(--wp--preset--color--accent-4);
+	line-height: 1.5;
+}
+
 .kayi-cat-cards .wp-block-post-excerpt__excerpt {
+	margin: 0;
 	display: -webkit-box;
-	-webkit-line-clamp: 3;
+	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
 }
@@ -895,17 +1183,33 @@ footer .wp-block-group.alignfull .has-small-font-size a:hover {
 /* Push price + button to the bottom of every card. */
 .kayi-cat-cards .wp-block-woocommerce-product-price {
 	margin-top: auto !important;
-	padding-top: 0.75rem;
+	padding-top: 0.5rem;
 }
 
-/* Narrow two-up cards on phones: smaller titles, single-line full-width buttons. */
+.kayi-cat-cards .wp-block-woocommerce-product-button {
+	margin-top: 0.75rem !important;
+}
+
+.kayi-cat-cards .wp-block-woocommerce-product-button .wp-block-button__link {
+	padding: 0.6rem 1.25rem;
+}
+
+/* Phones: shop + category listings show one product per row (Adidas-style
+   large image), so the two-up alignment helpers aren't needed there. */
 @media (max-width: 599px) {
-	.kayi-cat-cards .wp-block-post-title {
-		font-size: 1rem !important;
+	.kayi-cat-cards,
+	.kayi-shop__grid .wc-block-product-template {
+		grid-template-columns: 1fr !important;
+		row-gap: 2.75rem !important;
 	}
 
-	.kayi-cat-cards .wp-block-post-excerpt {
-		font-size: 0.9rem !important;
+	/* Single-image products don't need a spacer when cards don't sit side by side. */
+	.kayi-cat-cards .woocommerce-product-gallery:not(:has(.flex-control-thumbs))::after {
+		content: none;
+	}
+
+	.kayi-cat-cards .wp-block-woocommerce-product-price {
+		padding-top: 0.5rem;
 	}
 
 	.kayi-cat-cards .wp-block-woocommerce-product-button,
@@ -915,8 +1219,160 @@ footer .wp-block-group.alignfull .has-small-font-size a:hover {
 
 	.kayi-cat-cards .wp-block-woocommerce-product-button .wp-block-button__link {
 		justify-content: center;
-		padding: 0.75rem 0.5rem;
-		font-size: 0.9rem;
-		white-space: nowrap;
 	}
+}
+
+/* Phones: every big section heading matches the "Boxing Gloves" heading
+   (same fluid size WordPress generates for its 7.5rem setting). */
+@media (max-width: 599px) {
+	main :is(h1, h2).wp-block-heading.js-reveal-wall {
+		font-size: clamp(3.615rem, 2.3962rem + 6.094vw, 7.5rem) !important;
+		line-height: 1 !important;
+	}
+}
+
+/* Phones: sections use vw-based padding (6vw ≈ 23px on a phone), so they run
+   into each other. Give every content section clear breathing room — except
+   full-bleed heroes (alignfull covers) and the pinned slider. */
+@media (max-width: 599px) {
+	.wp-block-post-content > :is(.wp-block-group, .wp-block-cover):not(.js-pinned-slider):not(.wp-block-cover.alignfull) {
+		padding-top: 4.5rem !important;
+		padding-bottom: 4.5rem !important;
+	}
+
+	/* Contact page: intro + details read as one block, so keep them close. */
+	.wp-block-post-content > .wp-block-group:has(+ .wp-block-group .kayi-contact-card):not(.js-pinned-slider):not(.wp-block-cover.alignfull) {
+		padding-bottom: 1.5rem !important;
+	}
+
+	.wp-block-post-content > .wp-block-group:has(.kayi-contact-card):not(.js-pinned-slider):not(.wp-block-cover.alignfull) {
+		padding-top: 1.5rem !important;
+	}
+
+	/* Keep a larger custom top padding set in the editor (e.g. 100px). */
+	.wp-block-post-content > .wp-block-group.has-custom-css:not(.js-pinned-slider):not(.wp-block-cover.alignfull) {
+		padding-top: max(4.5rem, 100px) !important;
+	}
+}
+
+/* ── Category carousel (homepage) ───────────────────────────────────────────
+   Apple-style scroller: the track runs off the right edge of the page (3.2
+   cards on desktop, 2.2 on tablet, 1.15 on phones) while the first card lines
+   up with the page content; round prev/next arrows underneath (animation.js).
+   The section is a size container so the offset can be worked out in CSS:
+   100cqw = its content width, i.e. the page width minus the root padding. */
+.kayi-carousel {
+	container-type: inline-size;
+}
+
+.kayi-carousel .kayi-carousel__track {
+	--kayi-carousel-gap: 16px;
+	--kayi-carousel-visible: 3.2;
+	--kayi-carousel-gaps: 3;
+	/* Distance from the screen edge to the content edge (wide-size aware). */
+	--kayi-carousel-offset: max(
+		var(--wp--style--root--padding-left),
+		(100cqw + var(--wp--style--root--padding-left) + var(--wp--style--root--padding-right) - var(--wp--style--global--wide-size)) / 2
+	);
+	gap: var(--kayi-carousel-gap);
+	flex-wrap: nowrap;
+	align-items: stretch;
+	padding-inline: var(--kayi-carousel-offset);
+	scroll-padding-inline: var(--kayi-carousel-offset);
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	scroll-snap-type: x mandatory;
+	scrollbar-width: none;
+}
+
+.kayi-carousel .kayi-carousel__track::-webkit-scrollbar {
+	display: none;
+}
+
+/* 100% here is the track minus its side padding (the content width), so add
+   one offset back to get the visible width from the content edge to the
+   right edge of the screen. */
+.kayi-carousel .kayi-carousel__track > * {
+	flex: 0 0 calc((100% + var(--kayi-carousel-offset) - var(--kayi-carousel-gaps) * var(--kayi-carousel-gap)) / var(--kayi-carousel-visible));
+	min-width: 0;
+	margin: 0;
+	scroll-snap-align: start;
+}
+
+/* Card: photo, then title and "Shop now" underneath (always readable). */
+.kayi-carousel__card > * {
+	margin: 0;
+}
+
+.kayi-carousel__card .wp-block-image img {
+	display: block;
+	width: 100%;
+	height: auto;
+	background: #f5f5f5;
+}
+
+.kayi-carousel__card .kayi-carousel__title {
+	margin: 1rem 0 0.75rem;
+	font-size: var(--wp--preset--font-size--large);
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+.kayi-carousel__card .wp-block-button__link {
+	padding: 0.6rem 1.4rem;
+	font-size: var(--wp--preset--font-size--small);
+}
+
+@media (max-width: 1024px) {
+	.kayi-carousel .kayi-carousel__track {
+		--kayi-carousel-visible: 2.2;
+		--kayi-carousel-gaps: 2;
+	}
+}
+
+@media (max-width: 599px) {
+	.kayi-carousel .kayi-carousel__track {
+		--kayi-carousel-gap: 12px;
+		--kayi-carousel-visible: 1.15;
+		--kayi-carousel-gaps: 1;
+	}
+}
+
+.kayi-carousel__nav {
+	display: flex;
+	justify-content: flex-end;
+	gap: 12px;
+	margin-top: 24px !important;
+}
+
+.kayi-carousel__nav[hidden] {
+	display: none;
+}
+
+.kayi-carousel__btn {
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: rgb(0 0 0 / 0.08);
+	color: var(--wp--preset--color--contrast);
+	cursor: pointer;
+	transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.kayi-carousel__btn:hover:not(:disabled) {
+	background: rgb(0 0 0 / 0.16);
+}
+
+.kayi-carousel__btn:disabled {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.kayi-carousel__btn:focus-visible {
+	outline: 2px solid var(--wp--preset--color--contrast);
+	outline-offset: 2px;
 }

@@ -1,0 +1,7264 @@
+/* ==========================================================================
+   Kayi Sports — black & gold brand styles
+   Header, footer, homepage sections (.kayi-c-*) and the WooCommerce / page
+   overrides that carry the look across the rest of the site. Colours, fonts
+   and base element styles live in theme.json; this file adds the rest.
+   Originally the homepage concept (Figma, then the "Dark · Core three focus"
+   design canvas).
+   ========================================================================== */
+
+:root {
+	--kc-black: #0b0b0c;
+	--kc-ink: #141417;
+	--kc-line: #2a2a2f;
+	--kc-grey: #a3a3ab;
+	--kc-gold: #c9a24a;
+	--kc-gold-deep: #9e7c2e;
+	--kc-cream: #f3efe7;
+	--kc-cream-line: #ddd6c8;
+	--kc-display: "Anton", "Impact", "Arial Narrow", sans-serif;
+	--kc-cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+	--kc-body: "Barlow", system-ui, sans-serif;
+	--kc-gutter: clamp(20px, 5.56vw, 80px);
+	--kc-max: 1280px;
+	--kc-section-y: clamp(72px, 8.4vw, 120px);
+}
+
+/* ── Shared type ─────────────────────────────────────────────────────────── */
+
+.kayi-c-main,
+.kayi-c-footer,
+.kayi-c-header,
+.kayi-c-announce {
+	font-family: var(--kc-body);
+	-webkit-font-smoothing: antialiased;
+}
+
+.kayi-c-main :is(h1, h2, h3, h4) {
+	font-family: var(--kc-display);
+	font-weight: 400;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	margin: 0;
+}
+
+.kayi-c-main p {
+	margin: 0;
+}
+
+.kayi-c-gold {
+	color: var(--kc-gold);
+}
+
+.kayi-c-eyebrow {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	line-height: 1.2;
+	color: var(--kc-gold-deep);
+}
+
+.kayi-c-eyebrow::before {
+	content: "";
+	flex: none;
+	width: 36px;
+	height: 2px;
+	background: var(--kc-gold);
+}
+
+:is(.kayi-c-hero, .kayi-c-feature, .kayi-c-why, .kayi-c-promo.is-dark) .kayi-c-eyebrow {
+	color: var(--kc-gold);
+}
+
+.kayi-c-promo.is-gold .kayi-c-eyebrow {
+	color: var(--kc-black);
+}
+
+.kayi-c-promo.is-gold .kayi-c-eyebrow::before {
+	background: var(--kc-black);
+}
+
+.kayi-c-h2 {
+	font-size: clamp(48px, 6.1vw, 88px);
+	line-height: 0.92;
+}
+
+.kayi-c-lead {
+	font-size: clamp(16px, 1.25vw, 18px);
+	line-height: 1.6;
+}
+
+/* ── Buttons ─────────────────────────────────────────────────────────────── */
+
+.kayi-c-buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+}
+
+:is(.kayi-c-btn-gold, .kayi-c-btn-outline, .kayi-c-btn-dark) .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px 30px;
+	border: 1.5px solid transparent;
+	border-radius: 0;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 1.2;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+:is(.kayi-c-btn-gold, .kayi-c-btn-outline, .kayi-c-btn-dark) .wp-block-button__link::after {
+	content: "→";
+	font-family: var(--kc-body);
+	transition: transform 0.2s ease;
+}
+
+:is(.kayi-c-btn-gold, .kayi-c-btn-outline, .kayi-c-btn-dark) .wp-block-button__link:hover::after {
+	transform: translateX(4px);
+}
+
+.kayi-c-btn-gold .wp-block-button__link {
+	background: var(--kc-gold);
+	border-color: var(--kc-gold);
+	color: var(--kc-black);
+}
+
+.kayi-c-btn-gold .wp-block-button__link:hover {
+	background: #dab65e;
+	border-color: #dab65e;
+	color: var(--kc-black);
+}
+
+.kayi-c-btn-outline .wp-block-button__link {
+	background: transparent;
+	border-color: rgba(255, 255, 255, 0.85);
+	color: #fff;
+	padding-block: 19.5px;
+}
+
+.kayi-c-btn-outline .wp-block-button__link:hover {
+	background: #fff;
+	color: var(--kc-black);
+}
+
+.kayi-c-btn-dark .wp-block-button__link {
+	background: var(--kc-black);
+	border-color: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-c-btn-dark .wp-block-button__link:hover {
+	background: #26262b;
+	border-color: #26262b;
+	color: #fff;
+}
+
+/* ── Announcement bar ───────────────────────────────────────────────────── */
+
+header.wp-block-template-part:has(.kayi-c-header) {
+	background: var(--kc-black);
+}
+
+.kayi-c-announce {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 28px;
+	min-height: 38px;
+	padding: 8px var(--kc-gutter);
+	background: var(--kc-gold);
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+}
+
+.kayi-c-announce > p {
+	margin: 0;
+	white-space: nowrap;
+}
+
+.kayi-c-announce > p + p::before {
+	content: "•";
+	margin-right: 28px;
+}
+
+.kayi-c-announce a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.kayi-c-announce a:hover {
+	text-decoration: underline;
+}
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+
+.kayi-c-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 24px;
+	margin: 0 !important;
+	padding: 22px var(--kc-gutter);
+	background: var(--kc-black);
+	border-bottom: 1px solid var(--kc-line);
+	color: #fff;
+}
+
+.kayi-c-header > *,
+.kayi-c-announce > * {
+	margin-block: 0 !important;
+}
+
+.kayi-c-logo {
+	margin: 0;
+}
+
+.kayi-c-logo a {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+	color: #fff;
+	text-decoration: none;
+	font-family: var(--kc-display);
+	font-size: 36px;
+	line-height: 0.92;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+.kayi-c-logo a::before {
+	content: "";
+	flex: none;
+	width: 54px;
+	height: 46px;
+	background: url("assets/horse-mark-gold.svg") center / contain no-repeat;
+}
+
+.kayi-c-logo span {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 6px;
+	color: var(--kc-gold);
+}
+
+.kayi-c-nav {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 16px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	--navigation-layout-justification-setting: center;
+}
+
+.kayi-c-nav .wp-block-navigation__container {
+	gap: 34px;
+}
+
+header .kayi-c-nav .wp-block-navigation-item__content {
+	color: #fff;
+	font-weight: 600 !important;
+	text-decoration: none !important;
+	transition: color 0.2s ease;
+}
+
+header .kayi-c-nav .wp-block-navigation-item__content:hover,
+header .kayi-c-nav .kayi-c-nav__sale .wp-block-navigation-item__content {
+	color: var(--kc-gold);
+}
+
+header .kayi-c-nav .kayi-c-nav__muted .wp-block-navigation-item__content {
+	color: var(--kc-grey);
+}
+
+header .kayi-c-nav .kayi-c-nav__muted .wp-block-navigation-item__content:hover {
+	color: #fff;
+}
+
+/* Mobile overlay menu */
+.kayi-c-nav .wp-block-navigation__responsive-container-open,
+.kayi-c-nav .wp-block-navigation__responsive-container-close {
+	color: #fff;
+}
+
+.kayi-c-nav .wp-block-navigation__responsive-container.is-menu-open {
+	background: var(--kc-black) !important;
+	color: #fff !important;
+	padding: 32px var(--kc-gutter);
+}
+
+.kayi-c-nav .is-menu-open .wp-block-navigation__container {
+	gap: 22px;
+	font-family: var(--kc-display);
+	font-size: 34px;
+	font-weight: 400;
+	letter-spacing: 0.5px;
+}
+
+.kayi-c-utils {
+	display: flex;
+	align-items: center;
+	gap: 26px;
+	margin: 0 !important;
+}
+
+.kayi-c-utils > * {
+	margin: 0 !important;
+}
+
+/* Search: text button that expands the field. */
+.kayi-c-search .wp-block-search__button,
+.kayi-c-account a,
+.kayi-c-account,
+.kayi-c-trade a {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: var(--kc-grey);
+	text-decoration: none;
+}
+
+.kayi-c-search .wp-block-search__button {
+	background: none;
+	border: 0;
+	padding: 0;
+	margin: 0;
+	cursor: pointer;
+}
+
+.kayi-c-search .wp-block-search__button:hover,
+.kayi-c-account a:hover,
+.kayi-c-trade a:hover {
+	color: #fff;
+}
+
+.kayi-c-search .wp-block-search__inside-wrapper {
+	border: 0;
+	padding: 0;
+	gap: 10px;
+}
+
+.kayi-c-search .wp-block-search__input {
+	background: var(--kc-ink);
+	border: 1px solid var(--kc-line);
+	border-radius: 0;
+	color: #fff;
+	font-family: var(--kc-body);
+	font-size: 15px;
+	padding: 8px 12px;
+}
+
+.kayi-c-account svg,
+.kayi-c-account .label {
+	display: none;
+}
+
+.kayi-c-account a::before {
+	content: "Account";
+}
+
+.kayi-c-search,
+.kayi-c-search .wp-block-search__inside-wrapper {
+	display: flex;
+	align-items: center;
+}
+
+/* Basket: the Mini-Cart button, re-skinned as "BASKET [0]". */
+.kayi-c-basket .wc-block-mini-cart__button {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	padding: 8px 16px;
+	border: 1.5px solid var(--kc-gold);
+	border-radius: 0;
+	color: #fff;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	transition: background-color 0.2s ease;
+}
+
+.kayi-c-basket .wc-block-mini-cart__button:hover {
+	background: rgba(201, 162, 74, 0.12);
+	opacity: 1;
+}
+
+.kayi-c-basket .wc-block-mini-cart__button::before {
+	content: "Basket";
+}
+
+.kayi-c-basket .wc-block-mini-cart__quantity-badge {
+	display: inline-flex;
+	align-items: center;
+}
+
+.kayi-c-basket .wc-block-mini-cart__icon {
+	display: none;
+}
+
+.kayi-c-basket .wc-block-mini-cart__badge {
+	position: static;
+	transform: none;
+	display: inline-flex;
+	visibility: visible;
+	min-width: 20px;
+	height: 18px;
+	margin: 0;
+	padding: 0 6px;
+	border: 0;
+	border-radius: 0;
+	background: var(--kc-gold) !important;
+	color: var(--kc-black) !important;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 0;
+}
+
+.kayi-c-basket .wc-block-mini-cart__badge:empty::before {
+	content: "0";
+}
+
+/* ── Hero ────────────────────────────────────────────────────────────────── */
+
+.kayi-c-hero {
+	position: relative;
+	isolation: isolate;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	gap: 72px;
+	min-height: 880px;
+	margin: 0 !important;
+	padding: 110px var(--kc-gutter) 55px;
+	overflow: hidden;
+	background: var(--kc-black);
+	color: #fff;
+}
+
+/* Photo, darkened from the left so the type stays legible. */
+.kayi-c-media {
+	position: absolute;
+	inset: 0;
+	z-index: -2;
+	margin: 0 !important;
+}
+
+.kayi-c-media img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Desktop: photo fills the right-hand side, fading into black behind the type. */
+@media (min-width: 782px) {
+	.kayi-c-hero .kayi-c-media {
+		left: 34%;
+	}
+}
+
+.kayi-c-hero .kayi-c-media img {
+	object-position: 50% 30%;
+}
+
+.kayi-c-hero::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: -1;
+	background:
+		linear-gradient(90deg, #0b0b0c 0%, #0b0b0c 34%, rgba(11, 11, 12, 0.55) 52%, rgba(11, 11, 12, 0.15) 100%),
+		linear-gradient(0deg, rgba(11, 11, 12, 0.85) 0%, rgba(11, 11, 12, 0) 35%);
+}
+
+/* Horse watermark. */
+.kayi-c-hero::after {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	right: -40px;
+	top: 120px;
+	width: min(752px, 58vw);
+	aspect-ratio: 54.065 / 46;
+	background: url("assets/horse-mark-gold.svg") center / contain no-repeat;
+	opacity: 0.1;
+	pointer-events: none;
+}
+
+/* With a photo in the hero the watermark fights the subject; keep it for a
+   plain (image-less) hero only. */
+.kayi-c-hero:has(.kayi-c-media img)::after {
+	display: none;
+}
+
+/* Without the stats row the hero's content is centred vertically. */
+.kayi-c-hero:not(:has(.kayi-c-stats)) {
+	justify-content: center;
+	min-height: 780px;
+	padding-bottom: 110px;
+}
+
+@media (max-width: 1024px) {
+	.kayi-c-hero:not(:has(.kayi-c-stats)) {
+		min-height: 0;
+		padding-bottom: 88px;
+	}
+}
+
+@media (max-width: 781px) {
+	.kayi-c-hero:not(:has(.kayi-c-stats)) {
+		padding-bottom: 64px;
+	}
+}
+
+.kayi-c-hero > * {
+	width: 100%;
+	max-width: var(--kc-max);
+	margin-inline: auto !important;
+}
+
+.kayi-c-hero__content {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin-block: 0 !important;
+}
+
+.kayi-c-hero__title {
+	margin-top: 30px !important;
+	font-size: clamp(72px, 12.8vw, 184px) !important;
+	line-height: 0.88 !important;
+	letter-spacing: 1px !important;
+	color: #fff;
+}
+
+.kayi-c-hero__lead {
+	max-width: 540px;
+	margin-top: 30px !important;
+	font-size: clamp(16px, 1.4vw, 19px);
+	line-height: 1.58;
+	color: #c9c9cf;
+}
+
+.kayi-c-hero .kayi-c-buttons {
+	margin-top: 30px;
+}
+
+.kayi-c-stats {
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	margin-block: 0 !important;
+	padding-top: 27px;
+	border-top: 1px solid var(--kc-line);
+}
+
+.kayi-c-stat {
+	margin: 0 !important;
+}
+
+.kayi-c-stat__value {
+	font-family: var(--kc-display);
+	font-size: 28px;
+	line-height: 1.18;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	color: #fff;
+}
+
+.kayi-c-stat__label {
+	margin-top: 4px !important;
+	font-family: var(--kc-cond);
+	font-weight: 500;
+	font-size: 14px;
+	letter-spacing: 1px;
+	color: var(--kc-grey);
+}
+
+/* ── Category marquee ───────────────────────────────────────────────────── */
+
+.kayi-c-marquee {
+	margin: 0 !important;
+	overflow: hidden;
+	background: var(--kc-gold);
+	color: var(--kc-black);
+}
+
+.kayi-c-marquee__track {
+	display: flex;
+	width: max-content;
+	margin: 0 !important;
+	padding: 22px 0;
+	animation: kayi-c-marquee 40s linear infinite;
+}
+
+.kayi-c-marquee:hover .kayi-c-marquee__track {
+	animation-play-state: paused;
+}
+
+.kayi-c-marquee__track > p {
+	display: flex;
+	align-items: center;
+	flex: none;
+	margin: 0 !important;
+	padding-left: 40px;
+	font-family: var(--kc-display);
+	font-size: clamp(24px, 2.2vw, 32px);
+	line-height: 1;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+	white-space: nowrap;
+}
+
+.kayi-c-marquee__track > p::after {
+	content: "";
+	width: 10px;
+	height: 10px;
+	margin-left: 40px;
+	background: currentColor;
+	transform: rotate(45deg);
+}
+
+.kayi-c-marquee a {
+	color: inherit;
+	text-decoration: none;
+}
+
+@keyframes kayi-c-marquee {
+	to {
+		transform: translateX(-50%);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kayi-c-marquee__track {
+		animation: none;
+	}
+}
+
+/* ── Section shell ──────────────────────────────────────────────────────── */
+
+.kayi-c-section {
+	margin: 0 !important;
+	padding: var(--kc-section-y) var(--kc-gutter);
+}
+
+.kayi-c-section > * {
+	width: 100%;
+	max-width: var(--kc-max);
+	margin-inline: auto !important;
+	margin-block: 0;
+}
+
+.kayi-c-head {
+	display: flex;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 32px;
+	flex-wrap: wrap;
+}
+
+.kayi-c-head__titles {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+	margin: 0 !important;
+}
+
+.kayi-c-head__titles > * {
+	margin: 0 !important;
+}
+
+.kayi-c-textlink {
+	margin: 0 !important;
+}
+
+.kayi-c-textlink a {
+	display: inline-flex;
+	gap: 12px;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 17px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: inherit;
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.kayi-c-textlink a::after {
+	content: "→";
+	font-family: var(--kc-body);
+}
+
+/* ── Section heads ──────────────────────────────────────────────────────── */
+
+.kayi-c-display {
+	font-size: clamp(64px, 9.2vw, 132px) !important;
+	line-height: 0.88 !important;
+}
+
+.kayi-c-head--rule {
+	padding-bottom: clamp(32px, 3.4vw, 48px);
+	border-bottom: 1px solid var(--kc-line);
+}
+
+.kayi-c-head__intro {
+	max-width: 440px;
+	margin: 0 !important;
+	font-size: clamp(16px, 1.32vw, 19px);
+	line-height: 1.5;
+	color: var(--kc-grey);
+}
+
+.kayi-c-head__sub {
+	font-size: 17px;
+	line-height: 1.5;
+	color: #4a4a50;
+}
+
+.kayi-c-head__actions {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin: 0 !important;
+}
+
+/* ── 01 Boxing gloves: feature explorer ─────────────────────────────────── */
+
+.kayi-c-gloves {
+	background: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-c-explore {
+	display: grid;
+	grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+	gap: clamp(40px, 5.5vw, 80px);
+	align-items: center;
+	margin-top: clamp(40px, 4.4vw, 64px) !important;
+}
+
+/* Media stage: the slides sit side by side and the track slides between them. */
+.kayi-c-stage {
+	position: relative;
+	min-height: 680px;
+	height: 100%;
+	margin: 0 !important;
+	overflow: hidden;
+	background: linear-gradient(160deg, #2c2c31 0%, #0b0b0c 100%);
+}
+
+.kayi-c-stage__track {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	margin: 0 !important;
+	transition: transform 0.55s cubic-bezier(0.65, 0, 0.35, 1);
+	will-change: transform;
+}
+
+.kayi-c-stage__slide {
+	position: relative;
+	flex: 0 0 100%;
+	height: 100%;
+	margin: 0 !important;
+	overflow: hidden;
+}
+
+.kayi-c-stage__slide .kayi-c-media,
+.kayi-c-stage__slide .kayi-c-video {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	margin: 0 !important;
+}
+
+.kayi-c-stage__slide .kayi-c-media img {
+	transform: scale(1.06);
+	transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kayi-c-stage__slide.is-active .kayi-c-media img {
+	transform: scale(1);
+}
+
+.kayi-c-video video {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Shade so the caption and tabs stay legible on light photos. */
+.kayi-c-stage::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(180deg, rgba(11, 11, 12, 0.25) 0%, rgba(11, 11, 12, 0) 30%, rgba(11, 11, 12, 0) 55%, rgba(11, 11, 12, 0.8) 100%);
+	pointer-events: none;
+}
+
+.kayi-c-stage__bars {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	z-index: 3;
+	display: flex;
+	gap: 4px;
+}
+
+.kayi-c-stage__bars span {
+	flex: 1;
+	height: 4px;
+	background: rgba(255, 255, 255, 0.18);
+	transition: background-color 0.3s ease;
+}
+
+.kayi-c-stage__bars span.is-active {
+	background: var(--kc-gold);
+}
+
+.kayi-c-stage__caption {
+	position: absolute;
+	left: 24px;
+	right: 24px;
+	bottom: 24px;
+	z-index: 3;
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	margin: 0;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 14px;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: rgba(255, 255, 255, 0.85);
+	pointer-events: none;
+}
+
+.kayi-c-stage__caption b {
+	font-weight: 700;
+	color: var(--kc-gold);
+}
+
+.kayi-c-stage__caption strong {
+	font-weight: 600;
+}
+
+.kayi-c-stage__caption span:not(:empty)::before {
+	content: "– ";
+}
+
+.kayi-c-stage__caption strong + span {
+	margin-left: -6px;
+}
+
+.kayi-c-play {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 3;
+	display: grid;
+	place-items: center;
+	width: 96px;
+	height: 96px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: var(--kc-gold);
+	color: var(--kc-black);
+	cursor: pointer;
+	transform: translate(-50%, -50%);
+	transition: transform 0.25s ease, opacity 0.25s ease, background-color 0.2s ease;
+}
+
+.kayi-c-play:hover {
+	background: #dab65e;
+	transform: translate(-50%, -50%) scale(1.06);
+}
+
+.kayi-c-play[hidden] {
+	display: none;
+}
+
+.kayi-c-stage.is-playing .kayi-c-play {
+	opacity: 0;
+}
+
+.kayi-c-stage.is-playing:hover .kayi-c-play {
+	opacity: 1;
+}
+
+/* Phones: feature tab bar fixed to the bottom of the screen (built by
+   kayi.js, appended to <body>). Hidden on larger screens. */
+.kayi-c-featbar {
+	display: none;
+}
+
+.kayi-c-stage__tab:focus {
+	outline: none;
+}
+
+.kayi-c-stage__tab:focus-visible {
+	outline: 2px solid var(--kc-gold);
+	outline-offset: -2px;
+}
+
+.kayi-c-explore__copy {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 32px;
+	margin: 0 !important;
+}
+
+.kayi-c-explore__copy > * {
+	margin: 0 !important;
+}
+
+.kayi-c-hint {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 14px;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: #8a8a92;
+}
+
+.kayi-c-opts {
+	border-bottom: 1px solid #3a3a40;
+}
+
+.kayi-c-opt {
+	display: grid;
+	grid-template-columns: 34px minmax(0, 220px) minmax(0, 1fr);
+	column-gap: 28px;
+	align-items: center;
+	margin: 0 !important;
+	padding: 24px 16px 24px 0;
+	border-top: 1px solid #3a3a40;
+	opacity: 0.45;
+	cursor: pointer;
+	transition: opacity 0.25s ease, padding 0.25s ease;
+}
+
+.kayi-c-opt > * {
+	margin: 0 !important;
+}
+
+.kayi-c-opt.is-active {
+	opacity: 1;
+	padding-left: 16px;
+}
+
+.kayi-c-opt:focus-visible {
+	outline: 2px solid var(--kc-gold);
+	outline-offset: 2px;
+}
+
+.kayi-c-opt__num {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 3px;
+	color: #8a8a92;
+	transition: color 0.25s ease;
+}
+
+.kayi-c-opt.is-active .kayi-c-opt__num {
+	color: var(--kc-gold);
+}
+
+.kayi-c-opt__title {
+	font-size: 44px !important;
+	line-height: 1.1 !important;
+	color: #fff;
+}
+
+.kayi-c-opt__text {
+	font-size: 17px;
+	line-height: 1.4;
+	color: var(--kc-grey);
+}
+
+/* Structure slide: animated cut-away of the multi-layer padding (from the
+   "Glove Padding Layers" design). The layers draw in and the labels fade up
+   each time the slide becomes active (.is-playing is re-added by kayi.js). */
+.kayi-c-layers {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	padding: 36px 32px 72px;
+	background: radial-gradient(ellipse at 35% 45%, #1d1a15 0%, #0e0d0b 70%);
+	color: var(--kc-gold);
+}
+
+.kayi-c-layers p {
+	margin: 0;
+}
+
+.kayi-c-layers__eyebrow {
+	padding-right: 150px;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 14px;
+	letter-spacing: 3px;
+	text-transform: uppercase;
+}
+
+.kayi-c-layers__total {
+	position: absolute;
+	top: 30px;
+	right: 32px;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 2.5px;
+	text-align: right;
+	text-transform: uppercase;
+}
+
+.kayi-c-layers__total b {
+	display: block;
+	font-family: var(--kc-display);
+	font-weight: 400;
+	font-size: 40px;
+	line-height: 1;
+	letter-spacing: 0.5px;
+	color: #fff;
+}
+
+.kayi-c-layers__svg {
+	flex: 1;
+	width: 100%;
+	min-height: 0;
+	margin-top: 12px;
+	overflow: visible;
+}
+
+.kayi-c-layers .kl-glove { fill: #1c1915; stroke: currentColor; stroke-width: 2.5px; stroke-linejoin: round; }
+.kayi-c-layers .kl-cuff { fill: #16140f; stroke: currentColor; stroke-width: 2px; }
+.kayi-c-layers .kl-strap { fill: #252019; stroke: currentColor; stroke-width: 2px; }
+.kayi-c-layers .kl-shell { fill: none; stroke: #2b2620; stroke-width: 10px; }
+.kayi-c-layers .kl-core { fill: #12100d; }
+.kayi-c-layers .kl-band { fill: none; stroke-linecap: butt; }
+.kayi-c-layers .kl-sheet { stroke: url(#kayi-pSheet); stroke-width: 47px; }
+.kayi-c-layers .kl-under { stroke: url(#kayi-pUnder); stroke-width: 29.5px; }
+.kayi-c-layers .kl-foam { stroke: url(#kayi-pFoam); stroke-width: 29.5px; }
+.kayi-c-layers .kl-cut { stroke: currentColor; stroke-width: 1.5px; opacity: 0.5; }
+.kayi-c-layers .kl-seam { fill: none; stroke: currentColor; stroke-width: 1.5px; stroke-dasharray: 6 6; opacity: 0.55; }
+.kayi-c-layers .kl-lead { fill: none; stroke: currentColor; stroke-width: 2px; }
+.kayi-c-layers .kl-dot { fill: currentColor; stroke: #0e0d0b; stroke-width: 2px; }
+.kayi-c-layers .kl-n { font-family: var(--kc-cond); font-weight: 700; font-size: 46px; fill: currentColor; }
+.kayi-c-layers .kl-t { font-family: var(--kc-body); font-weight: 500; font-size: 24px; fill: #f2ede4; }
+.kayi-c-layers .kl-muted { font-family: var(--kc-cond); font-weight: 600; font-size: 16px; letter-spacing: 0.2em; fill: #7d766a; text-anchor: middle; }
+
+.kayi-c-layers.is-playing .kl-wrap {
+	stroke-dasharray: 1 1;
+	animation: kayi-kl-wrap 6s cubic-bezier(0.45, 0, 0.2, 1) infinite both;
+}
+
+.kayi-c-layers.is-playing .kl-fade {
+	animation: kayi-kl-fade 6s ease infinite both;
+}
+
+@keyframes kayi-kl-wrap {
+	0% { stroke-dashoffset: 1; opacity: 1; }
+	18% { stroke-dashoffset: 0; }
+	86% { stroke-dashoffset: 0; opacity: 1; }
+	100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes kayi-kl-fade {
+	0%, 18% { opacity: 0; }
+	30%, 86% { opacity: 1; }
+	100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kayi-c-layers.is-playing .kl-wrap,
+	.kayi-c-layers.is-playing .kl-fade {
+		animation: none;
+		stroke-dasharray: none;
+	}
+}
+
+@media (max-width: 781px) {
+	/* Leave room for the big caption at the bottom of the stage. */
+	.kayi-c-layers {
+		padding: 22px 18px 150px;
+	}
+
+	.kayi-c-layers__eyebrow {
+		padding-right: 110px;
+		font-size: 12px;
+		letter-spacing: 2px;
+	}
+
+	.kayi-c-layers__total {
+		top: 18px;
+		right: 18px;
+		font-size: 11px;
+		letter-spacing: 2px;
+	}
+
+	.kayi-c-layers__total b {
+		font-size: 30px;
+	}
+
+	.kayi-c-layers .kl-n {
+		font-size: 60px;
+	}
+
+	.kayi-c-layers .kl-t {
+		font-size: 34px;
+	}
+}
+
+/* ── Product shelves (glove range, rest of the range) ───────────────────── */
+
+.kayi-c-range {
+	background: #fff;
+	color: var(--kc-black);
+}
+
+.kayi-c-rest {
+	background: var(--kc-cream);
+	color: var(--kc-black);
+}
+
+.kayi-c-shelf .kayi-c-eyebrow {
+	color: #6e5520;
+}
+
+.kayi-c-shelf .kayi-c-h2 {
+	font-size: clamp(44px, 4.45vw, 64px);
+	line-height: 0.95;
+}
+
+.kayi-c-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin: 0 !important;
+}
+
+.kayi-c-tabs .wp-block-button,
+.kayi-c-pills .wp-block-button {
+	margin: 0;
+}
+
+.kayi-c-tabs .wp-block-button__link,
+.kayi-c-pills .wp-block-button__link {
+	padding: 10px 20px;
+	border: 1px solid rgba(11, 11, 12, 0.2);
+	border-radius: 999px;
+	background: transparent;
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 14px;
+	line-height: 1.2;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.kayi-c-tabs .wp-block-button__link:hover,
+.kayi-c-pills .wp-block-button__link:hover {
+	border-color: var(--kc-black);
+}
+
+.kayi-c-tabs .wp-block-button__link.is-active,
+.kayi-c-pills .is-sale .wp-block-button__link {
+	background: var(--kc-black);
+	border-color: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-c-pills {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 10px;
+	margin-top: 40px !important;
+}
+
+.kayi-c-pills::before {
+	content: "Also shop:";
+	margin-right: 6px;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: #4a4a50;
+}
+
+.kayi-c-pills .wp-block-button__link {
+	padding: 9px 18px;
+}
+
+.kayi-c-shelf__controls {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 16px 24px;
+}
+
+.kayi-c-arrows {
+	display: flex;
+	gap: 8px;
+}
+
+.kayi-c-arrows[hidden] {
+	display: none;
+}
+
+.kayi-c-arrow {
+	display: grid;
+	place-items: center;
+	width: 52px;
+	height: 52px;
+	padding: 0;
+	border: 1.5px solid rgba(11, 11, 12, 0.25);
+	border-radius: 50%;
+	background: transparent;
+	color: var(--kc-black);
+	cursor: pointer;
+	transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.kayi-c-arrow--next {
+	background: var(--kc-black);
+	border-color: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-c-arrow:disabled {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.kayi-c-products {
+	margin-top: 40px !important;
+}
+
+.kayi-c-products .kayi-c-cards {
+	position: relative;
+	display: flex !important;
+	flex-wrap: nowrap !important;
+	gap: 24px !important;
+	margin: 0 !important;
+	padding: 0 0 4px !important;
+	overflow-x: auto;
+	overscroll-behavior-x: contain;
+	scroll-snap-type: x mandatory;
+	scroll-behavior: smooth;
+	scrollbar-width: none;
+	list-style: none;
+}
+
+.kayi-c-products .kayi-c-cards::-webkit-scrollbar {
+	display: none;
+}
+
+.kayi-c-products .kayi-c-cards > li {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	flex: 0 0 calc((100% - 72px) / 4) !important;
+	width: auto !important;
+	max-width: none !important;
+	margin: 0 !important;
+	scroll-snap-align: start;
+	text-align: left;
+}
+
+.kayi-c-products .kayi-c-cards.is-compact > li {
+	flex-basis: 280px !important;
+}
+
+.kayi-c-products .kayi-c-cards > li[hidden] {
+	display: none;
+}
+
+.kayi-c-card__image {
+	position: relative;
+	margin: 0 !important;
+	background: linear-gradient(180deg, #f3efe7 0%, #d6ccb8 100%);
+}
+
+.kayi-c-rest .kayi-c-card__image {
+	background: #fff;
+}
+
+.kayi-c-card__image img {
+	transition: transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kayi-c-cards > li:hover .kayi-c-card__image img {
+	transform: scale(1.04);
+}
+
+.kayi-c-card__image .wc-block-components-product-sale-badge {
+	position: absolute;
+	top: 16px;
+	left: 16px;
+	right: auto;
+	margin: 0;
+	padding: 5px 10px;
+	border: 0;
+	border-radius: 0;
+	background: var(--kc-gold);
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	z-index: 2;
+}
+
+.kayi-c-rest .kayi-c-card__image .wc-block-components-product-sale-badge {
+	background: var(--kc-black);
+	color: #fff;
+}
+
+/* Category label: first non-"Sale" category only. */
+.kayi-c-card__cat {
+	margin: 14px 0 0 !important;
+	font-family: var(--kc-cond);
+	font-weight: 500;
+	font-size: 14px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: #6b6b73;
+}
+
+.kayi-c-card__cat a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.kayi-c-card__cat a[href*="/sale/"],
+.kayi-c-card__cat a:not([href*="/sale/"]) ~ a {
+	display: none;
+}
+
+.kayi-c-card__title {
+	margin: 10px 0 0 !important;
+	font-family: var(--kc-body) !important;
+	font-weight: 600 !important;
+	font-size: 19px !important;
+	line-height: 1.25 !important;
+	letter-spacing: 0 !important;
+	text-transform: none !important;
+}
+
+.is-compact .kayi-c-card__title {
+	font-size: 18px !important;
+}
+
+.kayi-c-card__title a {
+	color: var(--kc-black);
+	text-decoration: none;
+}
+
+.kayi-c-card__title a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.kayi-c-card__price {
+	margin: 10px 0 0 !important;
+	font-family: var(--kc-body);
+	font-weight: 700;
+	font-size: 18px;
+	color: var(--kc-black);
+	text-align: left !important;
+}
+
+.kayi-c-card__price del {
+	margin-right: 8px;
+	font-weight: 500;
+	font-size: 15px;
+	color: #6b6b73;
+	opacity: 1;
+}
+
+.kayi-c-card__price ins {
+	text-decoration: none;
+}
+
+.kayi-c-cards .kayi-c-card__btn {
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	width: 100%;
+	margin: auto 0 0 !important;
+	padding-top: 14px;
+}
+
+.kayi-c-cards .kayi-c-card__btn .wp-block-button__link,
+.kayi-c-cards .kayi-c-card__btn .wc-block-components-product-button__button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	min-height: 50px;
+	margin: 0;
+	padding: 14px 16px;
+	border: 0;
+	border-radius: 0;
+	background: var(--kc-black);
+	color: #fff;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.kayi-c-cards .kayi-c-card__btn .wp-block-button__link:hover,
+.kayi-c-cards .kayi-c-card__btn .wc-block-components-product-button__button:hover {
+	background: var(--kc-gold);
+	color: var(--kc-black);
+}
+
+.kayi-c-card__btn .added_to_cart {
+	display: block;
+	margin-top: 8px;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: var(--kc-black);
+}
+
+/* ── 02 Focus pads / 03 Head guards (split sections) ────────────────────── */
+
+.kayi-c-split {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.13fr);
+	align-items: center;
+	gap: clamp(40px, 6vw, 88px);
+}
+
+.kayi-c-split > * {
+	max-width: none;
+	margin-inline: 0 !important;
+}
+
+@media (min-width: 1441px) {
+	.kayi-c-split {
+		padding-inline: calc((100% - var(--kc-max)) / 2);
+	}
+}
+
+.kayi-c-split__copy {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 28px;
+	margin: 0 !important;
+}
+
+.kayi-c-split__copy > * {
+	margin: 0 !important;
+}
+
+.kayi-c-split__title {
+	font-size: clamp(72px, 9.4vw, 136px) !important;
+	line-height: 0.88 !important;
+}
+
+/* Phones: "Focus pads" / "Head guards" on one line — the <br> (with a space
+   before it in the markup) is dropped, and the size is capped at 16vw so the
+   longer one still fits a 320px screen. */
+@media (max-width: 781px) {
+	.kayi-c-split__title br {
+		display: none;
+	}
+
+	.kayi-c-split .wp-block-heading.kayi-c-split__title.js-reveal-wall {
+		font-size: min(clamp(3.615rem, 2.3962rem + 6.094vw, 7.5rem), 16vw) !important;
+	}
+}
+
+.kayi-c-split__text {
+	max-width: 520px;
+	font-size: clamp(16px, 1.32vw, 19px);
+	line-height: 1.55;
+}
+
+.kayi-c-pads {
+	background: var(--kc-gold);
+	color: var(--kc-black);
+}
+
+.kayi-c-pads .kayi-c-eyebrow {
+	color: var(--kc-black);
+}
+
+.kayi-c-pads .kayi-c-eyebrow::before {
+	background: var(--kc-black);
+}
+
+.kayi-c-pads .kayi-c-split__text,
+.kayi-c-callout__text {
+	color: #1d1d20;
+}
+
+.kayi-c-callout {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	align-self: stretch;
+	padding: 24px 0;
+	border-top: 1px solid rgba(11, 11, 12, 0.25);
+	border-bottom: 1px solid rgba(11, 11, 12, 0.25);
+}
+
+.kayi-c-callout > * {
+	margin: 0 !important;
+}
+
+.kayi-c-callout__title {
+	font-family: var(--kc-display);
+	font-size: 32px;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+
+.kayi-c-callout__text {
+	max-width: 520px;
+	font-size: 17px;
+	line-height: 1.55;
+}
+
+.kayi-c-btn-outline-dark .wp-block-button__link {
+	display: inline-flex;
+	align-items: center;
+	gap: 14px;
+	padding: 18px 30px;
+	border: 1.5px solid var(--kc-black);
+	border-radius: 0;
+	background: transparent;
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 1.2;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.kayi-c-btn-outline-dark .wp-block-button__link::after {
+	content: "→";
+	font-family: var(--kc-body);
+}
+
+.kayi-c-btn-outline-dark .wp-block-button__link:hover {
+	background: var(--kc-black);
+	color: #fff;
+}
+
+/* Image tiles: product shots on a cream panel. */
+.kayi-c-tile {
+	position: relative;
+	margin: 0 !important;
+	overflow: hidden;
+	background: #f3efe7;
+}
+
+.kayi-c-tile img,
+.kayi-c-tile video {
+	display: block;
+	width: 100%;
+	height: 100%;
+}
+
+.kayi-c-tile img {
+	object-fit: contain;
+	padding: 8%;
+	box-sizing: border-box;
+	mix-blend-mode: multiply;
+	transition: transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kayi-c-tile:hover img {
+	transform: scale(1.04);
+}
+
+.kayi-c-tile.is-video {
+	background: var(--kc-black);
+}
+
+.kayi-c-tile.is-video video {
+	object-fit: cover;
+}
+
+.kayi-c-mosaic {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-template-rows: 272px 272px;
+	gap: 16px;
+	margin: 0 !important;
+}
+
+.kayi-c-mosaic .kayi-c-tile.is-tall {
+	grid-row: span 2;
+}
+
+/* Focus pads stage: cut-out pads on a cream panel with numbered hotspots.
+   Picking a feature (list, hotspot or bar) zooms the picture towards that
+   hotspot — kayi.js initZooms sets --s / --px / --py on .kayi-c-zoom__pic —
+   and the last step crossfades to the pad-work video. Without JS the first
+   view shows as a still. */
+.kayi-c-zoom {
+	position: relative;
+	aspect-ratio: 1 / 1.04;
+	min-height: 480px;
+	margin: 0 !important;
+	overflow: hidden;
+	background: var(--kc-cream);
+}
+
+.kayi-c-zoom__view {
+	position: absolute;
+	inset: 0;
+	opacity: 0;
+	visibility: hidden;
+	transition: opacity 0.5s ease, visibility 0s linear 0.5s;
+}
+
+.kayi-c-zoom__view.is-active,
+.kayi-c-zoom:not(.is-ready) .kayi-c-zoom__view:first-child {
+	opacity: 1;
+	visibility: visible;
+	transition: opacity 0.5s ease;
+}
+
+.kayi-c-zoom__view.is-video {
+	background: var(--kc-black);
+}
+
+.kayi-c-zoom__view video {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+/* Scaled about its centre, then shifted so the picked hotspot moves most of
+   the way to the middle of the panel. */
+.kayi-c-zoom__pic {
+	--s: 1;
+	--px: 50;
+	--py: 50;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	height: 76%;
+	aspect-ratio: var(--ar, 1);
+	transform: translate(-50%, -50%) translate(calc((50 - var(--px)) * var(--s) * 0.7%), calc((50 - var(--py)) * var(--s) * 0.7%)) scale(var(--s));
+	transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kayi-c-zoom__pic img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	filter: drop-shadow(0 28px 36px rgba(11, 11, 12, 0.22));
+}
+
+.kayi-c-zoom__spot {
+	position: absolute;
+	top: calc(var(--y) * 1%);
+	left: calc(var(--x) * 1%);
+	z-index: 1;
+	display: grid;
+	place-items: center;
+	width: 38px;
+	height: 38px;
+	margin: -19px 0 0 -19px;
+	padding: 0;
+	border: 2px solid var(--kc-gold);
+	border-radius: 50%;
+	background: rgba(11, 11, 12, 0.85);
+	color: var(--kc-gold);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 16px;
+	line-height: 1;
+	cursor: pointer;
+	/* Undo the picture's zoom so the dot stays the same size. */
+	transform: scale(calc(1 / var(--s)));
+	transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1), background-color 0.25s ease, color 0.25s ease;
+}
+
+.kayi-c-zoom__spot:hover,
+.kayi-c-zoom__spot.is-active {
+	background: var(--kc-gold);
+	color: var(--kc-black);
+}
+
+.kayi-c-zoom__spot:focus {
+	outline: none;
+}
+
+.kayi-c-zoom__spot:focus-visible {
+	outline: 2px solid var(--kc-black);
+	outline-offset: 3px;
+}
+
+.kayi-c-zoom__spot.is-active::before {
+	content: "";
+	position: absolute;
+	inset: -2px;
+	border: 2px solid var(--kc-gold);
+	border-radius: 50%;
+	animation: kayi-zoom-pulse 1.8s ease-out infinite;
+	pointer-events: none;
+}
+
+@keyframes kayi-zoom-pulse {
+	from {
+		transform: scale(1);
+		opacity: 0.9;
+	}
+	to {
+		transform: scale(2.1);
+		opacity: 0;
+	}
+}
+
+/* Name tag beside the active hotspot (to its left with .is-left). */
+.kayi-c-zoom__spot::after {
+	content: attr(aria-label);
+	position: absolute;
+	top: 50%;
+	left: calc(100% + 12px);
+	padding: 8px 12px;
+	background: var(--kc-black);
+	color: #fff;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	white-space: nowrap;
+	opacity: 0;
+	transform: translate(-6px, -50%);
+	transition: opacity 0.3s ease, transform 0.3s ease;
+	pointer-events: none;
+}
+
+.kayi-c-zoom__spot.is-left::after {
+	left: auto;
+	right: calc(100% + 12px);
+	transform: translate(6px, -50%);
+}
+
+.kayi-c-zoom__spot.is-active::after {
+	opacity: 1;
+	transform: translate(0, -50%);
+	transition-delay: 0.45s;
+}
+
+/* Progress bars along the top (built by kayi.js); on phones the active one
+   fills over the auto-advance time. */
+.kayi-c-zoom__bars {
+	position: absolute;
+	top: 16px;
+	left: 20px;
+	right: 20px;
+	z-index: 2;
+	display: flex;
+	gap: 4px;
+}
+
+.kayi-c-zoom__bar {
+	position: relative;
+	flex: 1;
+	height: 24px;
+	padding: 0;
+	border: 0;
+	background: none;
+	cursor: pointer;
+}
+
+.kayi-c-zoom__bar::before,
+.kayi-c-zoom__bar i {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 4px;
+	background: rgba(11, 11, 12, 0.14);
+}
+
+.kayi-c-zoom__bar i {
+	background: var(--kc-gold);
+	transform: scaleX(0);
+	transform-origin: left center;
+}
+
+.kayi-c-zoom__bar:focus {
+	outline: none;
+}
+
+.kayi-c-zoom__bar:focus-visible::before {
+	background: var(--kc-black);
+}
+
+/* Feature list in the copy column (replaces the old callout). */
+.kayi-c-zoom-opts {
+	align-self: stretch;
+	border-bottom: 1px solid rgba(11, 11, 12, 0.25);
+}
+
+.kayi-c-zoom-opt {
+	display: grid;
+	grid-template-columns: 40px minmax(0, 1fr);
+	grid-template-rows: auto 0fr;
+	column-gap: 12px;
+	margin: 0 !important;
+	padding: 16px 0;
+	border-top: 1px solid rgba(11, 11, 12, 0.25);
+	cursor: pointer;
+	transition: grid-template-rows 0.45s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.kayi-c-zoom-opt > * {
+	margin: 0 !important;
+}
+
+.kayi-c-zoom-opt.is-active {
+	grid-template-rows: auto 1fr;
+}
+
+.kayi-c-zoom-opt:focus {
+	outline: none;
+}
+
+.kayi-c-zoom-opt:focus-visible {
+	outline: 2px solid var(--kc-black);
+	outline-offset: 4px;
+}
+
+.kayi-c-zoom-opt__num {
+	align-self: center;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 3px;
+	color: rgba(11, 11, 12, 0.5);
+	transition: color 0.25s ease;
+}
+
+.kayi-c-zoom-opt__title {
+	font-size: 30px !important;
+	line-height: 1.1 !important;
+	color: rgba(11, 11, 12, 0.5);
+	transition: color 0.25s ease;
+}
+
+.kayi-c-zoom-opt:hover .kayi-c-zoom-opt__title,
+.kayi-c-zoom-opt.is-active .kayi-c-zoom-opt__num,
+.kayi-c-zoom-opt.is-active .kayi-c-zoom-opt__title {
+	color: var(--kc-black);
+}
+
+.kayi-c-zoom-opt__text {
+	grid-column: 2;
+	min-height: 0;
+	overflow: hidden;
+	max-width: 480px;
+	font-size: 17px;
+	line-height: 1.5;
+	color: #1d1d20;
+	opacity: 0;
+	transition: opacity 0.35s ease;
+}
+
+.kayi-c-zoom-opt__text::before {
+	content: "";
+	display: block;
+	height: 6px;
+}
+
+.kayi-c-zoom-opt.is-active .kayi-c-zoom-opt__text {
+	opacity: 1;
+	transition-delay: 0.1s;
+}
+
+/* One column: copy display: contents so the stage can sit between the intro
+   and the feature list. */
+@media (max-width: 1024px) {
+	.kayi-c-pads.kayi-c-split {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 24px;
+	}
+
+	.kayi-c-pads .kayi-c-split__copy {
+		display: contents;
+	}
+
+	.kayi-c-pads .kayi-c-zoom {
+		order: 1;
+		aspect-ratio: 4 / 3;
+		margin-block: 8px !important;
+	}
+
+	.kayi-c-pads .kayi-c-zoom-opts {
+		order: 2;
+	}
+
+	.kayi-c-pads .kayi-c-buttons {
+		order: 3;
+	}
+}
+
+/* Phones: square stage inside the page margins (user didn't want it touching
+   the sides); only the active feature shows under it (all stacked in one grid
+   cell so the height doesn't jump). */
+@media (max-width: 781px) {
+	.kayi-c-pads .kayi-c-zoom {
+		aspect-ratio: 1 / 1;
+		min-height: 0;
+	}
+
+	.kayi-c-zoom__pic {
+		height: 74%;
+	}
+
+	.kayi-c-zoom__spot {
+		width: 34px;
+		height: 34px;
+		margin: -17px 0 0 -17px;
+		font-size: 15px;
+	}
+
+	/* Name tag above the dot, so it can't run into a neighbouring hotspot. */
+	.kayi-c-zoom__spot::after,
+	.kayi-c-zoom__spot.is-left::after {
+		top: auto;
+		right: auto;
+		bottom: calc(100% + 10px);
+		left: 50%;
+		padding: 7px 10px;
+		font-size: 12px;
+		letter-spacing: 1.5px;
+		transform: translate(-50%, 6px);
+	}
+
+	.kayi-c-zoom__spot.is-active::after {
+		transform: translate(-50%, 0);
+	}
+
+	.kayi-c-zoom-opts {
+		display: grid;
+		border-bottom: 0;
+	}
+
+	.kayi-c-zoom-opt {
+		grid-area: 1 / 1;
+		grid-template-rows: auto 1fr;
+		padding: 0;
+		border-top: 0;
+		opacity: 0;
+		visibility: hidden;
+		transition: opacity 0.35s ease, visibility 0s linear 0.35s;
+	}
+
+	.kayi-c-zoom-opt.is-active {
+		opacity: 1;
+		visibility: visible;
+		transition: opacity 0.35s ease;
+	}
+
+	.kayi-c-zoom-opt__title {
+		font-size: 32px !important;
+	}
+
+	.kayi-c-zoom-opt__text {
+		opacity: 1;
+		font-size: 16px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kayi-c-zoom__view,
+	.kayi-c-zoom__pic,
+	.kayi-c-zoom__spot,
+	.kayi-c-zoom__spot::after,
+	.kayi-c-zoom-opt,
+	.kayi-c-zoom-opt__text {
+		transition: none !important;
+	}
+
+	.kayi-c-zoom__spot.is-active::before {
+		animation: none;
+	}
+}
+
+.kayi-c-guards {
+	background: #141416;
+	color: #fff;
+}
+
+.kayi-c-guards .kayi-c-split__text {
+	color: var(--kc-grey);
+}
+
+/* Images on the left on desktop; copy stays first in the markup. */
+.kayi-c-guards {
+	grid-template-columns: minmax(0, 1.13fr) minmax(0, 1fr);
+}
+
+.kayi-c-guards .kayi-c-duo,
+.kayi-c-guards .kayi-c-look {
+	order: -1;
+}
+
+/* "Take a closer look" view switcher from the head guards page, reused on
+   the homepage: the .kayi-lp-viewer / .kayi-lp-tabs rules below, plus the
+   variables and margin resets the landing page's .kayi-lp wrapper gives it. */
+.kayi-c-look {
+	--lp-line: #232327;
+	--lp-panel: #161619;
+	--lp-glow: rgba(201, 162, 74, 0.18);
+	--lp-ease: cubic-bezier(0.2, 0.75, 0.2, 1);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+	margin: 0 !important;
+	text-align: center;
+}
+
+.kayi-c-look > *,
+.kayi-c-look .is-layout-flow > *,
+.kayi-c-look figure {
+	margin-block: 0;
+}
+
+.kayi-c-look .kayi-lp-viewer {
+	width: 100%;
+	background:
+		radial-gradient(ellipse 45% 55% at 50% 45%, var(--lp-glow), transparent 70%),
+		#0f0f11;
+}
+
+.kayi-c-look .kayi-lp-tabs button:focus-visible {
+	outline: 2px solid var(--kc-gold);
+	outline-offset: 3px;
+}
+
+/* One column: copy display: contents so the buttons can follow the viewer
+   (on desktop they stay under the copy). */
+@media (max-width: 1024px) {
+	.kayi-c-guards.kayi-c-split {
+		display: flex;
+		flex-direction: column;
+		align-items: stretch;
+		gap: 24px;
+	}
+
+	.kayi-c-guards .kayi-c-split__copy {
+		display: contents;
+	}
+
+	.kayi-c-guards .kayi-c-look {
+		order: 1;
+		margin-block: 24px 8px !important;
+	}
+
+	.kayi-c-guards .kayi-c-buttons {
+		order: 2;
+	}
+}
+
+.kayi-c-duo {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	align-items: start;
+	gap: 16px;
+	margin: 0 !important;
+}
+
+.kayi-c-duo .kayi-c-tile {
+	height: 560px;
+}
+
+.kayi-c-duo .kayi-c-tile:nth-child(2) {
+	margin-top: 56px !important;
+}
+
+.kayi-c-points {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	align-self: stretch;
+	border-top: 1px solid #3a3a40;
+}
+
+.kayi-c-point {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	margin: 0 !important;
+	padding: 22px 16px 22px 0;
+}
+
+.kayi-c-point > * {
+	margin: 0 !important;
+}
+
+.kayi-c-point__title {
+	font-family: var(--kc-display);
+	font-size: 28px;
+	line-height: 1.15;
+	text-transform: uppercase;
+}
+
+.kayi-c-point__text {
+	font-size: 16px;
+	line-height: 1.45;
+	color: var(--kc-grey);
+}
+
+/* ── Why Kayi ────────────────────────────────────────────────────────────── */
+
+.kayi-c-why {
+	background: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-c-why .kayi-c-h2 {
+	font-size: clamp(52px, 6.67vw, 96px);
+}
+
+.kayi-c-usps {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 40px;
+	margin-top: 72px !important;
+}
+
+.kayi-c-usp {
+	margin: 0 !important;
+	padding-top: 34px;
+	border-top: 2px solid var(--kc-gold-deep);
+}
+
+.kayi-c-usp > * {
+	margin: 0 !important;
+}
+
+.kayi-c-usp__num {
+	font-family: var(--kc-display);
+	font-size: 64px;
+	line-height: 1.12;
+	color: var(--kc-gold);
+}
+
+.kayi-c-usp__title {
+	margin-top: 18px !important;
+	font-size: 28px !important;
+	line-height: 1.18 !important;
+	color: #fff;
+}
+
+.kayi-c-usp__text {
+	margin-top: 18px !important;
+	font-size: 16px;
+	line-height: 1.6;
+	color: var(--kc-grey);
+}
+
+/* ── FAQs ────────────────────────────────────────────────────────────────── */
+
+.kayi-c-faq {
+	display: grid;
+	grid-template-columns: minmax(0, 420px) minmax(0, 764px);
+	justify-content: space-between;
+	column-gap: 64px;
+	row-gap: 48px;
+	align-items: start;
+	background: var(--kc-cream);
+	color: var(--kc-black);
+}
+
+.kayi-c-faq > * {
+	max-width: none;
+	margin-inline: 0 !important;
+}
+
+@media (min-width: 1441px) {
+	.kayi-c-faq {
+		padding-inline: calc((100% - var(--kc-max)) / 2);
+	}
+}
+
+.kayi-c-faq__intro {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	margin: 0 !important;
+}
+
+.kayi-c-faq__intro > * {
+	margin: 0 !important;
+}
+
+.kayi-c-faq__intro .kayi-c-h2 {
+	margin-top: 28px !important;
+}
+
+.kayi-c-faq__intro .kayi-c-lead {
+	margin-top: 28px !important;
+	color: #55555c;
+}
+
+.kayi-c-faq__intro .kayi-c-buttons {
+	margin-top: 28px !important;
+}
+
+.kayi-c-faq__list {
+	margin: 0 !important;
+}
+
+.kayi-c-faq__list .wp-block-details {
+	margin: 0 !important;
+	border-top: 1px solid var(--kc-cream-line);
+}
+
+.kayi-c-faq__list .wp-block-details:last-child {
+	border-bottom: 1px solid var(--kc-cream-line);
+}
+
+.kayi-c-faq__list .wp-block-details summary {
+	gap: 24px;
+	padding: 30px 0;
+	font-family: var(--kc-body);
+	font-weight: 600;
+	font-size: clamp(17px, 1.4vw, 20px);
+	line-height: 1.3;
+	color: var(--kc-black);
+}
+
+/* Circle +/– button. */
+.kayi-c-faq__list .wp-block-details summary::after {
+	width: 40px;
+	height: 40px;
+	margin-left: 0;
+	border: 1px solid #c9c2b3;
+	border-radius: 50%;
+	background:
+		linear-gradient(currentColor, currentColor) center / 12px 1.5px no-repeat,
+		linear-gradient(currentColor, currentColor) center / 1.5px 12px no-repeat;
+	transition: background-size 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, transform 0.35s ease;
+}
+
+.kayi-c-faq__list .wp-block-details[open] summary::after {
+	background:
+		linear-gradient(currentColor, currentColor) center / 12px 1.5px no-repeat,
+		linear-gradient(currentColor, currentColor) center / 1.5px 0 no-repeat,
+		var(--kc-gold);
+	border-color: var(--kc-gold);
+}
+
+.kayi-c-faq__list .wp-block-details > :not(summary) {
+	max-width: 700px;
+	padding-bottom: 30px;
+	font-size: 16px;
+	line-height: 1.7;
+	color: #6b6b73;
+}
+
+/* ── Newsletter ─────────────────────────────────────────────────────────── */
+
+.kayi-c-news {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 32px 64px;
+	margin: 0 !important;
+	padding: 80px max(var(--kc-gutter), calc((100% - var(--kc-max)) / 2));
+	background: var(--kc-gold);
+	color: var(--kc-black);
+}
+
+.kayi-c-news > * {
+	margin: 0 !important;
+}
+
+.kayi-c-news__title {
+	font-size: clamp(40px, 4.45vw, 64px) !important;
+	line-height: 0.92 !important;
+}
+
+.kayi-c-news__text {
+	margin-top: 16px !important;
+	font-size: clamp(16px, 1.3vw, 19px);
+	line-height: 1.5;
+	color: #2a2210;
+}
+
+.kayi-c-news__form {
+	display: flex;
+	flex-wrap: wrap;
+	flex: 0 1 597px;
+	margin: 0;
+}
+
+.kayi-c-news__form input {
+	flex: 1 1 260px;
+	min-width: 0;
+	height: 60px;
+	padding: 0 24px;
+	border: 0;
+	border-radius: 0;
+	background: #fff;
+	color: var(--kc-black);
+	font-family: var(--kc-body);
+	font-size: 16px;
+}
+
+.kayi-c-news__form input:focus {
+	outline: 2px solid var(--kc-black);
+	outline-offset: -2px;
+}
+
+.kayi-c-news__form button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	height: 60px;
+	padding: 0 32px;
+	border: 0;
+	border-radius: 0;
+	background: var(--kc-black);
+	color: #fff;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 16px;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background-color 0.2s ease;
+}
+
+.kayi-c-news__form button::after {
+	content: "→";
+	font-family: var(--kc-body);
+}
+
+.kayi-c-news__form button:hover {
+	background: #26262b;
+}
+
+.kayi-c-news__msg {
+	flex-basis: 100%;
+	margin: 12px 0 0;
+	font-weight: 600;
+	font-size: 15px;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+
+.kayi-c-footer {
+	margin: 0 !important;
+	padding: 96px max(var(--kc-gutter), calc((100% - var(--kc-max)) / 2)) 40px;
+	background: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-c-footer > * {
+	margin: 0 !important;
+}
+
+.kayi-c-footer__cols {
+	display: grid;
+	grid-template-columns: minmax(0, 380px) repeat(3, minmax(0, 236px));
+	justify-content: space-between;
+	gap: 48px 32px;
+}
+
+.kayi-c-footer__cols > * {
+	margin: 0 !important;
+}
+
+.kayi-c-footer__brand > * {
+	margin: 0 !important;
+}
+
+.kayi-c-footer .kayi-c-logo a {
+	font-size: 40px;
+}
+
+.kayi-c-footer .kayi-c-logo a::before {
+	width: 61px;
+	height: 52px;
+}
+
+.kayi-c-footer__about {
+	margin-top: 20px !important;
+	font-size: 16px;
+	line-height: 1.6;
+	color: var(--kc-grey);
+}
+
+.kayi-c-footer__social {
+	display: flex;
+	gap: 10px;
+	margin-top: 20px !important;
+}
+
+.kayi-c-footer__social a {
+	display: grid;
+	place-items: center;
+	width: 42px;
+	height: 42px;
+	border: 1px solid var(--kc-line);
+	border-radius: 50%;
+	color: #fff;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 1px;
+	text-decoration: none;
+	transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.kayi-c-footer__social a:hover {
+	border-color: var(--kc-gold);
+	color: var(--kc-gold);
+}
+
+.kayi-c-footer__col > * {
+	margin: 0 !important;
+}
+
+.kayi-c-footer__title {
+	font-family: var(--kc-cond) !important;
+	font-weight: 700 !important;
+	font-size: 14px !important;
+	line-height: 1.2 !important;
+	letter-spacing: 2.5px !important;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+.kayi-c-footer__links {
+	display: flex;
+	flex-direction: column;
+	gap: 14px;
+	margin-top: 14px !important;
+	padding: 0;
+	list-style: none;
+	font-size: 16px;
+	line-height: 1.4;
+	color: #c8c8cc;
+}
+
+.kayi-c-footer__links li {
+	margin: 0;
+}
+
+.kayi-c-footer__links a {
+	color: #c8c8cc;
+	text-decoration: none;
+	transition: color 0.2s ease;
+}
+
+.kayi-c-footer__links a:hover {
+	color: #fff;
+}
+
+.kayi-c-footer__wordmark {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 40px;
+	margin-top: 64px !important;
+	font-family: var(--kc-display);
+	font-size: clamp(64px, 13.9vw, 200px);
+	line-height: 0.9;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	white-space: nowrap;
+	color: #1c1c1f;
+	user-select: none;
+}
+
+.kayi-c-footer__wordmark::after {
+	content: "";
+	flex: none;
+	width: 0.98em;
+	aspect-ratio: 54.065 / 46;
+	background: url("assets/horse-mark-gold.svg") center / contain no-repeat;
+	opacity: 0.22;
+}
+
+.kayi-c-footer__bottom {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 16px 32px;
+	margin-top: 64px !important;
+	padding-top: 28px;
+	border-top: 1px solid var(--kc-line);
+}
+
+.kayi-c-footer__bottom > * {
+	margin: 0 !important;
+}
+
+.kayi-c-footer__legal {
+	font-size: 14px;
+	color: #6b6b73;
+}
+
+.kayi-c-footer__legal a {
+	color: inherit;
+}
+
+.kayi-c-footer__pay {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.kayi-c-footer__pay span {
+	padding: 5px 12px;
+	border-radius: 2px;
+	background: #1c1c1f;
+	color: var(--kc-grey);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 12px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+}
+
+/* ── Rest of the site: pages, shop and WooCommerce ──────────────────────── */
+
+/* Tailwind's preflight resets every heading to font-size: inherit, which beats
+   the theme.json heading scale. Page titles get their size back here; headings
+   inside content (product descriptions etc.) keep their current sizes. */
+h1.wp-block-post-title:not(.has-x-large-font-size):not(.has-xx-large-font-size) {
+	margin-top: clamp(32px, 4vw, 56px);
+	margin-bottom: clamp(20px, 2.4vw, 32px);
+	font-size: clamp(2.5rem, 1.6rem + 3vw, 4.5rem);
+	line-height: 0.95;
+}
+
+.kayi-product__title {
+	font-weight: 400 !important;
+	line-height: 0.95 !important;
+}
+
+/* Product cards in grids (shop, categories, search, related, cart cross-sells):
+   the name in the body font, like the homepage cards. */
+.wc-block-product .wp-block-post-title,
+.wc-block-grid__product-title,
+.wc-block-components-product-name,
+li.product .woocommerce-loop-product__title {
+	font-family: var(--kc-body) !important;
+	font-weight: 600 !important;
+	font-size: 17px !important;
+	line-height: 1.3 !important;
+	letter-spacing: 0 !important;
+	text-transform: none !important;
+}
+
+.wc-block-product .wp-block-post-title a {
+	color: var(--kc-black);
+	text-decoration: none;
+}
+
+.wc-block-product .wp-block-post-title a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.wc-block-product .wc-block-components-product-price,
+.wc-block-grid__product-price {
+	font-weight: 700;
+}
+
+.wc-block-product .wc-block-components-product-price del,
+.wc-block-grid__product-price del {
+	font-weight: 500;
+	color: #6b6b73;
+}
+
+/* One sale badge everywhere: square, black, condensed caps. */
+.wc-block-components-product-sale-badge,
+.wc-block-grid__product-onsale,
+.woocommerce span.onsale {
+	border: 0 !important;
+	border-radius: 0 !important;
+	background: var(--kc-black) !important;
+	color: #fff !important;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 13px !important;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	padding: 5px 10px !important;
+	min-height: 0;
+	line-height: 1.2 !important;
+}
+
+/* WooCommerce buttons that don't use the theme button element styles. */
+.wc-block-components-button:not(.is-link),
+.woocommerce .button,
+.woocommerce button.button,
+.woocommerce a.button {
+	border-radius: 0 !important;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+.wc-block-components-button:not(.is-link):not(.outlined),
+.woocommerce .button:not(.wc-forward-outline) {
+	background: var(--kc-black);
+	color: #fff;
+}
+
+.wc-block-components-button:not(.is-link):not(.outlined):hover,
+.woocommerce .button:hover {
+	background: var(--kc-gold);
+	color: var(--kc-black);
+}
+
+/* Disabled "Add to basket" (variation not chosen yet) stays on-brand. */
+.wc-block-components-product-button__button.disabled,
+.single_add_to_cart_button.disabled {
+	background: var(--kc-black) !important;
+	color: #fff !important;
+	opacity: 0.45 !important;
+}
+
+/* Square form fields to match the buttons. */
+.wc-block-components-text-input input,
+.wc-block-components-combobox .wc-block-components-combobox-control input,
+.wc-block-components-select-input select,
+.wc-blocks-components-select__select,
+.wc-block-components-textarea,
+.woocommerce form .input-text,
+.woocommerce form select,
+.kayi-form input,
+.kayi-form textarea {
+	border-radius: 0 !important;
+}
+
+/* Archive / search titles and WooCommerce section headings get a real size
+   back (see the preflight note above). */
+h1.wp-block-query-title,
+h1.page-title,
+.woocommerce-products-header__title {
+	font-size: clamp(2.25rem, 1.5rem + 2.6vw, 4rem);
+	line-height: 0.95;
+}
+
+.woocommerce-account .woocommerce h2 {
+	font-size: clamp(1.5rem, 1.2rem + 1vw, 2.125rem);
+	line-height: 1;
+}
+
+.wc-block-components-title.wc-block-components-title {
+	font-size: clamp(1.375rem, 1.2rem + 0.5vw, 1.75rem);
+	line-height: 1;
+}
+
+/* Checkout header (parts/checkout-header.html): logo, a secure-checkout note
+   and a way back to the basket. */
+.kayi-c-header--checkout .kayi-c-checkout-secure {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--kc-grey);
+}
+
+.kayi-c-header--checkout .kayi-c-checkout-secure::before {
+	content: "";
+	width: 14px;
+	height: 16px;
+	background: var(--kc-gold);
+	-webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3E%3Cpath d='M7 0a4 4 0 0 0-4 4v3H2a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-1V4a4 4 0 0 0-4-4zm-2.5 4a2.5 2.5 0 0 1 5 0v3h-5z'/%3E%3C/svg%3E") center / contain no-repeat;
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 14 16'%3E%3Cpath d='M7 0a4 4 0 0 0-4 4v3H2a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-1V4a4 4 0 0 0-4-4zm-2.5 4a2.5 2.5 0 0 1 5 0v3h-5z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.kayi-c-header--checkout .kayi-c-checkout-back a {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: #fff;
+	text-decoration: none;
+}
+
+.kayi-c-header--checkout .kayi-c-checkout-back a::before {
+	content: "← ";
+	font-family: var(--kc-body);
+}
+
+.kayi-c-header--checkout .kayi-c-checkout-back a:hover {
+	color: var(--kc-gold);
+}
+
+@media (max-width: 600px) {
+	.kayi-c-header--checkout .kayi-c-checkout-secure {
+		display: none;
+	}
+}
+
+/* Review form: Tailwind's preflight strips field borders, so restore them. */
+#review_form input[type="text"],
+#review_form input[type="email"],
+#review_form textarea,
+#review_form select,
+.comment-form input[type="text"],
+.comment-form input[type="email"],
+.comment-form input[type="url"],
+.comment-form textarea {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 12px 14px;
+	border: 1px solid rgba(11, 11, 12, 0.25);
+	border-radius: 0;
+	background: #fff;
+	font: inherit;
+	color: var(--kc-black);
+}
+
+#review_form select {
+	width: auto;
+}
+
+#review_form input:focus,
+#review_form textarea:focus,
+#review_form select:focus,
+.comment-form input:focus,
+.comment-form textarea:focus {
+	outline: 2px solid var(--kc-gold);
+	outline-offset: 0;
+	border-color: var(--kc-black);
+}
+
+#review_form label,
+.comment-form label {
+	display: block;
+	margin-bottom: 6px;
+	font-weight: 600;
+}
+
+#review_form .comment-form-cookies-consent label,
+.comment-form .comment-form-cookies-consent label {
+	display: inline;
+	font-weight: 400;
+}
+
+/* Breadcrumbs and small labels in the condensed face. */
+.wc-block-breadcrumbs,
+.woocommerce-breadcrumb {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 14px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #6b6b73;
+}
+
+.wc-block-breadcrumbs a,
+.woocommerce-breadcrumb a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.wc-block-breadcrumbs a:hover,
+.woocommerce-breadcrumb a:hover {
+	color: var(--kc-black);
+}
+
+/* ── Category pages (templates/taxonomy-product_cat.html) ────────────────
+   "Find your pair" cards in a grid, filter tabs beside the title; on phones
+   the tabs become a Filter bar at the bottom of the screen that opens a
+   bottom sheet (built by kayi.js). */
+
+.kayi-catalog {
+	padding-top: clamp(20px, 2.8vw, 40px);
+	background: #fff;
+	color: var(--kc-black);
+}
+
+.kayi-catalog__top > * {
+	margin: 0 !important;
+}
+
+/* "Find out more" banner linking a category to its product landing page
+   ([kayi_category_landing]; set under Products › Categories). The whole card
+   is clickable through the button. */
+.kayi-catlink {
+	position: relative;
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	align-items: center;
+	gap: 16px 32px;
+	margin-top: clamp(20px, 2.4vw, 32px) !important;
+	padding: 16px 28px 16px 16px;
+	box-sizing: border-box;
+	overflow: hidden;
+	background:
+		radial-gradient(ellipse 30% 120% at 6% 50%, rgba(201, 162, 74, 0.28), transparent 70%),
+		var(--kc-black);
+	color: #fff;
+	animation: kayi-catlink-in 0.8s cubic-bezier(0.2, 0.75, 0.2, 1) 0.15s both;
+}
+
+.kayi-catlink > * {
+	margin: 0 !important;
+}
+
+.kayi-catlink__media {
+	display: grid;
+	place-items: center;
+	width: 120px;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: radial-gradient(closest-side, rgba(243, 239, 231, 0.95), rgba(243, 239, 231, 0.15) 75%, transparent);
+}
+
+.kayi-catlink__media img {
+	width: 84%;
+	height: 84%;
+	object-fit: contain;
+	filter: drop-shadow(0 10px 14px rgba(0, 0, 0, 0.45));
+	transition: transform 0.6s cubic-bezier(0.2, 0.75, 0.2, 1);
+}
+
+.kayi-catlink:hover .kayi-catlink__media img {
+	transform: translateY(-4px) rotate(-5deg) scale(1.06);
+}
+
+.kayi-catlink__copy {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.kayi-catlink__copy p {
+	margin: 0;
+}
+
+.kayi-catlink__eyebrow {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 2.6px;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+.kayi-catlink__title {
+	font-family: var(--kc-display);
+	font-size: clamp(22px, 2.1vw, 30px);
+	line-height: 1.05;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.kayi-catlink__text {
+	max-width: 600px;
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--kc-grey);
+}
+
+.kayi-catlink__btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	padding: 18px 28px;
+	background: var(--kc-gold);
+	color: var(--kc-black) !important;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 16px;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	text-decoration: none !important;
+	white-space: nowrap;
+	transition: background-color 0.2s ease;
+}
+
+.kayi-catlink__btn::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+}
+
+.kayi-catlink__btn::after {
+	content: "→";
+	font-family: var(--kc-body);
+	transition: transform 0.2s ease;
+}
+
+.kayi-catlink:hover .kayi-catlink__btn {
+	background: #dab65e;
+}
+
+.kayi-catlink:hover .kayi-catlink__btn::after {
+	transform: translateX(4px);
+}
+
+.kayi-catlink__btn:focus-visible {
+	outline: 2px solid #fff;
+	outline-offset: 3px;
+}
+
+@keyframes kayi-catlink-in {
+	from { opacity: 0; transform: translateY(14px); }
+	to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 781px) {
+	.kayi-catlink {
+		grid-template-columns: 84px minmax(0, 1fr);
+		gap: 14px 16px;
+		padding: 14px;
+	}
+
+	.kayi-catlink__media {
+		width: 84px;
+	}
+
+	.kayi-catlink__text {
+		font-size: 14px;
+	}
+
+	.kayi-catlink__btn {
+		grid-column: 1 / -1;
+		justify-self: stretch;
+		padding: 15px 20px;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kayi-catlink {
+		animation: none;
+	}
+}
+
+.kayi-catalog__head {
+	margin-top: 8px !important;
+}
+
+/* Title takes the free width beside the filter tabs. Basis 0 (not a px
+   width): on phones the head stacks, and a px basis would become a height. */
+.kayi-catalog__head .kayi-archive-header {
+	flex: 1 1 0;
+	min-width: min(100%, 420px);
+}
+
+.kayi-catalog .kayi-archive-header__title {
+	margin-top: 0;
+}
+
+.kayi-catalog__toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	gap: 12px 24px;
+	margin: 0 0 28px !important;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e6e6ea;
+}
+
+.kayi-catalog__toolbar > *,
+.kayi-catalog__toolbar form,
+.kayi-catalog__toolbar p {
+	margin: 0 !important;
+}
+
+.kayi-catalog__toolbar .woocommerce-result-count,
+.kayi-catalog__toolbar .wc-block-product-results-count {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: #6b6b73;
+}
+
+.kayi-catalog__toolbar select {
+	padding: 10px 36px 10px 14px;
+	border: 1px solid rgba(11, 11, 12, 0.2);
+	border-radius: 0;
+	background-color: #fff;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: var(--kc-black);
+}
+
+.kayi-c-products .kayi-c-cards.is-grid {
+	display: grid !important;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 48px 24px !important;
+	overflow: visible;
+	scroll-snap-type: none;
+}
+
+.kayi-c-products .kayi-c-cards.is-grid > li {
+	flex: none !important;
+	width: auto !important;
+}
+
+.kayi-catalog .wp-block-query-pagination,
+.kayi-catalog .wc-block-product-collection-pagination {
+	margin-top: 48px !important;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	letter-spacing: 1.5px;
+}
+
+/* Mobile Filter bar + bottom sheet (hidden on larger screens). */
+.kayi-filterbar,
+.kayi-sheet {
+	display: none;
+}
+
+@media (max-width: 781px) {
+	.kayi-c-tabs.has-sheet {
+		display: none;
+	}
+
+	.kayi-filterbar {
+		position: fixed;
+		left: 50%;
+		bottom: calc(16px + env(safe-area-inset-bottom));
+		z-index: 90;
+		display: block;
+		transform: translate(-50%, calc(100% + 32px));
+		transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	.kayi-filterbar.is-visible {
+		transform: translate(-50%, 0);
+	}
+
+	.kayi-filterbar__btn {
+		display: flex;
+		align-items: center;
+		gap: 10px;
+		min-height: 52px;
+		padding: 0 22px;
+		border: 0;
+		border-radius: 999px;
+		background: var(--kc-black);
+		box-shadow: 0 10px 30px rgba(11, 11, 12, 0.35);
+		color: #fff;
+		font-family: var(--kc-cond);
+		font-weight: 700;
+		font-size: 16px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.kayi-filterbar__btn svg {
+		flex: none;
+		color: var(--kc-gold);
+	}
+
+	.kayi-filterbar__value {
+		max-width: 34vw;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		padding-left: 10px;
+		border-left: 1px solid rgba(255, 255, 255, 0.25);
+		color: var(--kc-gold);
+	}
+
+	.kayi-sheet {
+		position: fixed;
+		inset: 0;
+		z-index: 100000;
+		display: block;
+		visibility: hidden;
+		transition: visibility 0s linear 0.35s;
+	}
+
+	.kayi-sheet.is-open {
+		visibility: visible;
+		transition: none;
+	}
+
+	.kayi-sheet__backdrop {
+		position: absolute;
+		inset: 0;
+		background: rgba(11, 11, 12, 0.55);
+		opacity: 0;
+		transition: opacity 0.3s ease;
+	}
+
+	.kayi-sheet.is-open .kayi-sheet__backdrop {
+		opacity: 1;
+	}
+
+	.kayi-sheet__panel {
+		position: absolute;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		display: flex;
+		flex-direction: column;
+		max-height: 82vh;
+		padding: 10px 20px calc(20px + env(safe-area-inset-bottom));
+		border-radius: 14px 14px 0 0;
+		background: #fff;
+		color: var(--kc-black);
+		transform: translateY(100%);
+		transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	.kayi-sheet.is-open .kayi-sheet__panel {
+		transform: translateY(0);
+	}
+
+	.kayi-sheet__panel::before {
+		content: "";
+		align-self: center;
+		width: 40px;
+		height: 4px;
+		margin-bottom: 10px;
+		border-radius: 2px;
+		background: #d9d9dd;
+	}
+
+	.kayi-sheet__head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		padding-bottom: 12px;
+		border-bottom: 1px solid #e6e6ea;
+	}
+
+	.kayi-sheet__title {
+		margin: 0;
+		font-family: var(--kc-display);
+		font-weight: 400;
+		font-size: 30px;
+		line-height: 1;
+		text-transform: uppercase;
+	}
+
+	.kayi-sheet__close {
+		display: grid;
+		place-items: center;
+		width: 44px;
+		height: 44px;
+		margin-right: -10px;
+		padding: 0;
+		border: 0;
+		background: transparent;
+		color: var(--kc-black);
+		cursor: pointer;
+	}
+
+	.kayi-sheet__label {
+		margin: 18px 0 4px;
+		font-family: var(--kc-cond);
+		font-weight: 700;
+		font-size: 13px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		color: #6b6b73;
+	}
+
+	.kayi-sheet__list {
+		margin: 0;
+		padding: 0;
+		overflow-y: auto;
+		list-style: none;
+	}
+
+	.kayi-sheet__opt {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+		width: 100%;
+		min-height: 56px;
+		padding: 0;
+		border: 0;
+		border-bottom: 1px solid #efeff2;
+		background: transparent;
+		color: var(--kc-black);
+		font-family: var(--kc-body);
+		font-weight: 500;
+		font-size: 17px;
+		text-align: left;
+		cursor: pointer;
+	}
+
+	.kayi-sheet__opt::before {
+		content: "";
+		flex: none;
+		width: 22px;
+		height: 22px;
+		box-sizing: border-box;
+		border: 1.5px solid #c9c9cf;
+		border-radius: 50%;
+		transition: border 0.2s ease;
+	}
+
+	.kayi-sheet__opt[aria-checked="true"] {
+		font-weight: 700;
+	}
+
+	.kayi-sheet__opt[aria-checked="true"]::before {
+		border: 7px solid var(--kc-gold);
+	}
+
+	.kayi-sheet__count {
+		margin-left: auto;
+		font-family: var(--kc-cond);
+		font-weight: 600;
+		font-size: 15px;
+		letter-spacing: 1px;
+		color: #6b6b73;
+	}
+
+	.kayi-sheet__apply {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		width: 100%;
+		min-height: 56px;
+		margin-top: 18px;
+		border: 0;
+		border-radius: 0;
+		background: var(--kc-black);
+		color: #fff;
+		font-family: var(--kc-cond);
+		font-weight: 700;
+		font-size: 16px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+		cursor: pointer;
+	}
+
+	.kayi-sheet__apply:active {
+		background: var(--kc-gold);
+		color: var(--kc-black);
+	}
+
+	html.kayi-sheet-open,
+	html.kayi-sheet-open body {
+		overflow: hidden;
+	}
+
+	/* Lift the cookie-settings button above the Filter bar while it shows. */
+	.cky-btn-revisit-wrapper {
+		transition: bottom 0.35s cubic-bezier(0.2, 0.7, 0.2, 1);
+	}
+
+	/* (The homepage bar floats higher, so the cookie button stays in its corner.) */
+	html:has(.kayi-filterbar.is-visible) .cky-btn-revisit-wrapper,
+	html:has(.kayi-c-featbar:not(.kayi-c-featbar--auto).is-visible) .cky-btn-revisit-wrapper {
+		bottom: calc(84px + env(safe-area-inset-bottom)) !important;
+	}
+
+	/* The cookie-settings button would sit on top of the sheet's button. */
+	html.kayi-sheet-open .cky-btn-revisit-wrapper {
+		display: none !important;
+	}
+
+	.kayi-c-products .kayi-c-cards.is-grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: 32px 12px !important;
+	}
+
+	.kayi-c-cards.is-grid .kayi-c-card__title {
+		font-size: 15px !important;
+	}
+
+	.kayi-c-cards.is-grid .kayi-c-card__cat {
+		font-size: 12px;
+		letter-spacing: 1px;
+	}
+
+	.kayi-c-cards.is-grid .kayi-c-card__price {
+		font-size: 16px;
+	}
+
+	.kayi-c-cards.is-grid .kayi-c-card__btn .wc-block-components-product-button__button {
+		min-height: 44px;
+		padding: 10px 8px;
+		font-size: 13px;
+		letter-spacing: 1px;
+	}
+
+	.kayi-catalog__head {
+		gap: 0;
+	}
+
+	.kayi-catalog__toolbar {
+		flex-wrap: nowrap;
+		margin-bottom: 20px !important;
+		padding-bottom: 12px;
+	}
+
+	.kayi-catalog__toolbar .woocommerce-result-count,
+	.kayi-catalog__toolbar .wc-block-product-results-count {
+		font-size: 13px;
+		letter-spacing: 1px;
+	}
+
+	.kayi-catalog__toolbar select {
+		max-width: 52vw;
+		padding: 8px 30px 8px 10px;
+		font-size: 13px;
+	}
+}
+
+@media (min-width: 782px) and (max-width: 1100px) {
+	.kayi-c-products .kayi-c-cards.is-grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+/* ── Product description: plain, readable text ──────────────────────────
+   The imported descriptions use h1–h3 wrapped in <strong> and lots of bold
+   phrases; drop the Anton/uppercase heading style and all the bold. */
+.wp-block-woocommerce-product-description :is(h1, h2, h3, h4, h5, h6) {
+	margin: 1.6em 0 0.4em;
+	font-family: var(--wp--preset--font-family--barlow);
+	font-size: 17px;
+	font-weight: 500;
+	line-height: 1.4;
+	letter-spacing: normal;
+	text-transform: none;
+}
+
+.wp-block-woocommerce-product-description :is(h1, h2) {
+	font-size: 19px;
+}
+
+.wp-block-woocommerce-product-description :is(strong, b) {
+	font-weight: inherit;
+}
+
+.wp-block-woocommerce-product-description :is(p, li) {
+	font-size: 16px;
+	line-height: 1.65;
+}
+
+/* ── Product page info on phones (kayi.js initProductInfo) ───────────────
+   Accordion rows become compact links that open a bottom sheet; a tab bar
+   (same as the gloves explorer's) is fixed to the bottom of the screen. */
+
+@media (max-width: 781px) {
+	.kayi-product__accordions.is-sheet .wp-block-details summary {
+		padding: 18px 0;
+	}
+
+	.kayi-product__accordions.is-sheet .wp-block-details summary::after,
+	.kayi-product__accordions.is-sheet .wp-block-details[open] summary::after {
+		width: 9px;
+		height: 9px;
+		margin-right: 4px;
+		background: none;
+		border-right: 2px solid currentColor;
+		border-bottom: 2px solid currentColor;
+		transform: rotate(-45deg);
+		transition: none;
+	}
+
+	.kayi-c-featbar--info .kayi-c-stage__tab {
+		min-height: 64px;
+		padding: 10px 10px 12px;
+		font-size: 15px;
+		line-height: 1.05;
+	}
+
+	.kayi-c-featbar--info {
+		background: rgba(11, 11, 12, 0.96);
+	}
+
+	.kayi-c-featbar--info .kayi-c-stage__tab {
+		color: var(--kc-gold);
+	}
+
+	.kayi-c-featbar--info .kayi-c-stage__tab small {
+		font-size: 11px;
+		color: rgba(201, 162, 74, 0.7);
+	}
+
+	.kayi-c-featbar--info .kayi-c-stage__tab:active {
+		background: rgba(201, 162, 74, 0.14);
+	}
+
+	.kayi-sheet--info .kayi-sheet__panel {
+		height: 86vh;
+		max-height: 86vh;
+	}
+
+	.kayi-sheet__tabs {
+		display: flex;
+		gap: 8px;
+		margin: 14px -20px 0;
+		padding: 0 20px 14px;
+		overflow-x: auto;
+		border-bottom: 1px solid #e6e6ea;
+		scrollbar-width: none;
+	}
+
+	.kayi-sheet__tabs::-webkit-scrollbar {
+		display: none;
+	}
+
+	.kayi-sheet__tab {
+		flex: none;
+		padding: 9px 16px;
+		border: 1px solid rgba(11, 11, 12, 0.2);
+		border-radius: 999px;
+		background: transparent;
+		color: var(--kc-black);
+		font-family: var(--kc-cond);
+		font-weight: 700;
+		font-size: 14px;
+		letter-spacing: 1.5px;
+		text-transform: uppercase;
+		white-space: nowrap;
+		cursor: pointer;
+	}
+
+	.kayi-sheet__tab.is-active {
+		border-color: var(--kc-black);
+		background: var(--kc-black);
+		color: #fff;
+	}
+
+	.kayi-sheet__body {
+		flex: 1;
+		min-height: 0;
+		padding: 18px 0 8px;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+		-webkit-overflow-scrolling: touch;
+		font-size: 16px;
+		line-height: 1.6;
+	}
+
+	.kayi-sheet__pane > :first-child,
+	.kayi-sheet__pane > :first-child > :first-child {
+		margin-top: 0;
+	}
+}
+
+/* ── Product landing pages (.kayi-lp) ────────────────────────────────────
+   patterns/head-guards.php, boxing-gloves.php and focus-pads.php; first built
+   from the "Kayi Head Guards Section" design canvas (full feature page).
+   kayi.js initLanding adds .is-anim to .kayi-lp (not with reduced motion)
+   and .is-in to each block as it scrolls into view; without it everything
+   simply shows. Scroll-linked parts read --p (0 → 1) set by the script. */
+
+.kayi-lp {
+	--lp-line: #232327;
+	--lp-panel: #161619;
+	--lp-alt: #111113;
+	--lp-glow: rgba(201, 162, 74, 0.18);
+	--lp-ease: cubic-bezier(0.2, 0.75, 0.2, 1);
+	position: relative;
+	margin: 0 !important;
+	background: var(--kc-black);
+	color: #fff;
+}
+
+/* The footer's block-gap margin would show a strip of white body below. */
+.wp-site-blocks:has(.kayi-lp) > footer {
+	margin-block-start: 0;
+}
+
+/* An older Tailwind rule pads every top-level group on phones. */
+.wp-block-post-content > .wp-block-group.kayi-lp.alignfull.kayi-lp {
+	padding: 0 !important;
+}
+
+.kayi-lp.is-layout-flow > *,
+.kayi-lp .is-layout-flow > *,
+.kayi-lp figure {
+	margin-block: 0;
+}
+
+.kayi-lp figure {
+	margin-inline: 0;
+}
+
+.kayi-lp :is(h1, h2, h3) {
+	color: inherit;
+}
+
+.kayi-lp [id] {
+	scroll-margin-top: 84px;
+}
+
+.kayi-lp img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
+/* Section shell */
+.kayi-lp-sec {
+	padding: var(--kc-section-y) var(--kc-gutter);
+	border-top: 1px solid #1a1a1d;
+}
+
+.kayi-lp-sec.is-alt {
+	background: var(--lp-alt);
+}
+
+.kayi-lp-sec > * {
+	width: 100%;
+	max-width: var(--kc-max);
+	margin-inline: auto !important;
+}
+
+.kayi-lp-head,
+.kayi-lp-copy {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.kayi-lp-head {
+	max-width: 820px;
+	margin-inline: 0 auto !important;
+}
+
+.kayi-lp-sec > .kayi-lp-head {
+	max-width: var(--kc-max);
+}
+
+.kayi-lp-sec > .kayi-lp-head > * {
+	max-width: 820px;
+}
+
+.kayi-lp-h2 {
+	font-size: clamp(48px, 6vw, 88px) !important;
+	line-height: 0.92 !important;
+}
+
+.kayi-lp-h2.is-md {
+	font-size: clamp(44px, 5vw, 72px) !important;
+}
+
+.kayi-lp-h2.is-sm {
+	font-size: clamp(36px, 3.9vw, 56px) !important;
+}
+
+.kayi-lp-h3 {
+	font-size: 24px !important;
+	line-height: 1.1 !important;
+}
+
+.kayi-lp-h3.is-lg {
+	font-size: clamp(26px, 2.3vw, 32px) !important;
+}
+
+.kayi-lp-h3.is-xl {
+	font-size: clamp(30px, 3vw, 40px) !important;
+}
+
+.kayi-lp-lead {
+	max-width: 640px;
+	font-size: clamp(17px, 1.4vw, 20px);
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+/* Reveal on scroll */
+/* Transitions sit on the revealed state only, so hiding (when the script
+   adds .is-anim) is instant and only the reveal animates. */
+.kayi-lp.is-anim :is(.kayi-lp-rv, .kayi-lp-stagger > *) {
+	opacity: 0;
+	transform: translateY(36px);
+}
+
+.kayi-lp.is-anim :is(.kayi-lp-rv, .kayi-lp-stagger > *).is-in {
+	opacity: 1;
+	transform: none;
+	transition: opacity 0.9s ease, transform 1.1s var(--lp-ease);
+	transition-delay: var(--lp-d, 0ms);
+}
+
+/* ── Section nav (sticky) ── */
+
+.kayi-lp-nav {
+	position: sticky;
+	top: var(--wp-admin--admin-bar--height, 0px);
+	z-index: 60;
+	background: rgba(11, 11, 12, 0.86);
+	-webkit-backdrop-filter: blur(14px) saturate(1.4);
+	backdrop-filter: blur(14px) saturate(1.4);
+	border-bottom: 1px solid var(--kc-line);
+}
+
+.kayi-lp-nav__inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px 28px;
+	max-width: calc(var(--kc-max) + 2 * var(--kc-gutter));
+	min-height: 62px;
+	margin: 0 auto;
+	padding: 0 var(--kc-gutter);
+	box-sizing: border-box;
+}
+
+.kayi-lp-nav__title {
+	flex: none;
+	margin: 0;
+	font-family: var(--kc-display);
+	font-size: 20px;
+	letter-spacing: 0.5px;
+	text-transform: uppercase;
+}
+
+.kayi-lp-nav__links {
+	display: flex;
+	gap: 28px;
+	margin-left: auto;
+}
+
+.kayi-lp-nav__links a {
+	position: relative;
+	padding: 21px 0;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: var(--kc-grey);
+	text-decoration: none;
+	white-space: nowrap;
+	transition: color 0.2s ease;
+}
+
+.kayi-lp-nav__links a::after {
+	content: "";
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: -1px;
+	height: 2px;
+	background: var(--kc-gold);
+	transform: scaleX(0);
+	transition: transform 0.35s var(--lp-ease);
+}
+
+.kayi-lp-nav__links a:hover,
+.kayi-lp-nav__links a.is-active {
+	color: #fff;
+}
+
+.kayi-lp-nav__links a.is-active::after {
+	transform: scaleX(1);
+}
+
+.kayi-lp-nav__buy {
+	flex: none;
+	display: inline-flex;
+	align-items: center;
+	min-height: 40px;
+	padding: 0 22px;
+	background: var(--kc-gold);
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color 0.2s ease;
+}
+
+.kayi-lp-nav__buy:hover {
+	background: #dab65e;
+	color: var(--kc-black);
+}
+
+.kayi-lp-nav__progress {
+	position: absolute;
+	left: 0;
+	bottom: -1px;
+	width: 100%;
+	height: 2px;
+	background: linear-gradient(90deg, var(--kc-gold-deep), var(--kc-gold));
+	transform: scaleX(var(--lp-progress, 0));
+	transform-origin: left;
+	pointer-events: none;
+}
+
+.kayi-lp :is(.kayi-lp-nav a, .kayi-lp-spot, .kayi-lp-tabs button, .kayi-lp-kit__card a):focus-visible {
+	outline: 2px solid var(--kc-gold);
+	outline-offset: 3px;
+}
+
+/* ── Hero ── */
+
+.kayi-lp-hero {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: clamp(28px, 3.6vw, 48px);
+	margin: 0 !important;
+	padding: clamp(64px, 7.5vw, 112px) var(--kc-gutter) 0;
+	overflow: hidden;
+	text-align: center;
+	background:
+		radial-gradient(ellipse 55% 45% at 50% 82%, rgba(201, 162, 74, 0.22), transparent 70%),
+		var(--kc-black);
+}
+
+/* Outlined wordmark behind the guard; drifts up as the hero scrolls away. */
+.kayi-lp-hero::before {
+	content: "KAYI";
+	position: absolute;
+	left: 50%;
+	bottom: 4%;
+	font-family: var(--kc-display);
+	font-size: clamp(180px, 34vw, 520px);
+	line-height: 0.8;
+	letter-spacing: 0.02em;
+	color: transparent;
+	-webkit-text-stroke: 1px rgba(201, 162, 74, 0.16);
+	transform: translate(-50%, calc(var(--lp-hp, 0) * -80px));
+	pointer-events: none;
+	white-space: nowrap;
+}
+
+.kayi-lp-hero__copy {
+	position: relative;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 24px;
+	max-width: 900px;
+}
+
+.kayi-lp-hero .kayi-c-eyebrow {
+	justify-content: center;
+}
+
+.kayi-lp-hero .kayi-c-eyebrow::after {
+	content: "";
+	flex: none;
+	width: 36px;
+	height: 2px;
+	background: var(--kc-gold);
+}
+
+.kayi-lp-hero__title {
+	font-size: clamp(60px, 8.6vw, 132px) !important;
+	line-height: 0.88 !important;
+}
+
+.kayi-lp-hero__lead {
+	max-width: 620px;
+	font-size: clamp(17px, 1.5vw, 21px);
+	line-height: 1.5;
+	color: var(--kc-grey);
+}
+
+.kayi-lp-hero .kayi-c-buttons {
+	justify-content: center;
+}
+
+/* Title lines rise out of a mask. */
+.kayi-lp-line {
+	display: block;
+	overflow: hidden;
+	padding-bottom: 0.06em;
+	margin-bottom: -0.06em;
+}
+
+.kayi-lp-line__in {
+	display: inline-block;
+}
+
+.kayi-lp.is-anim .kayi-lp-line__in {
+	transform: translateY(108%);
+}
+
+.kayi-lp.is-anim .kayi-lp-in {
+	opacity: 0;
+	transform: translateY(24px);
+}
+
+.kayi-lp.is-anim .kayi-lp-hero.is-ready :is(.kayi-lp-line__in, .kayi-lp-in) {
+	opacity: 1;
+	transform: none;
+	transition: opacity 0.9s ease, transform 1.1s var(--lp-ease);
+	transition-delay: var(--lp-d, 0ms);
+}
+
+.kayi-lp.is-anim .kayi-lp-hero.is-ready .kayi-lp-hero__lead.kayi-lp-in { transition-delay: 420ms; }
+.kayi-lp.is-anim .kayi-lp-hero.is-ready .kayi-c-buttons.kayi-lp-in { transition-delay: 540ms; }
+
+/* Range wordmark in place of the hero title (Bulwark: wide condensed + gold series number). */
+.kayi-lp-wordmark {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.32em;
+	margin: 0 !important;
+	font-family: var(--kc-cond) !important;
+	font-weight: 700 !important;
+	font-size: clamp(40px, 7vw, 104px) !important;
+	line-height: 1 !important;
+	letter-spacing: 0 !important;
+	text-transform: uppercase;
+}
+
+.kayi-lp-wordmark::before,
+.kayi-lp-wordmark::after {
+	content: "";
+	flex: none;
+	width: 0.6em;
+	height: max(2px, 0.03em);
+	background: var(--kc-gold);
+}
+
+.kayi-lp-wordmark__name {
+	letter-spacing: 0.28em;
+	margin-right: -0.28em;
+}
+
+.kayi-lp-wordmark__num {
+	margin-left: 0.12em;
+	letter-spacing: 0.06em;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-wordmark__by {
+	margin-top: -10px !important;
+	margin-right: -0.6em !important;
+	font-family: var(--kc-cond);
+	font-weight: 500;
+	font-size: clamp(12px, 1.25vw, 18px);
+	letter-spacing: 0.6em;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+.kayi-lp.is-anim .kayi-lp-hero.is-ready .kayi-lp-wordmark__by.kayi-lp-in { transition-delay: 200ms; }
+
+@media (max-width: 600px) {
+	.kayi-lp-wordmark::before,
+	.kayi-lp-wordmark::after {
+		display: none;
+	}
+}
+
+/* Product: floats in, tilts with the pointer, drifts on scroll. */
+.kayi-lp-hero__media {
+	position: relative;
+	z-index: 1;
+	width: min(600px, 84vw);
+	transform:
+		perspective(1100px)
+		translateY(calc(var(--lp-hp, 0) * 70px))
+		rotateX(var(--lp-ty, 0deg))
+		rotateY(var(--lp-tx, 0deg));
+	transition: transform 0.6s var(--lp-ease);
+}
+
+.kayi-lp-hero__media::before {
+	content: "";
+	position: absolute;
+	inset: 12% 8% 6%;
+	z-index: -1;
+	border-radius: 50%;
+	background: radial-gradient(closest-side, rgba(201, 162, 74, 0.45), transparent);
+	filter: blur(30px);
+	animation: kayi-lp-glow 5s ease-in-out infinite;
+}
+
+.kayi-lp-hero__media::after {
+	content: "";
+	position: absolute;
+	left: 18%;
+	right: 18%;
+	bottom: 2%;
+	height: 26px;
+	z-index: -1;
+	border-radius: 50%;
+	background: rgba(0, 0, 0, 0.7);
+	filter: blur(14px);
+	animation: kayi-lp-shadow 6s ease-in-out infinite;
+}
+
+.kayi-lp-hero__media img {
+	width: 100%;
+	animation: kayi-lp-float 6s ease-in-out infinite;
+	filter: drop-shadow(0 30px 40px rgba(0, 0, 0, 0.55));
+}
+
+.kayi-lp.is-anim .kayi-lp-hero__media {
+	opacity: 0;
+	translate: 0 80px;
+	scale: 0.88;
+	rotate: -7deg;
+}
+
+.kayi-lp.is-anim .kayi-lp-hero.is-ready .kayi-lp-hero__media {
+	opacity: 1;
+	translate: none;
+	scale: none;
+	rotate: none;
+	transition:
+		opacity 1.2s ease 0.25s,
+		translate 1.5s var(--lp-ease) 0.25s,
+		scale 1.5s var(--lp-ease) 0.25s,
+		rotate 1.5s var(--lp-ease) 0.25s,
+		transform 0.6s var(--lp-ease);
+}
+
+@keyframes kayi-lp-float {
+	0%, 100% { transform: translateY(0) rotate(0deg); }
+	50% { transform: translateY(-14px) rotate(1.2deg); }
+}
+
+@keyframes kayi-lp-shadow {
+	0%, 100% { transform: scaleX(1); opacity: 1; }
+	50% { transform: scaleX(0.86); opacity: 0.7; }
+}
+
+@keyframes kayi-lp-glow {
+	0%, 100% { opacity: 0.75; transform: scale(1); }
+	50% { opacity: 1; transform: scale(1.06); }
+}
+
+/* ── Highlights ── */
+
+.kayi-lp-stats-wrap {
+	padding-top: clamp(48px, 5vw, 72px);
+	border-top: 0;
+}
+
+.kayi-lp-stats {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 1px;
+	background: var(--lp-line);
+	border: 1px solid var(--lp-line);
+	border-radius: 16px;
+	overflow: hidden;
+}
+
+.kayi-lp-stat {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding: 32px 28px;
+	background: var(--kc-black);
+}
+
+.kayi-lp-stat::before {
+	content: "";
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--kc-gold);
+	transform-origin: left;
+}
+
+.kayi-lp.is-anim .kayi-lp-stat::before {
+	transform: scaleX(0);
+}
+
+.kayi-lp.is-anim .kayi-lp-stat.is-in::before {
+	transform: scaleX(1);
+	transition: transform 1s var(--lp-ease) calc(var(--lp-d, 0ms) + 250ms);
+}
+
+.kayi-lp-stat__value {
+	font-family: var(--kc-display);
+	font-size: clamp(34px, 3.4vw, 48px);
+	line-height: 1;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-stat__label {
+	font-size: 15px;
+	line-height: 1.45;
+	color: var(--kc-grey);
+}
+
+/* ── 01 Protection: hotspots ── */
+
+.kayi-lp-zones {
+	--lp-stage-h: clamp(380px, 42vw, 600px);
+	position: relative;
+	display: grid;
+	place-items: center;
+	height: var(--lp-stage-h);
+	margin-top: clamp(40px, 4vw, 56px) !important;
+	border: 1px solid var(--lp-line);
+	border-radius: 20px;
+	overflow: hidden;
+	background:
+		radial-gradient(ellipse 40% 60% at 50% 55%, var(--lp-glow), transparent 70%),
+		var(--lp-panel);
+}
+
+/* Faint target rings behind the guard. */
+.kayi-lp-zones::before {
+	content: "";
+	position: absolute;
+	left: 50%;
+	top: 52%;
+	width: min(820px, 120%);
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: repeating-radial-gradient(circle, transparent 0 58px, rgba(201, 162, 74, 0.08) 59px 60px);
+	transform: translate(-50%, -50%);
+	pointer-events: none;
+}
+
+.kayi-lp-zones__figure {
+	position: relative;
+	z-index: 1;
+	height: calc(var(--lp-stage-h) * 0.86);
+	aspect-ratio: 893 / 1000;
+}
+
+.kayi-lp-zones__figure.is-pads {
+	aspect-ratio: 814 / 820;
+}
+
+.kayi-lp-zones__figure figure,
+.kayi-lp-zones__figure img {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.kayi-lp-zones__figure img {
+	filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.6));
+}
+
+.kayi-lp.is-anim .kayi-lp-zones img {
+	scale: 0.92;
+}
+
+.kayi-lp.is-anim .kayi-lp-zones.is-in img {
+	scale: 1;
+	transition: scale 1.4s var(--lp-ease) 0.15s;
+}
+
+.kayi-lp-spots {
+	position: absolute;
+	inset: 0;
+}
+
+.kayi-lp-spot {
+	position: absolute;
+	left: var(--x);
+	top: var(--y);
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	margin: -22px 0 0 -22px;
+	padding: 0;
+	border: 2px solid var(--kc-gold);
+	border-radius: 50%;
+	background: rgba(11, 11, 12, 0.85);
+	color: var(--kc-gold);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 17px;
+	line-height: 1;
+	cursor: pointer;
+	transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.35s ease;
+}
+
+.kayi-lp-spot::before {
+	content: "";
+	position: absolute;
+	inset: -2px;
+	border: 2px solid var(--kc-gold);
+	border-radius: 50%;
+	animation: kayi-lp-ping 2.4s ease-out infinite;
+	pointer-events: none;
+}
+
+.kayi-lp-spot:hover,
+.kayi-lp-spot.is-active {
+	background: var(--kc-gold);
+	color: var(--kc-black);
+	box-shadow: 0 0 0 9px rgba(201, 162, 74, 0.22);
+}
+
+.kayi-lp.is-anim .kayi-lp-spot {
+	scale: 0;
+}
+
+.kayi-lp.is-anim .kayi-lp-zones.is-in .kayi-lp-spot {
+	scale: 1;
+	transition: background-color 0.25s ease, color 0.25s ease, box-shadow 0.35s ease, scale 0.6s var(--lp-ease);
+}
+
+.kayi-lp.is-anim .kayi-lp-zones.is-in .kayi-lp-spot:nth-child(1) { transition-delay: 0.6s, 0.6s, 0s, 0.6s; }
+.kayi-lp.is-anim .kayi-lp-zones.is-in .kayi-lp-spot:nth-child(2) { transition-delay: 0.6s, 0.6s, 0s, 0.75s; }
+.kayi-lp.is-anim .kayi-lp-zones.is-in .kayi-lp-spot:nth-child(3) { transition-delay: 0.6s, 0.6s, 0s, 0.9s; }
+
+@keyframes kayi-lp-ping {
+	0% { transform: scale(1); opacity: 0.8; }
+	80%, 100% { transform: scale(1.9); opacity: 0; }
+}
+
+.kayi-lp-zonelist {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: clamp(24px, 3vw, 40px);
+	margin-top: clamp(32px, 3.4vw, 48px) !important;
+}
+
+.kayi-lp-zone {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding-top: 22px;
+	border-top: 2px solid #2a2a2f;
+}
+
+.kayi-lp-zone::before {
+	content: "";
+	position: absolute;
+	top: -2px;
+	left: 0;
+	right: 0;
+	height: 2px;
+	background: var(--kc-gold);
+	transform: scaleX(0);
+	transform-origin: left;
+	transition: transform 0.6s var(--lp-ease);
+}
+
+.kayi-lp-zone.is-active::before {
+	transform: scaleX(1);
+}
+
+.kayi-lp-zone .kayi-lp-h3 {
+	transition: color 0.3s ease;
+}
+
+.kayi-lp-zone.is-active .kayi-lp-h3 {
+	color: var(--kc-gold);
+}
+
+.kayi-lp-zone p,
+.kayi-lp-card p,
+.kayi-lp-step p,
+.kayi-lp-tip p,
+.kayi-lp-fitnote p {
+	font-size: 17px;
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+/* ── Split sections: materials / visibility ── */
+
+.kayi-lp-split {
+	display: grid;
+	grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(40px, 6vw, 88px);
+}
+
+.kayi-lp-split.is-flipped {
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+}
+
+.kayi-lp-panel {
+	position: relative;
+	overflow: hidden;
+	border: 1px solid var(--lp-line);
+	border-radius: 20px;
+	background:
+		radial-gradient(ellipse 60% 55% at 50% 58%, var(--lp-glow), transparent 70%),
+		var(--lp-panel);
+}
+
+.kayi-lp-zoom {
+	aspect-ratio: 5 / 6;
+}
+
+.kayi-lp-zoom img {
+	width: 100%;
+	height: 100% !important;
+	padding: 9%;
+	box-sizing: border-box;
+	object-fit: contain;
+	filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.55));
+	transform: scale(calc(1.32 - 0.32 * var(--p, 1))) rotate(calc(-8deg + 8deg * var(--p, 1)));
+	will-change: transform;
+}
+
+.kayi-lp-specs {
+	display: flex;
+	flex-direction: column;
+	margin-top: 8px !important;
+	border-top: 1px solid var(--kc-line);
+}
+
+.kayi-lp-spec {
+	display: flex;
+	justify-content: space-between;
+	gap: 24px;
+	padding: 18px 0;
+	font-size: 16px;
+	background: linear-gradient(var(--kc-line), var(--kc-line)) left bottom / 100% 1px no-repeat;
+}
+
+.kayi-lp-spec span {
+	color: var(--kc-grey);
+}
+
+.kayi-lp-spec strong {
+	font-weight: 600;
+	text-align: right;
+}
+
+.kayi-lp.is-anim .kayi-lp-spec {
+	background-size: 0% 1px;
+	transform: translateX(-24px);
+}
+
+.kayi-lp.is-anim .kayi-lp-spec.is-in {
+	background-size: 100% 1px;
+	transition: opacity 0.8s ease, transform 1s var(--lp-ease), background-size 1.2s var(--lp-ease);
+	transition-delay: calc(var(--lp-d, 0ms) + 200ms);
+}
+
+/* Visibility: the guard is revealed through a widening "iris" as you
+   scroll, with field-of-view arcs drawing behind it. */
+.kayi-lp-iris {
+	aspect-ratio: 5 / 4;
+}
+
+.kayi-lp-iris > * {
+	position: absolute !important;
+	inset: 0;
+}
+
+.kayi-lp-iris > .kayi-lp-iris__img {
+	z-index: 1;
+	inset: 7% 12%;
+	width: auto;
+	height: auto;
+}
+
+.kayi-lp-iris__img img {
+	width: 100%;
+	height: 100% !important;
+	object-fit: contain;
+	filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.6));
+	clip-path: circle(calc(16% + 60% * var(--p, 1)) at 46% 50%);
+	will-change: clip-path;
+}
+
+.kayi-lp-iris__fov {
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.kayi-lp-iris__arc,
+.kayi-lp-iris__ray {
+	fill: none;
+	stroke: var(--kc-gold);
+	stroke-width: 1.5;
+	stroke-linecap: round;
+	stroke-dasharray: 1;
+	stroke-dashoffset: 0;
+	opacity: 0.55;
+}
+
+.kayi-lp-iris__arc.is-2 {
+	opacity: 0.3;
+	stroke-dasharray: 0.012 0.018;
+}
+
+.kayi-lp-iris__ray {
+	opacity: 0.35;
+	stroke-dasharray: 0.02 0.03;
+}
+
+.kayi-lp.is-anim .kayi-lp-iris__arc:not(.is-2) {
+	stroke-dashoffset: 1;
+}
+
+.kayi-lp.is-anim .kayi-lp-iris.is-in .kayi-lp-iris__arc:not(.is-2) {
+	stroke-dashoffset: 0;
+	transition: stroke-dashoffset 1.8s var(--lp-ease) 0.3s;
+}
+
+.kayi-lp.is-anim .kayi-lp-iris :is(.kayi-lp-iris__arc.is-2, .kayi-lp-iris__ray) {
+	opacity: 0;
+}
+
+.kayi-lp.is-anim .kayi-lp-iris.is-in .kayi-lp-iris__arc.is-2 {
+	opacity: 0.3;
+	transition: opacity 1s ease 1.1s;
+	animation: kayi-lp-dash 14s linear infinite;
+}
+
+.kayi-lp.is-anim .kayi-lp-iris.is-in .kayi-lp-iris__ray {
+	opacity: 0.35;
+	transition: opacity 1s ease 1.1s;
+}
+
+@keyframes kayi-lp-dash {
+	to { stroke-dashoffset: -1; }
+}
+
+/* ── 04 Straps ── */
+
+.kayi-lp-cards {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 24px;
+	margin-top: clamp(40px, 4vw, 56px) !important;
+}
+
+.kayi-lp-card {
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	border: 1px solid var(--lp-line);
+	border-radius: 20px;
+	background: #18181b;
+}
+
+.kayi-lp-card__media {
+	position: relative;
+	flex: none;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	background:
+		radial-gradient(ellipse 55% 60% at 50% 60%, var(--lp-glow), transparent 70%),
+		var(--lp-panel);
+}
+
+.kayi-lp-card__media img {
+	position: absolute;
+	inset: 0;
+	width: 100%;
+	height: 100% !important;
+	padding: 7%;
+	box-sizing: border-box;
+	object-fit: contain;
+	filter: drop-shadow(0 20px 30px rgba(0, 0, 0, 0.55));
+	transition: transform 0.9s var(--lp-ease);
+}
+
+.kayi-lp-card:hover .kayi-lp-card__media img {
+	transform: scale(1.06) rotate(-2deg);
+}
+
+.kayi-lp.is-anim .kayi-lp-card__media img {
+	translate: 0 40px;
+}
+
+.kayi-lp.is-anim .kayi-lp-card.is-in .kayi-lp-card__media img {
+	translate: none;
+	transition: transform 0.9s var(--lp-ease), translate 1.3s var(--lp-ease) calc(var(--lp-d, 0ms) + 150ms);
+}
+
+.kayi-lp-card__body {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	padding: 28px 30px 32px;
+}
+
+/* ── A closer look: view switcher ── */
+
+.kayi-lp-look {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 32px;
+	text-align: center;
+}
+
+.kayi-lp-viewer {
+	position: relative;
+	padding: clamp(24px, 3vw, 40px);
+	border: 1px solid var(--lp-line);
+	border-radius: 24px;
+	box-sizing: border-box;
+	background:
+		radial-gradient(ellipse 45% 55% at 50% 45%, var(--lp-glow), transparent 70%),
+		var(--lp-panel);
+	perspective: 1400px;
+}
+
+/* Without the script: the four views side by side. */
+.kayi-lp-viewer:not(.is-ready) {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 24px;
+}
+
+.kayi-lp-view {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 18px;
+}
+
+.kayi-lp-view__label {
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-view figure {
+	width: 100%;
+}
+
+.kayi-lp-view img {
+	width: 100%;
+	height: auto;
+	object-fit: contain;
+	filter: drop-shadow(0 26px 40px rgba(0, 0, 0, 0.6));
+}
+
+.kayi-lp-view__caption {
+	max-width: 640px;
+	font-size: 18px;
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+.kayi-lp-viewer.is-ready {
+	display: grid;
+	width: 100%;
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view {
+	grid-area: 1 / 1;
+	visibility: hidden;
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view.is-active {
+	visibility: visible;
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view__label {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip: rect(0 0 0 0);
+	white-space: nowrap;
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view figure {
+	height: clamp(260px, 32vw, 460px);
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view img {
+	height: 100% !important;
+	opacity: 0;
+	transform: translateX(var(--lp-from, 10%)) rotateY(var(--lp-turn, -35deg)) scale(0.86);
+	transition: opacity 0.6s ease, transform 0.9s var(--lp-ease);
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view.is-before {
+	--lp-from: -10%;
+	--lp-turn: 35deg;
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view.is-active img {
+	opacity: 1;
+	transform: none;
+	transition-delay: 0.08s;
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view__caption {
+	min-height: 3.1em;
+	opacity: 0;
+	transform: translateY(10px);
+	transition: opacity 0.5s ease, transform 0.6s var(--lp-ease);
+}
+
+.kayi-lp-viewer.is-ready .kayi-lp-view.is-active .kayi-lp-view__caption {
+	opacity: 1;
+	transform: none;
+	transition-delay: 0.25s;
+}
+
+.kayi-lp-tabs {
+	position: relative;
+	display: inline-flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 4px;
+	width: auto !important;
+	max-width: 100%;
+	padding: 5px;
+	box-sizing: border-box;
+	border: 1px solid var(--lp-line);
+	border-radius: 999px;
+	background: #161619;
+}
+
+.kayi-lp-tabs__ind {
+	position: absolute;
+	top: 5px;
+	left: 0;
+	height: calc(100% - 10px);
+	border-radius: 999px;
+	background: var(--kc-gold);
+	transition: transform 0.5s var(--lp-ease), width 0.5s var(--lp-ease);
+}
+
+.kayi-lp-tabs button {
+	position: relative;
+	z-index: 1;
+	min-height: 44px;
+	padding: 0 24px;
+	border: 0;
+	border-radius: 999px;
+	background: transparent;
+	color: var(--kc-grey);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: color 0.3s ease;
+}
+
+.kayi-lp-tabs button:hover {
+	color: #fff;
+}
+
+.kayi-lp-tabs button[aria-pressed="true"] {
+	color: var(--kc-black);
+}
+
+/* ── 05 Fit ── */
+
+.kayi-lp-fithead {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 400px);
+	align-items: end;
+	gap: 32px 48px;
+}
+
+.kayi-lp-fitnote {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 28px 30px;
+	border: 1px solid rgba(201, 162, 74, 0.35);
+	border-radius: 16px;
+	background: #161412;
+}
+
+.kayi-lp-fitnote__title {
+	font-family: var(--kc-display);
+	font-size: 26px;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+
+.kayi-lp-fitnote .kayi-c-textlink a {
+	font-size: 15px;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-steps {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 24px;
+	margin-top: clamp(40px, 4vw, 56px) !important;
+}
+
+.kayi-lp-step {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	padding-bottom: 30px;
+	overflow: hidden;
+	border: 1px solid var(--lp-line);
+	border-radius: 20px;
+	background: #18181b;
+}
+
+.kayi-lp-step > :not(.kayi-lp-step__art) {
+	padding-inline: 28px;
+}
+
+.kayi-lp-step__art {
+	aspect-ratio: 4 / 3;
+	margin-bottom: 18px;
+	border-bottom: 1px solid var(--lp-line);
+	background:
+		radial-gradient(ellipse 50% 60% at 50% 55%, rgba(201, 162, 74, 0.12), transparent 70%),
+		#141417;
+}
+
+.kayi-lp-step__art svg {
+	display: block;
+	width: 100%;
+	height: 100%;
+	overflow: visible;
+}
+
+.kayi-lp-step__num {
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 14px;
+	letter-spacing: 2.4px;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-step__art :is(.hg-head, .hg-face) {
+	fill: #222226;
+	stroke: #3a3a40;
+	stroke-width: 2;
+}
+
+.kayi-lp-step__art .hg-guard {
+	fill: rgba(201, 162, 74, 0.1);
+	stroke: var(--kc-gold);
+	stroke-width: 3;
+	stroke-linejoin: round;
+}
+
+.kayi-lp-step__art :is(.hg-strap, .hg-pull path, .hg-motion, .hg-cross) {
+	fill: none;
+	stroke: var(--kc-gold);
+	stroke-width: 3;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.kayi-lp-step__art .hg-strap {
+	stroke-dasharray: 1;
+}
+
+.kayi-lp-step__art .hg-eyes circle {
+	fill: var(--kc-gold);
+}
+
+.kayi-lp-step__art .hg-cross {
+	stroke-width: 2;
+	opacity: 0.8;
+}
+
+/* Looping demos (paused until the card scrolls into view, below). */
+.kayi-lp-step__art * {
+	transform-box: view-box;
+}
+
+.kayi-lp-step__art .hg-strap { animation: kayi-lp-tighten 2.8s var(--lp-ease) infinite; }
+.kayi-lp-step__art .hg-pull { animation: kayi-lp-pull 2.8s var(--lp-ease) infinite; }
+.kayi-lp-step__art .hg-shake { transform-origin: 120px 150px; animation: kayi-lp-shake 2.4s ease-in-out infinite; }
+.kayi-lp-step__art .hg-motion { animation: kayi-lp-motion 2.4s ease-in-out infinite; }
+.kayi-lp-step__art .hg-motion.is-r { animation-delay: -1.2s; }
+.kayi-lp-step__art .hg-eyes { animation: kayi-lp-centre 3.2s var(--lp-ease) infinite; }
+.kayi-lp-step__art .hg-cross { stroke-dasharray: 1; animation: kayi-lp-cross 3.2s var(--lp-ease) infinite; }
+
+.kayi-lp.is-anim .kayi-lp-step:not(.is-in) .kayi-lp-step__art * {
+	animation-play-state: paused;
+}
+
+@keyframes kayi-lp-tighten {
+	0% { stroke-dashoffset: 1; }
+	45%, 80% { stroke-dashoffset: 0; }
+	100% { stroke-dashoffset: 0; opacity: 0; }
+}
+
+@keyframes kayi-lp-pull {
+	0%, 15% { transform: translate(0, 0); opacity: 0; }
+	30% { opacity: 1; }
+	55%, 80% { transform: translate(10px, -7px); opacity: 1; }
+	100% { transform: translate(10px, -7px); opacity: 0; }
+}
+
+@keyframes kayi-lp-shake {
+	0%, 100% { transform: rotate(0deg); }
+	20% { transform: rotate(-7deg); }
+	40% { transform: rotate(6deg); }
+	60% { transform: rotate(-4deg); }
+	80% { transform: rotate(2deg); }
+}
+
+@keyframes kayi-lp-motion {
+	0%, 100% { opacity: 0; }
+	20%, 40% { opacity: 1; }
+}
+
+@keyframes kayi-lp-centre {
+	0% { transform: translate(-22px, 12px); }
+	45%, 85% { transform: translate(0, 0); }
+	100% { transform: translate(-22px, 12px); }
+}
+
+@keyframes kayi-lp-cross {
+	0%, 30% { stroke-dashoffset: 1; }
+	55%, 85% { stroke-dashoffset: 0; }
+	100% { stroke-dashoffset: 1; }
+}
+
+/* ── 06 Care ── */
+
+.kayi-lp-care {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 20px;
+	margin-top: clamp(32px, 3.4vw, 48px) !important;
+}
+
+.kayi-lp-tip {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 28px;
+	border: 1px solid var(--lp-line);
+	border-radius: 16px;
+	background: #141417;
+	transition: border-color 0.3s ease, transform 0.5s var(--lp-ease);
+}
+
+.kayi-lp-tip:hover {
+	border-color: rgba(201, 162, 74, 0.45);
+}
+
+.kayi-lp-tip__icon {
+	width: 34px;
+	height: 34px;
+	margin-bottom: 6px;
+	fill: none;
+	stroke: var(--kc-gold);
+	stroke-width: 1.6;
+	stroke-linecap: round;
+	stroke-linejoin: round;
+}
+
+.kayi-lp-tip__icon path {
+	stroke-dasharray: 1;
+}
+
+.kayi-lp.is-anim .kayi-lp-tip__icon path {
+	stroke-dashoffset: 1;
+}
+
+.kayi-lp.is-anim .kayi-lp-tip.is-in .kayi-lp-tip__icon path {
+	stroke-dashoffset: 0;
+	transition: stroke-dashoffset 1.4s var(--lp-ease) calc(var(--lp-d, 0ms) + 300ms);
+}
+
+/* ── Buy ── */
+
+.kayi-lp-buy__panel {
+	display: grid;
+	grid-template-columns: minmax(0, 440px) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(32px, 4.5vw, 64px);
+	padding: clamp(24px, 3.4vw, 48px);
+	box-sizing: border-box;
+	border: 1px solid #3a3226;
+	border-radius: 24px;
+	background:
+		radial-gradient(ellipse 50% 70% at 20% 50%, rgba(201, 162, 74, 0.12), transparent 70%),
+		#161412;
+}
+
+.kayi-lp-buy__media {
+	position: relative;
+	aspect-ratio: 1;
+	display: grid;
+	place-items: center;
+	border-radius: 16px;
+	background:
+		radial-gradient(closest-side, rgba(201, 162, 74, 0.28), transparent),
+		#121212;
+}
+
+.kayi-lp-buy__media img {
+	position: absolute;
+	inset: 9%;
+	width: 82%;
+	height: 82% !important;
+	object-fit: contain;
+	filter: drop-shadow(0 24px 34px rgba(0, 0, 0, 0.6));
+	animation: kayi-lp-float 6s ease-in-out infinite;
+}
+
+.kayi-lp-buy__price {
+	font-family: var(--kc-display);
+	font-size: clamp(32px, 3vw, 40px);
+	line-height: 1;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-buy__price del {
+	margin-right: 12px;
+	font-size: 0.6em;
+	color: var(--kc-grey);
+}
+
+.kayi-lp-buy__price ins {
+	text-decoration: none;
+}
+
+.kayi-lp-ticks {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	margin: 4px 0 8px !important;
+	padding: 0;
+	list-style: none;
+	font-size: 16px;
+	color: #d6d3cc;
+}
+
+.kayi-lp-ticks li {
+	position: relative;
+	padding-left: 30px;
+}
+
+.kayi-lp-ticks li::before {
+	content: "";
+	position: absolute;
+	left: 4px;
+	top: 0.28em;
+	width: 7px;
+	height: 12px;
+	border: solid var(--kc-gold);
+	border-width: 0 2px 2px 0;
+	transform: rotate(45deg);
+}
+
+.kayi-lp-kit {
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	margin-top: clamp(56px, 6vw, 88px) !important;
+}
+
+.kayi-lp-kit__grid {
+	display: grid;
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+	gap: 20px;
+}
+
+.kayi-lp-kit__card a {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	height: 100%;
+	padding: 28px;
+	box-sizing: border-box;
+	border: 1px solid var(--lp-line);
+	border-radius: 16px;
+	background: #141417;
+	color: #fff;
+	text-decoration: none;
+	transition: border-color 0.3s ease, transform 0.5s var(--lp-ease), background-color 0.3s ease;
+}
+
+.kayi-lp-kit__card a:hover {
+	transform: translateY(-4px);
+	border-color: rgba(201, 162, 74, 0.5);
+	background: #18181b;
+}
+
+.kayi-lp-kit__card strong {
+	font-family: var(--kc-display);
+	font-weight: 400;
+	font-size: 24px;
+	line-height: 1.1;
+	text-transform: uppercase;
+}
+
+.kayi-lp-kit__card span {
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--kc-grey);
+}
+
+.kayi-lp-kit__card em {
+	display: inline-flex;
+	gap: 10px;
+	margin-top: 6px;
+	font-style: normal;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-kit__card em::after {
+	content: "→";
+	font-family: var(--kc-body);
+	transition: transform 0.3s ease;
+}
+
+.kayi-lp-kit__card a:hover em::after {
+	transform: translateX(4px);
+}
+
+/* ── Landing pages: photo hero, photo / video / cut-away panels ── */
+
+/* Hero with a lifestyle photo instead of a floating cut-out. */
+.kayi-lp-hero__media.is-photo {
+	width: min(1180px, 100%);
+	aspect-ratio: 16 / 8;
+	overflow: hidden;
+	border: 1px solid var(--lp-line);
+	border-radius: 20px 20px 0 0;
+	border-bottom: 0;
+	transform: translateY(calc(var(--lp-hp, 0) * 40px));
+}
+
+.kayi-lp-hero__media.is-photo::before,
+.kayi-lp-hero__media.is-photo::after {
+	content: none;
+}
+
+.kayi-lp-hero__media.is-photo img {
+	width: 100%;
+	height: 100% !important;
+	object-fit: cover;
+	filter: none;
+	animation: kayi-lp-kenburns 18s ease-in-out infinite alternate;
+	scale: calc(1 + var(--lp-hp, 0) * 0.08);
+}
+
+@keyframes kayi-lp-kenburns {
+	from { transform: scale(1.04) translate(0, 0); }
+	to { transform: scale(1.12) translate(-2%, -2%); }
+}
+
+.kayi-lp-panel.is-photo img,
+.kayi-lp-card__media.is-photo img {
+	padding: 0;
+	object-fit: cover;
+	filter: none;
+}
+
+.kayi-lp-panel.is-photo {
+	aspect-ratio: 4 / 5;
+}
+
+.kayi-lp-panel.is-video {
+	aspect-ratio: 4 / 5;
+}
+
+.kayi-lp-panel.is-video figure,
+.kayi-lp-panel.is-video video {
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	object-fit: cover;
+}
+
+/* Padding cut-away (the homepage's .kayi-c-layers) inside a panel. */
+.kayi-lp-panel.is-layers {
+	aspect-ratio: 5 / 4;
+}
+
+.kayi-lp-panel.is-layers .kayi-c-layers {
+	padding: clamp(20px, 2.6vw, 36px);
+}
+
+/* Small tag above card titles ("Golden Boxing Gloves", "Lace-up"). */
+.kayi-lp-tag {
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 2.4px;
+	text-transform: uppercase;
+	color: var(--kc-gold);
+}
+
+/* A centred section (switcher / picker) can still open with a normal head. */
+.kayi-lp-look > .kayi-lp-head {
+	align-self: stretch;
+	text-align: left;
+}
+
+/* ── Photo viewer (gloves) ── */
+
+.kayi-lp-viewer.is-photos.is-ready .kayi-lp-view img {
+	width: auto !important;
+	max-width: 100%;
+	margin-inline: auto;
+	object-fit: cover;
+	border-radius: 14px;
+	filter: none;
+	box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+.kayi-lp-viewer.is-photos:not(.is-ready) img {
+	border-radius: 12px;
+	filter: none;
+}
+
+/* ── Size picker (glove weights) ── */
+
+.kayi-lp-viewer.is-picker {
+	text-align: left;
+}
+
+.kayi-lp-viewer.is-picker.is-ready {
+	grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+	align-items: center;
+	column-gap: clamp(24px, 4vw, 64px);
+}
+
+.kayi-lp-viewer.is-picker.is-ready .kayi-lp-view {
+	grid-area: 1 / 2;
+	align-items: flex-start;
+	gap: 12px;
+}
+
+.kayi-lp-viewer.is-picker:not(.is-ready) {
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	text-align: left;
+}
+
+.kayi-lp-viewer.is-picker:not(.is-ready) .kayi-lp-view {
+	align-items: flex-start;
+}
+
+.kayi-lp-ozart {
+	grid-area: 1 / 1;
+	display: grid;
+	place-items: center;
+}
+
+.kayi-lp-viewer:not(.is-ready) .kayi-lp-ozart {
+	display: none;
+}
+
+.kayi-lp-ozart svg {
+	width: min(100%, 360px);
+	height: auto;
+	overflow: visible;
+}
+
+.kayi-lp-ozart__glove {
+	transform-box: fill-box;
+	transform-origin: 50% 100%;
+	transform: scale(calc(0.62 + 0.38 * var(--lp-k, 0.5)));
+	transition: transform 0.8s var(--lp-ease);
+}
+
+.kayi-lp-ozart__glove path {
+	fill: rgba(201, 162, 74, 0.14);
+	stroke: var(--kc-gold);
+	stroke-width: 3;
+	stroke-linejoin: round;
+}
+
+.kayi-lp-ozart__glove .is-fill {
+	fill: var(--kc-gold);
+	stroke: none;
+	opacity: calc(0.12 + 0.4 * var(--lp-k, 0.5));
+	transition: opacity 0.8s ease;
+}
+
+.kayi-lp-ozart__floor {
+	fill: rgba(0, 0, 0, 0.55);
+	filter: blur(6px);
+}
+
+.kayi-lp-oz {
+	font-family: var(--kc-display);
+	font-size: clamp(72px, 9vw, 128px) !important;
+	line-height: 0.85 !important;
+	color: var(--kc-gold);
+}
+
+.kayi-lp-oz small {
+	font-size: 0.42em;
+	margin-left: 4px;
+	color: #fff;
+}
+
+.kayi-lp-viewer.is-picker .kayi-lp-view p:not(.kayi-lp-view__label):not(.kayi-lp-oz) {
+	max-width: 520px;
+	font-size: 18px;
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+.kayi-lp-viewer.is-picker.is-ready .kayi-lp-view > :not(.kayi-lp-view__label) {
+	opacity: 0;
+	transform: translateY(14px);
+	transition: opacity 0.4s ease, transform 0.5s var(--lp-ease);
+}
+
+.kayi-lp-viewer.is-picker.is-ready .kayi-lp-view.is-active > :not(.kayi-lp-view__label) {
+	opacity: 1;
+	transform: none;
+	transition-delay: 0.12s;
+}
+
+.kayi-lp-viewer.is-picker.is-ready .kayi-lp-view.is-active > :nth-child(3) { transition-delay: 0.2s; }
+.kayi-lp-viewer.is-picker.is-ready .kayi-lp-view.is-active > :nth-child(4) { transition-delay: 0.28s; }
+
+/* Weight scale under the picker tabs. */
+.kayi-lp-scale {
+	position: relative;
+	width: min(560px, 100%);
+	height: 4px;
+	margin-top: -12px !important;
+	border-radius: 4px;
+	background: var(--lp-line);
+	overflow: hidden;
+}
+
+.kayi-lp-scale span {
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(90deg, var(--kc-gold-deep), var(--kc-gold));
+	transform: scaleX(var(--lp-k, 0));
+	transform-origin: left;
+	transition: transform 0.8s var(--lp-ease);
+}
+
+.kayi-lp-note {
+	max-width: 640px;
+	font-size: 15px;
+	line-height: 1.55;
+	color: var(--kc-grey);
+	text-align: center;
+}
+
+.kayi-lp-note a {
+	color: var(--kc-gold);
+}
+
+/* ── Range: product cards with live prices ── */
+
+.kayi-lp-range {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 20px;
+	margin-top: clamp(40px, 4vw, 56px) !important;
+}
+
+.kayi-lp-range.is-3 {
+	grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.kayi-lp-range .kayi-lp-card {
+	position: relative;
+	transition: border-color 0.3s ease, transform 0.5s var(--lp-ease);
+}
+
+.kayi-lp-range .kayi-lp-card:hover {
+	transform: translateY(-6px);
+	border-color: rgba(201, 162, 74, 0.5);
+}
+
+.kayi-lp-range .kayi-lp-card__media {
+	aspect-ratio: 1;
+}
+
+.kayi-lp-range .kayi-lp-card__body {
+	flex: 1;
+	gap: 8px;
+	padding: 22px 22px 24px;
+}
+
+.kayi-lp-range .kayi-lp-card__body p {
+	font-size: 15px;
+}
+
+.kayi-lp-range .kayi-lp-h3 {
+	font-size: 22px !important;
+}
+
+.kayi-lp-range__price {
+	margin-top: auto !important;
+	padding-top: 8px;
+	font-family: var(--kc-display);
+	font-size: 26px !important;
+	line-height: 1;
+	color: var(--kc-gold) !important;
+}
+
+.kayi-lp-range__price del {
+	margin-right: 8px;
+	font-size: 0.65em;
+	color: var(--kc-grey);
+}
+
+.kayi-lp-range__price ins {
+	text-decoration: none;
+}
+
+/* The whole card is clickable through its "Shop" link. */
+.kayi-lp-range .kayi-c-textlink a {
+	font-size: 15px;
+	color: #fff;
+}
+
+.kayi-lp-range .kayi-c-textlink a::before {
+	content: "";
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+}
+
+.kayi-lp-range .kayi-lp-card:hover .kayi-c-textlink a {
+	color: var(--kc-gold);
+}
+
+/* ── Combo drill (focus pads) ── */
+
+.kayi-lp-drill {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	align-items: center;
+	gap: clamp(24px, 4vw, 64px);
+	margin-top: clamp(40px, 4vw, 56px) !important;
+	padding: clamp(24px, 4vw, 56px);
+	box-sizing: border-box;
+	border: 1px solid var(--lp-line);
+	border-radius: 24px;
+	background:
+		radial-gradient(ellipse 45% 70% at 25% 50%, rgba(201, 162, 74, 0.16), transparent 70%),
+		var(--lp-panel);
+}
+
+.kayi-lp-drill__pad {
+	width: min(420px, 100%);
+	margin-inline: auto !important;
+	display: grid;
+	place-items: center;
+	aspect-ratio: 1;
+	border-radius: 50%;
+	background: radial-gradient(closest-side, #f3efe7 0 62%, rgba(243, 239, 231, 0.08) 63%, transparent 72%);
+}
+
+.kayi-lp-drill__pad img {
+	width: 62%;
+	height: auto;
+	filter: drop-shadow(0 18px 24px rgba(0, 0, 0, 0.35));
+	animation: kayi-lp-knock 4s var(--lp-ease) infinite;
+}
+
+.kayi-lp-combo {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.kayi-lp-combo__title {
+	font-family: var(--kc-display);
+	font-size: clamp(30px, 3vw, 40px);
+	line-height: 1;
+	text-transform: uppercase;
+}
+
+.kayi-lp-combo__title span {
+	color: var(--kc-gold);
+}
+
+.kayi-lp-combo ol {
+	display: grid;
+	grid-template-columns: repeat(4, minmax(0, 1fr));
+	gap: 12px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.kayi-lp-combo li {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	padding: 18px 8px;
+	border: 1px solid var(--lp-line);
+	border-radius: 14px;
+	background: #111113;
+	color: var(--kc-gold);
+	text-align: center;
+	animation: kayi-lp-hit 4s ease infinite;
+}
+
+.kayi-lp-combo li:nth-child(2) { animation-delay: 0.6s; }
+.kayi-lp-combo li:nth-child(3) { animation-delay: 1.2s; }
+.kayi-lp-combo li:nth-child(4) { animation-delay: 1.8s; }
+
+.kayi-lp-combo b {
+	display: grid;
+	place-items: center;
+	width: 52px;
+	height: 52px;
+	border: 2px solid currentColor;
+	border-radius: 50%;
+	font-family: var(--kc-display);
+	font-weight: 400;
+	font-size: 26px;
+	color: inherit;
+}
+
+.kayi-lp-combo li span {
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 14px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: inherit;
+}
+
+.kayi-lp-combo p {
+	font-size: 16px;
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+@keyframes kayi-lp-hit {
+	0%, 14%, 100% { transform: none; background: #111113; border-color: var(--lp-line); color: var(--kc-gold); }
+	3% { transform: scale(1.08); background: var(--kc-gold); border-color: var(--kc-gold); color: var(--kc-black); }
+}
+
+@keyframes kayi-lp-knock {
+	0%, 45%, 100% { transform: none; }
+	2%, 17%, 32%, 47% { transform: translateX(10px) rotate(4deg) scale(0.97); }
+	8%, 23%, 38% { transform: none; }
+}
+
+.kayi-lp.is-anim .kayi-lp-drill:not(.is-in) :is(li, li *, img) {
+	animation-play-state: paused;
+}
+
+/* ── Cream panels for dark products (focus pads) ── */
+
+.kayi-lp.is-cream {
+	--lp-panel: #efe9dd;
+	--lp-glow: rgba(201, 162, 74, 0.28);
+}
+
+.kayi-lp.is-cream :is(.kayi-lp-zones, .kayi-lp-panel:not(.is-video), .kayi-lp-viewer, .kayi-lp-card__media, .kayi-lp-buy__media) {
+	border-color: var(--kc-cream-line);
+}
+
+.kayi-lp.is-cream .kayi-lp-zones::before {
+	background: repeating-radial-gradient(circle, transparent 0 58px, rgba(11, 11, 12, 0.07) 59px 60px);
+}
+
+.kayi-lp.is-cream :is(.kayi-lp-zones, .kayi-lp-viewer, .kayi-lp-card__media, .kayi-lp-buy__media) img {
+	filter: drop-shadow(0 22px 26px rgba(0, 0, 0, 0.28));
+}
+
+.kayi-lp.is-cream .kayi-lp-buy__media {
+	background: radial-gradient(closest-side, rgba(255, 255, 255, 0.7), transparent), #efe9dd;
+}
+
+.kayi-lp.is-cream .kayi-lp-viewer .kayi-lp-view__caption {
+	color: #45454b;
+}
+
+.kayi-lp.is-cream .kayi-lp-hero__media::before {
+	inset: 4% 2% 0;
+	background: radial-gradient(closest-side, rgba(243, 239, 231, 0.95), rgba(243, 239, 231, 0.25) 70%, transparent);
+	filter: blur(10px);
+}
+
+.kayi-lp.is-cream .kayi-lp-hero__media img {
+	filter: drop-shadow(0 30px 34px rgba(0, 0, 0, 0.45));
+}
+
+.kayi-lp.is-cream .kayi-lp-spot:not(.is-active):not(:hover) {
+	background: rgba(11, 11, 12, 0.9);
+}
+
+.kayi-lp.is-cream .kayi-lp-drill__pad {
+	background: radial-gradient(closest-side, #f6f2ea 0 66%, transparent 67%);
+}
+
+.kayi-lp.is-cream .kayi-lp-hero::before {
+	content: none;
+}
+
+.kayi-lp.is-cream .kayi-lp-drill .kayi-lp-combo__title {
+	color: var(--kc-black);
+}
+
+.kayi-lp.is-cream .kayi-lp-drill .kayi-lp-combo__title span {
+	color: var(--kc-gold-deep);
+}
+
+.kayi-lp.is-cream .kayi-lp-drill .kayi-lp-combo > p {
+	color: #45454b;
+}
+
+@media (max-width: 1024px) {
+	.kayi-lp-range {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 900px) {
+	.kayi-lp-drill {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-lp-drill__pad {
+		width: min(320px, 80%);
+		margin-inline: auto;
+	}
+
+	.kayi-lp-panel.is-photo,
+	.kayi-lp-panel.is-video {
+		aspect-ratio: 4 / 3;
+	}
+
+	.kayi-lp-viewer.is-picker.is-ready {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-lp-viewer.is-picker.is-ready .kayi-lp-view {
+		grid-area: 2 / 1;
+	}
+
+	.kayi-lp-ozart svg {
+		width: min(60%, 220px);
+	}
+}
+
+@media (max-width: 781px) {
+	.kayi-lp-hero__media.is-photo {
+		aspect-ratio: 4 / 3;
+	}
+
+	.kayi-lp-range,
+	.kayi-lp-range.is-3 {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-lp-range .kayi-lp-card {
+		display: grid;
+		grid-template-columns: 132px minmax(0, 1fr);
+	}
+
+	.kayi-lp-range .kayi-lp-card__media {
+		aspect-ratio: auto;
+		height: 100%;
+		min-height: 150px;
+	}
+
+	.kayi-lp-range .kayi-lp-card__body {
+		padding: 16px 18px;
+	}
+
+	.kayi-lp-combo ol {
+		gap: 8px;
+	}
+
+	.kayi-lp-combo b {
+		width: 42px;
+		height: 42px;
+		font-size: 21px;
+	}
+
+	.kayi-lp-combo li span {
+		font-size: 12px;
+		letter-spacing: 1px;
+	}
+}
+
+/* ── Landing pages: tablet / phone ── */
+
+@media (max-width: 1024px) {
+	.kayi-lp-stats,
+	.kayi-lp-care {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.kayi-lp-nav__links {
+		gap: 20px;
+	}
+}
+
+@media (max-width: 900px) {
+	.kayi-lp-split,
+	.kayi-lp-split.is-flipped,
+	.kayi-lp-fithead,
+	.kayi-lp-buy__panel {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-lp-split.is-flipped > .kayi-lp-panel {
+		order: -1;
+	}
+
+	.kayi-lp-zoom {
+		aspect-ratio: 5 / 4;
+	}
+
+	.kayi-lp-buy__media {
+		max-width: 440px;
+		width: 100%;
+	}
+
+	.kayi-lp-steps {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-lp-step {
+		display: grid;
+		grid-template-columns: minmax(0, 200px) minmax(0, 1fr);
+		grid-template-rows: auto auto 1fr;
+		column-gap: 4px;
+		padding-bottom: 0;
+	}
+
+	.kayi-lp-step__art {
+		grid-row: 1 / 4;
+		margin: 0;
+		border-bottom: 0;
+		border-right: 1px solid var(--lp-line);
+		aspect-ratio: auto;
+		min-height: 160px;
+	}
+
+	.kayi-lp-step > :not(.kayi-lp-step__art) {
+		padding-inline: 24px;
+	}
+
+	.kayi-lp-step__num {
+		padding-top: 24px;
+	}
+
+	.kayi-lp-step > p:last-child {
+		padding-bottom: 24px;
+	}
+}
+
+@media (max-width: 781px) {
+	.kayi-lp-nav__title {
+		display: none;
+	}
+
+	.kayi-lp-nav__inner {
+		gap: 16px;
+		min-height: 54px;
+		padding-right: 12px;
+	}
+
+	.kayi-lp-nav__links {
+		flex: 1;
+		min-width: 0;
+		gap: 22px;
+		margin-left: 0;
+		overflow-x: auto;
+		scrollbar-width: none;
+		-webkit-mask-image: linear-gradient(90deg, #000 85%, transparent);
+		mask-image: linear-gradient(90deg, #000 85%, transparent);
+	}
+
+	.kayi-lp-nav__links::-webkit-scrollbar {
+		display: none;
+	}
+
+	.kayi-lp-nav__links a {
+		padding: 17px 0;
+		font-size: 14px;
+	}
+
+	.kayi-lp-nav__buy {
+		min-height: 36px;
+		padding: 0 16px;
+	}
+
+	.kayi-lp [id] {
+		scroll-margin-top: 70px;
+	}
+
+	.kayi-lp-hero .kayi-c-buttons {
+		flex-direction: column;
+		align-items: stretch;
+		width: 100%;
+		max-width: 360px;
+	}
+
+	.kayi-lp-hero .kayi-c-buttons .wp-block-button__link {
+		justify-content: center;
+		width: 100%;
+		box-sizing: border-box;
+	}
+
+	.kayi-lp-stat {
+		padding: 24px 18px;
+	}
+
+	.kayi-lp-stat__value {
+		font-size: 28px;
+	}
+
+	.kayi-lp-stat__label {
+		font-size: 14px;
+	}
+
+	.kayi-lp-zones {
+		--lp-stage-h: 400px;
+	}
+
+	.kayi-lp-spot {
+		width: 38px;
+		height: 38px;
+		margin: -19px 0 0 -19px;
+		font-size: 15px;
+	}
+
+	.kayi-lp-zonelist,
+	.kayi-lp-cards,
+	.kayi-lp-kit__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-lp-zonelist {
+		gap: 20px;
+	}
+
+	.kayi-lp-viewer:not(.is-ready) {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.kayi-lp-tabs button {
+		padding: 0 16px;
+		font-size: 14px;
+	}
+
+	.kayi-lp-step {
+		grid-template-columns: minmax(0, 120px) minmax(0, 1fr);
+	}
+
+	.kayi-lp-step__art {
+		min-height: 0;
+	}
+
+	.kayi-lp-step > :not(.kayi-lp-step__art) {
+		padding-inline: 18px;
+	}
+
+	.kayi-lp-care {
+		grid-template-columns: minmax(0, 1fr);
+		gap: 12px;
+	}
+
+	.kayi-lp-tip {
+		display: grid;
+		grid-template-columns: 34px minmax(0, 1fr);
+		column-gap: 18px;
+		row-gap: 6px;
+		padding: 22px;
+	}
+
+	.kayi-lp-tip__icon {
+		grid-row: 1 / 3;
+		margin: 0;
+	}
+
+	.kayi-lp-buy__panel .kayi-c-buttons {
+		flex-direction: column;
+		align-items: stretch;
+	}
+
+	.kayi-lp-buy__panel .wp-block-button__link {
+		justify-content: center;
+		width: 100%;
+		box-sizing: border-box;
+	}
+}
+
+@media (max-width: 600px) {
+	/* The admin bar scrolls away on small screens. */
+	.kayi-lp-nav {
+		top: 0;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kayi-lp *,
+	.kayi-lp *::before,
+	.kayi-lp *::after {
+		animation: none !important;
+	}
+
+	.kayi-lp-hero__media {
+		transform: none;
+	}
+}
+
+/* ── Tablet ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 1180px) {
+	.kayi-c-header {
+		gap: 16px;
+	}
+
+	.kayi-c-nav .wp-block-navigation__container {
+		gap: 22px;
+	}
+
+	.kayi-c-nav {
+		font-size: 15px;
+		letter-spacing: 1px;
+	}
+
+	.kayi-c-utils {
+		gap: 18px;
+	}
+
+	.kayi-c-account,
+	.kayi-c-trade {
+		display: none;
+	}
+
+	.kayi-c-opt {
+		grid-template-columns: 34px minmax(0, 1fr);
+		row-gap: 4px;
+	}
+
+	.kayi-c-opt__text {
+		grid-column: 2;
+	}
+
+	.kayi-c-opt__title {
+		font-size: 38px !important;
+	}
+}
+
+@media (max-width: 1024px) {
+	.kayi-c-announce > p:nth-child(2) {
+		display: none;
+	}
+
+	/* Hamburger takes over: logo left, menu + basket right. */
+	.kayi-c-header {
+		flex-wrap: nowrap;
+	}
+
+	.kayi-c-nav {
+		order: 3;
+	}
+
+	.kayi-c-utils {
+		margin-left: auto !important;
+	}
+
+	.kayi-c-hero {
+		min-height: 0;
+		padding-top: 88px;
+	}
+
+	.kayi-c-stats {
+		grid-template-columns: repeat(2, 1fr);
+		row-gap: 24px;
+	}
+
+	.kayi-c-explore,
+	.kayi-c-split,
+	.kayi-c-guards {
+		grid-template-columns: 1fr;
+		row-gap: 48px;
+	}
+
+	.kayi-c-stage {
+		min-height: 0;
+		height: auto;
+		aspect-ratio: 4 / 3;
+	}
+
+	.kayi-c-guards .kayi-c-duo {
+		order: 0;
+	}
+
+	.kayi-c-products .kayi-c-cards > li {
+		flex-basis: calc((100% - 48px) / 3) !important;
+	}
+
+	.kayi-c-usps {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		row-gap: 56px;
+	}
+
+	.kayi-c-faq {
+		grid-template-columns: 1fr;
+	}
+
+	.kayi-c-footer__cols {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+
+	.kayi-c-footer__brand {
+		grid-column: 1 / -1;
+		max-width: 420px;
+	}
+}
+
+/* The core Navigation block switches to its hamburger at 600px; force it
+   earlier for this header so the nav never wraps. */
+@media (min-width: 600px) and (max-width: 1024px) {
+	.kayi-c-nav .wp-block-navigation__responsive-container-open:not(.always-shown) {
+		display: flex;
+	}
+
+	.kayi-c-nav .wp-block-navigation__responsive-container:not(.hidden-by-default):not(.is-menu-open) {
+		display: none;
+	}
+}
+
+/* ── Phone ───────────────────────────────────────────────────────────────── */
+
+@media (max-width: 781px) {
+	.kayi-c-announce {
+		gap: 0;
+		font-size: 11px;
+		letter-spacing: 2px;
+	}
+
+	.kayi-c-announce > p:first-child,
+	.kayi-c-announce > p + p::before {
+		display: none;
+	}
+
+	.kayi-c-header {
+		padding-block: 14px;
+	}
+
+	.kayi-c-logo a {
+		font-size: 28px;
+		gap: 10px;
+	}
+
+	.kayi-c-logo a::before {
+		width: 42px;
+		height: 36px;
+	}
+
+	.kayi-c-header .kayi-c-logo span,
+	.kayi-c-search {
+		display: none;
+	}
+
+	.kayi-c-basket .wc-block-mini-cart__button {
+		padding: 6px 12px;
+		font-size: 14px;
+	}
+
+	.kayi-c-hero {
+		gap: 56px;
+		padding-top: 64px;
+		padding-bottom: 40px;
+	}
+
+	.kayi-c-hero::after {
+		top: auto;
+		bottom: 140px;
+		right: -30%;
+		width: 110vw;
+		opacity: 0.1;
+	}
+
+	.kayi-c-hero::before {
+		background: linear-gradient(180deg, rgba(11, 11, 12, 0.7) 0%, rgba(11, 11, 12, 0.88) 55%, rgba(11, 11, 12, 0.98) 100%);
+	}
+
+	.kayi-c-hero__title {
+		margin-top: 22px !important;
+	}
+
+	.kayi-c-hero .kayi-c-buttons {
+		width: 100%;
+	}
+
+	.kayi-c-hero .kayi-c-buttons .wp-block-button {
+		flex: 1 1 100%;
+	}
+
+	.kayi-c-hero .kayi-c-buttons .wp-block-button__link {
+		justify-content: center;
+		width: 100%;
+	}
+
+	.kayi-c-stat__value {
+		font-size: 22px;
+	}
+
+	.kayi-c-stat__label {
+		font-size: 13px;
+	}
+
+	.kayi-c-marquee__track {
+		padding: 16px 0;
+	}
+
+	.kayi-c-marquee__track > p {
+		padding-left: 28px;
+	}
+
+	.kayi-c-marquee__track > p::after {
+		margin-left: 28px;
+		width: 8px;
+		height: 8px;
+	}
+
+	.kayi-c-head {
+		align-items: flex-start;
+		flex-direction: column;
+		gap: 24px;
+	}
+
+	/* Glove explorer: full-bleed stage with the feature tabs along its
+	   bottom edge; tap (or swipe) to slide between them. */
+	.kayi-c-explore {
+		row-gap: 24px;
+		margin-top: 32px !important;
+	}
+
+	.kayi-c-stage {
+		aspect-ratio: auto;
+		height: min(118vw, 560px);
+		margin-inline: calc(-1 * var(--kc-gutter)) !important;
+	}
+
+	/* On phones the caption is the section's headline on the image: number,
+	   big feature name, then the description. The tabs live in the bottom bar. */
+	.kayi-c-stage::after {
+		background: linear-gradient(180deg, rgba(11, 11, 12, 0.2) 0%, rgba(11, 11, 12, 0) 28%, rgba(11, 11, 12, 0.15) 48%, rgba(11, 11, 12, 0.92) 100%);
+	}
+
+	.kayi-c-stage__caption {
+		left: 20px;
+		right: 20px;
+		bottom: 22px;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 6px;
+		text-transform: none;
+		letter-spacing: 0;
+	}
+
+	.kayi-c-stage__caption b {
+		font-family: var(--kc-cond);
+		font-size: 15px;
+		letter-spacing: 3px;
+	}
+
+	.kayi-c-stage__caption strong {
+		font-family: var(--kc-display);
+		font-weight: 400;
+		font-size: clamp(36px, 11vw, 48px);
+		line-height: 0.95;
+		letter-spacing: 0.5px;
+		text-transform: uppercase;
+		color: #fff;
+	}
+
+	.kayi-c-stage__caption span {
+		font-family: var(--kc-body);
+		font-weight: 500;
+		font-size: 17px;
+		line-height: 1.4;
+		color: rgba(255, 255, 255, 0.85);
+	}
+
+	.kayi-c-stage__caption span::before {
+		content: none !important;
+	}
+
+	.kayi-c-stage__caption strong + span {
+		margin-left: 0;
+	}
+
+	.kayi-c-featbar {
+		position: fixed;
+		left: 12px;
+		right: 12px;
+		bottom: calc(12px + env(safe-area-inset-bottom));
+		z-index: 90;
+		display: block;
+		overflow: hidden;
+		border-radius: 14px;
+		background: rgba(11, 11, 12, 0.88);
+		-webkit-backdrop-filter: blur(12px);
+		backdrop-filter: blur(12px);
+		box-shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(8px);
+		transition: opacity 0.25s ease, transform 0.25s ease;
+	}
+
+	/* Apple-style entrance: a gold dot pops up at the bottom of the screen,
+	   then stretches into the bar; the tabs fade up once it's open. */
+	.kayi-c-featbar.is-visible {
+		opacity: 1;
+		pointer-events: auto;
+		transform: none;
+		animation: kayi-featbar-open 1.2s cubic-bezier(0.65, 0, 0.35, 1) both;
+	}
+
+	.kayi-c-featbar::before {
+		content: "";
+		position: absolute;
+		inset: 0;
+		z-index: 1;
+		background: var(--kc-gold);
+		opacity: 0;
+		pointer-events: none;
+	}
+
+	.kayi-c-featbar.is-visible::before {
+		animation: kayi-featbar-dot 1.2s ease both;
+	}
+
+	.kayi-c-featbar.is-quick.is-visible,
+	.kayi-c-featbar.is-quick.is-visible::before,
+	.kayi-c-featbar.is-quick.is-visible .kayi-c-stage__tab {
+		animation: none !important;
+	}
+
+	.kayi-c-featbar.is-visible .kayi-c-stage__tab {
+		animation: kayi-featbar-tab 0.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+		animation-delay: 0.85s;
+	}
+
+	.kayi-c-featbar.is-visible .kayi-c-stage__tab:nth-child(2) {
+		animation-delay: 0.93s;
+	}
+
+	.kayi-c-featbar.is-visible .kayi-c-stage__tab:nth-child(3) {
+		animation-delay: 1.01s;
+	}
+
+	/* Exit: the bar shrinks back into the gold dot, which then vanishes. */
+	.kayi-c-featbar.is-leaving {
+		opacity: 1;
+		transform: none;
+		transition: none;
+		animation: kayi-featbar-close 0.65s cubic-bezier(0.65, 0, 0.35, 1) both;
+	}
+
+	.kayi-c-featbar.is-leaving::before {
+		animation: kayi-featbar-dot-out 0.65s ease both;
+	}
+
+	.kayi-c-featbar.is-leaving .kayi-c-stage__tab {
+		animation: kayi-featbar-tab-out 0.18s ease both;
+	}
+
+	@keyframes kayi-featbar-close {
+		0% {
+			clip-path: inset(0 0 0 0 round 14px);
+		}
+		55%,
+		78% {
+			clip-path: inset(calc(50% - 8px) calc(50% - 8px) calc(50% - 8px) calc(50% - 8px) round 999px);
+		}
+		100% {
+			clip-path: inset(calc(50% - 1px) calc(50% - 1px) calc(50% - 1px) calc(50% - 1px) round 999px);
+		}
+	}
+
+	@keyframes kayi-featbar-dot-out {
+		0%,
+		20% {
+			opacity: 0;
+		}
+		55%,
+		100% {
+			opacity: 1;
+		}
+	}
+
+	@keyframes kayi-featbar-tab-out {
+		to {
+			opacity: 0;
+			transform: translateY(6px);
+		}
+	}
+
+	@keyframes kayi-featbar-open {
+		0% {
+			clip-path: inset(calc(50% - 1px) calc(50% - 1px) calc(50% - 1px) calc(50% - 1px) round 999px);
+		}
+		14% {
+			clip-path: inset(calc(50% - 10px) calc(50% - 10px) calc(50% - 10px) calc(50% - 10px) round 999px);
+		}
+		24% {
+			clip-path: inset(calc(50% - 7px) calc(50% - 7px) calc(50% - 7px) calc(50% - 7px) round 999px);
+		}
+		40% {
+			clip-path: inset(calc(50% - 8px) calc(50% - 8px) calc(50% - 8px) calc(50% - 8px) round 999px);
+		}
+		75%,
+		100% {
+			clip-path: inset(0 0 0 0 round 14px);
+		}
+	}
+
+	@keyframes kayi-featbar-dot {
+		0%,
+		42% {
+			opacity: 1;
+		}
+		75%,
+		100% {
+			opacity: 0;
+		}
+	}
+
+	@keyframes kayi-featbar-tab {
+		from {
+			opacity: 0;
+			transform: translateY(8px);
+		}
+		to {
+			opacity: 1;
+			transform: none;
+		}
+	}
+
+	.kayi-c-stage__tabs {
+		display: grid;
+		grid-template-columns: repeat(var(--kc-tabs, 3), minmax(0, 1fr));
+	}
+
+	.kayi-c-stage__tab {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		gap: 2px;
+		min-height: 60px;
+		padding: 10px 14px 12px;
+		border: 0;
+		border-top: 3px solid transparent;
+		background: transparent;
+		color: rgba(255, 255, 255, 0.6);
+		font-family: var(--kc-display);
+		font-size: 20px;
+		line-height: 1.1;
+		letter-spacing: 0.5px;
+		text-align: left;
+		text-transform: uppercase;
+		cursor: pointer;
+		transition: color 0.25s ease, border-color 0.25s ease, background-color 0.25s ease;
+	}
+
+	.kayi-c-stage__tab + .kayi-c-stage__tab {
+		border-left: 1px solid rgba(255, 255, 255, 0.08);
+	}
+
+	.kayi-c-stage__tab small {
+		font-family: var(--kc-cond);
+		font-weight: 700;
+		font-size: 12px;
+		letter-spacing: 2px;
+		color: #8a8a92;
+	}
+
+	.kayi-c-stage__tab.is-active {
+		border-top-color: var(--kc-gold);
+		background: rgba(201, 162, 74, 0.12);
+		color: #fff;
+	}
+
+	.kayi-c-stage__tab.is-active small {
+		color: var(--kc-gold);
+	}
+
+	/* Auto-play timer: a gold line fills the active tab's top edge over 5s
+	   (driven by kayi.js); a faint track shows behind it. */
+	/* Homepage bar floats 20% of the screen height above the bottom edge. */
+	.kayi-c-featbar--auto {
+		bottom: 20vh;
+		bottom: 20svh;
+	}
+
+	.kayi-c-featbar--auto .kayi-c-stage__tab {
+		position: relative;
+	}
+
+	.kayi-c-featbar--auto .kayi-c-stage__tab.is-active {
+		border-top-color: transparent;
+	}
+
+	.kayi-c-featbar--auto .kayi-c-stage__tab.is-active::before {
+		content: "";
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: -3px;
+		height: 3px;
+		background: rgba(255, 255, 255, 0.16);
+	}
+
+	.kayi-c-stage__timer {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: -3px;
+		z-index: 1;
+		height: 3px;
+		background: var(--kc-gold);
+		transform: scaleX(0);
+		transform-origin: left center;
+	}
+
+	.kayi-c-stage__bars {
+		display: none;
+	}
+
+	.kayi-c-play {
+		top: 36%;
+		width: 76px;
+		height: 76px;
+	}
+
+	/* The feature list is replaced by the bottom bar + caption on phones. */
+	.kayi-c-hint,
+	.kayi-c-opts {
+		display: none;
+	}
+
+	.kayi-c-explore__copy {
+		gap: 24px;
+	}
+
+	.kayi-c-tabs {
+		flex-wrap: nowrap;
+		overflow-x: auto;
+		scrollbar-width: none;
+		max-width: 100%;
+	}
+
+	.kayi-c-tabs::-webkit-scrollbar {
+		display: none;
+	}
+
+	.kayi-c-tabs .wp-block-button__link {
+		padding: 9px 16px;
+		white-space: nowrap;
+	}
+
+	.kayi-c-shelf .kayi-c-arrows {
+		display: none;
+	}
+
+	.kayi-c-shelf__controls {
+		width: 100%;
+	}
+
+	.kayi-c-products {
+		margin-top: 28px !important;
+	}
+
+	.kayi-c-products .kayi-c-cards {
+		gap: 14px !important;
+	}
+
+	.kayi-c-products .kayi-c-cards > li,
+	.kayi-c-products .kayi-c-cards.is-compact > li {
+		flex-basis: 72% !important;
+	}
+
+	.kayi-c-card__title {
+		font-size: 16px !important;
+	}
+
+	.kayi-c-pills::before {
+		flex-basis: 100%;
+	}
+
+	.kayi-c-split__copy {
+		gap: 22px;
+	}
+
+	.kayi-c-callout__title {
+		font-size: 26px;
+	}
+
+	.kayi-c-mosaic {
+		grid-template-rows: 200px 200px;
+		gap: 10px;
+	}
+
+	.kayi-c-duo {
+		gap: 10px;
+	}
+
+	.kayi-c-duo .kayi-c-tile {
+		height: 300px;
+	}
+
+	.kayi-c-duo .kayi-c-tile:nth-child(2) {
+		margin-top: 32px !important;
+	}
+
+	.kayi-c-points {
+		grid-template-columns: 1fr;
+	}
+
+	.kayi-c-point {
+		padding: 16px 0;
+		border-bottom: 1px solid #3a3a40;
+	}
+
+	.kayi-c-usps {
+		grid-template-columns: 1fr;
+		row-gap: 40px;
+		margin-top: 48px !important;
+	}
+
+	.kayi-c-usp {
+		padding-top: 24px;
+	}
+
+	.kayi-c-usp__num {
+		font-size: 52px;
+	}
+
+	.kayi-c-news {
+		padding-block: 56px;
+	}
+
+	.kayi-c-news__form {
+		flex-basis: 100%;
+	}
+
+	.kayi-c-news__form button {
+		flex: 1 1 100%;
+	}
+
+	.kayi-c-footer {
+		padding-top: 64px;
+	}
+
+	.kayi-c-footer__cols {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.kayi-c-footer__col:last-child {
+		grid-column: 1 / -1;
+	}
+
+	.kayi-c-footer__wordmark {
+		margin-top: 48px !important;
+		font-size: 17.5vw;
+	}
+
+	.kayi-c-footer__wordmark::after {
+		display: none;
+	}
+
+	.kayi-c-footer__bottom {
+		margin-top: 40px !important;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.kayi-c-stage__track {
+		transition: none;
+	}
+
+	.kayi-c-featbar.is-visible,
+	.kayi-c-featbar.is-visible::before,
+	.kayi-c-featbar.is-visible .kayi-c-stage__tab,
+	.kayi-c-featbar.is-leaving,
+	.kayi-c-featbar.is-leaving::before,
+	.kayi-c-featbar.is-leaving .kayi-c-stage__tab {
+		animation: none;
+	}
+}
+
+/* ── Trade: Gyms & Clubs page, forms, bulk order form ────────────────────
+   inc/trade.php (shortcodes, pricing) and patterns/trade.php + trade-order.php.
+   The Gyms & Clubs page is a .kayi-lp page; the order form page is light. */
+
+/* Trade customers: bar above the header, prices without VAT. */
+.kayi-tradebar {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 4px 24px;
+	padding: 8px var(--kc-gutter);
+	background: #161412;
+	border-bottom: 1px solid #3a3226;
+	color: #fff;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 13px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+.kayi-tradebar p {
+	margin: 0;
+}
+
+.kayi-tradebar span {
+	margin-left: 10px;
+	font-weight: 500;
+	color: var(--kc-grey);
+}
+
+.kayi-tradebar a {
+	color: var(--kc-gold);
+	text-decoration: none;
+}
+
+.kayi-tradebar a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.kayi-trade-price {
+	display: inline-flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 2px 6px;
+}
+
+.kayi-trade-price__tax {
+	font-family: var(--kc-cond);
+	font-size: 0.72em;
+	font-weight: 600;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: #6b6b73;
+}
+
+.kayi-trade-price__rrp {
+	flex-basis: 100%;
+	font-size: 0.78em;
+	font-weight: 500;
+	color: #6b6b73;
+}
+
+.kayi-trade-note,
+.kayi-trade-box {
+	margin: 14px 0 0;
+	padding: 12px 16px;
+	border-left: 3px solid var(--kc-gold);
+	background: #f7f3ea;
+	color: var(--kc-black);
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.kayi-trade-box {
+	margin: 0 0 28px;
+	padding: 18px 20px;
+	font-size: 16px;
+}
+
+.kayi-trade-box p {
+	margin: 0;
+}
+
+.kayi-trade-box p + p {
+	margin-top: 14px;
+}
+
+.kayi-trade-note a {
+	color: inherit;
+	font-weight: 600;
+}
+
+/* Tier cards ([kayi_trade_tiers]). */
+.kayi-tr-tiers {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 20px;
+	margin-top: clamp(40px, 4vw, 56px) !important;
+}
+
+.kayi-tr-tier {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 32px 28px 28px;
+	border: 1px solid var(--lp-line);
+	border-radius: 20px;
+	background:
+		radial-gradient(ellipse 70% 60% at 50% 0%, rgba(201, 162, 74, 0.1), transparent 70%),
+		#141417;
+}
+
+.kayi-tr-tier:last-child {
+	border-color: rgba(201, 162, 74, 0.5);
+}
+
+.kayi-tr-tier__units {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-tier__off {
+	font-family: var(--kc-display);
+	font-size: clamp(64px, 6.4vw, 96px);
+	line-height: 0.9;
+	color: var(--kc-gold);
+}
+
+.kayi-tr-tier__off span {
+	display: block;
+	margin-top: 10px;
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 16px;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+	color: #fff;
+}
+
+.kayi-tr-tier__eg {
+	margin-top: auto !important;
+	padding-top: 18px;
+	border-top: 1px solid var(--lp-line);
+	font-size: 15px;
+	line-height: 1.5;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-tier__eg strong {
+	color: #fff;
+}
+
+.kayi-tr-note {
+	margin-top: 24px !important;
+	font-size: 16px;
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+/* Bulk order form preview (Gyms & Clubs page). */
+.kayi-tr-mock {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: clamp(20px, 3vw, 36px);
+}
+
+.kayi-tr-mock__row {
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+	padding: 16px 18px;
+	border: 1px solid #2a2a2f;
+	border-radius: 14px;
+	background: #0e0e10;
+}
+
+.kayi-tr-mock__name {
+	font-weight: 600;
+	font-size: 16px;
+}
+
+.kayi-tr-mock__sizes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.kayi-tr-mock__sizes b {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	min-width: 62px;
+	padding: 8px 10px;
+	border: 1px solid #2f2f35;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 1px;
+	text-transform: uppercase;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-mock__sizes i {
+	font-family: var(--kc-body);
+	font-style: normal;
+	font-weight: 700;
+	font-size: 18px;
+	letter-spacing: 0;
+	color: #fff;
+}
+
+.kayi-tr-mock__sizes b.is-set {
+	border-color: var(--kc-gold);
+}
+
+.kayi-tr-mock__sizes b.is-set i {
+	color: var(--kc-gold);
+}
+
+.kayi-tr-mock__sum {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px 20px;
+	padding: 16px 18px;
+	border-radius: 14px;
+	background: var(--kc-gold);
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 15px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+}
+
+.kayi-tr-mock__sum strong {
+	margin-left: auto;
+}
+
+/* Apply / quote: copy beside the form. */
+.kayi-tr-split {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr);
+	align-items: start;
+	gap: clamp(40px, 6vw, 88px);
+}
+
+.kayi-tr-split > .kayi-lp-copy {
+	position: sticky;
+	top: 100px;
+}
+
+.kayi-tr-split .kayi-lp-specs a {
+	color: var(--kc-gold);
+}
+
+.kayi-tr-formwrap,
+.kayi-tr-panel {
+	padding: clamp(24px, 3.4vw, 44px);
+	border: 1px solid var(--lp-line);
+	border-radius: 20px;
+	background: #141417;
+}
+
+.kayi-tr-formwrap > * {
+	margin: 0 !important;
+}
+
+.kayi-tr-panel {
+	display: flex;
+	flex-direction: column;
+	gap: 16px;
+	border-color: rgba(201, 162, 74, 0.5);
+}
+
+.kayi-tr-panel p {
+	font-size: 17px;
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-formwrap .kayi-tr-panel {
+	padding: 0;
+	border: 0;
+	background: none;
+}
+
+/* Dark form fields. */
+.kayi-tr-form {
+	gap: 22px;
+}
+
+.kayi-tr-form__grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 18px 20px;
+}
+
+.kayi-tr-form .kayi-form__field.is-wide {
+	grid-column: 1 / -1;
+}
+
+.kayi-tr-form .kayi-form__field label {
+	display: block;
+	margin-bottom: 8px;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 14px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: #d4d4d8;
+}
+
+.kayi-form__opt {
+	font-family: var(--kc-body);
+	font-weight: 400;
+	font-size: 13px;
+	letter-spacing: 0;
+	text-transform: none;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-form :is(input:not([type="file"]), select, textarea) {
+	display: block;
+	width: 100%;
+	min-height: 52px;
+	box-sizing: border-box;
+	padding: 14px 16px;
+	border: 1px solid #2f2f35;
+	border-radius: 0;
+	background-color: #0e0e10;
+	color: #fff;
+	font: inherit;
+	font-size: 16px;
+	transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.kayi-tr-form select {
+	-webkit-appearance: none;
+	appearance: none;
+	padding-right: 44px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%23c9a24a' stroke-width='1.6'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 16px center;
+	background-size: 12px 8px;
+}
+
+.kayi-tr-form input[type="date"] {
+	color-scheme: dark;
+}
+
+.kayi-tr-form :is(input, select, textarea):focus {
+	outline: none;
+	border-color: var(--kc-gold);
+	box-shadow: inset 0 0 0 1px var(--kc-gold);
+}
+
+.kayi-tr-file input {
+	width: 100%;
+	color: var(--kc-grey);
+	font-size: 15px;
+}
+
+.kayi-tr-file input::file-selector-button {
+	margin-right: 14px;
+	padding: 12px 18px;
+	border: 1px solid var(--kc-gold);
+	border-radius: 0;
+	background: transparent;
+	color: var(--kc-gold);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 14px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	cursor: pointer;
+}
+
+.kayi-tr-file small {
+	display: block;
+	margin-top: 8px;
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-form .kayi-form__consent {
+	font-size: 14px;
+	line-height: 1.5;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-form .kayi-form__consent a {
+	color: var(--kc-gold);
+}
+
+.kayi-tr-form .kayi-form__notice.is-error {
+	border: 1px solid rgba(239, 100, 80, 0.45);
+	background: rgba(239, 100, 80, 0.1);
+	color: #ffb4a6;
+}
+
+.kayi-tr-submit {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 14px;
+	min-height: 56px;
+	padding: 0 30px;
+	border: 0;
+	border-radius: 0;
+	background: var(--kc-gold);
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 16px;
+	letter-spacing: 2.5px;
+	text-transform: uppercase;
+	cursor: pointer;
+	transition: background-color 0.2s ease, opacity 0.2s ease;
+}
+
+.kayi-tr-submit::after {
+	content: "→";
+	font-family: var(--kc-body);
+}
+
+.kayi-tr-submit:hover {
+	background: #dab65e;
+}
+
+.kayi-tr-submit:disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+
+/* ── Trade order form page (light) ── */
+
+.kayi-tr-page {
+	margin: 0 !important;
+	background: #fff;
+	color: var(--kc-black);
+}
+
+.wp-block-post-content > .wp-block-group.kayi-tr-page.alignfull {
+	padding: 0 !important;
+}
+
+.wp-site-blocks:has(.kayi-tr-page) > footer {
+	margin-block-start: 0;
+}
+
+.kayi-tr-page > * {
+	margin-block: 0 !important;
+}
+
+.kayi-tr-page__head {
+	padding: clamp(56px, 6vw, 96px) var(--kc-gutter) clamp(40px, 4vw, 64px);
+	background: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-tr-page__head > *,
+.kayi-tr-page__body > * {
+	max-width: var(--kc-max);
+	margin-inline: auto !important;
+}
+
+.kayi-tr-page__inner {
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
+}
+
+.kayi-tr-page__inner > * {
+	margin: 0 !important;
+}
+
+.kayi-tr-page__inner h1 {
+	font-size: clamp(52px, 6.4vw, 96px) !important;
+	line-height: 0.9 !important;
+}
+
+.kayi-tr-page__inner p:not(.kayi-c-eyebrow) {
+	max-width: 640px;
+	font-size: clamp(17px, 1.4vw, 20px);
+	line-height: 1.55;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-page__inner .kayi-c-eyebrow {
+	color: var(--kc-gold);
+}
+
+.kayi-tr-page__body {
+	padding: 0 var(--kc-gutter) clamp(64px, 7vw, 104px);
+}
+
+.kayi-tr-order__cats {
+	position: sticky;
+	top: var(--wp-admin--admin-bar--height, 0px);
+	z-index: 20;
+	display: flex;
+	gap: 8px;
+	padding: 14px 0;
+	overflow-x: auto;
+	background: #fff;
+	border-bottom: 1px solid #e7e7ea;
+	scrollbar-width: none;
+}
+
+.kayi-tr-order__cats::-webkit-scrollbar {
+	display: none;
+}
+
+.kayi-tr-order__cats a {
+	flex: none;
+	padding: 10px 16px;
+	border: 1px solid #d9d9de;
+	color: var(--kc-black);
+	font-family: var(--kc-cond);
+	font-weight: 700;
+	font-size: 14px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	text-decoration: none;
+	transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.kayi-tr-order__cats a:hover {
+	border-color: var(--kc-black);
+	background: var(--kc-black);
+	color: #fff;
+}
+
+.kayi-tr-cat {
+	padding-top: clamp(32px, 3.6vw, 48px);
+	scroll-margin-top: calc(var(--wp-admin--admin-bar--height, 0px) + 64px);
+}
+
+.kayi-tr-cat__title {
+	padding-bottom: 12px;
+	border-bottom: 2px solid var(--kc-black);
+	font-size: clamp(32px, 3.4vw, 48px) !important;
+	line-height: 1 !important;
+}
+
+.kayi-tr-item {
+	display: grid;
+	grid-template-columns: 88px minmax(0, 300px) minmax(0, 1fr);
+	align-items: center;
+	gap: 16px 28px;
+	padding: 20px 0;
+	border-bottom: 1px solid #ececef;
+}
+
+.kayi-tr-item__img img {
+	display: block;
+	width: 88px;
+	height: 88px;
+	object-fit: cover;
+	background: #f4f4f5;
+}
+
+.kayi-c-main .kayi-tr-item__name {
+	font-family: var(--kc-body);
+	font-weight: 600;
+	font-size: 17px;
+	line-height: 1.3;
+	letter-spacing: 0;
+	text-transform: none;
+}
+
+.kayi-tr-item__name a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.kayi-tr-item__name a:hover {
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+.kayi-tr-item__price {
+	margin-top: 6px !important;
+	font-weight: 700;
+	font-size: 16px;
+}
+
+.kayi-tr-item__qty {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+}
+
+.kayi-tr-qty {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	min-width: 72px;
+	max-width: 150px;
+}
+
+.kayi-tr-qty span {
+	overflow: hidden;
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 13px;
+	letter-spacing: 1px;
+	text-align: center;
+	text-overflow: ellipsis;
+	text-transform: uppercase;
+	white-space: nowrap;
+	color: #55555c;
+}
+
+.kayi-tr-qty input {
+	width: 100%;
+	height: 48px;
+	box-sizing: border-box;
+	padding: 0 6px;
+	border: 1px solid #d4d4d8;
+	border-radius: 0;
+	background: #fff;
+	color: var(--kc-black);
+	font: 600 17px var(--kc-body);
+	text-align: center;
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
+
+.kayi-tr-qty input::-webkit-inner-spin-button,
+.kayi-tr-qty input::-webkit-outer-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+.kayi-tr-qty input:focus {
+	outline: none;
+	border-color: var(--kc-black);
+	box-shadow: inset 0 0 0 1px var(--kc-black);
+}
+
+.kayi-tr-qty.is-set input {
+	border-color: var(--kc-gold);
+	background: #fbf7ee;
+	box-shadow: inset 0 0 0 1px var(--kc-gold);
+}
+
+.kayi-tr-qty.is-out {
+	opacity: 0.45;
+}
+
+/* Running total, stuck to the bottom of the screen while the form scrolls. */
+.kayi-tr-sum {
+	position: sticky;
+	bottom: 16px;
+	z-index: 30;
+	margin-top: 40px;
+}
+
+.kayi-tr-sum__inner {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 12px 32px;
+	padding: 14px 14px 14px 28px;
+	background: var(--kc-black);
+	color: #fff;
+	box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+}
+
+.kayi-tr-sum__stat {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+}
+
+.kayi-tr-sum__stat span {
+	font-family: var(--kc-cond);
+	font-weight: 600;
+	font-size: 12px;
+	letter-spacing: 1.5px;
+	text-transform: uppercase;
+	color: var(--kc-grey);
+}
+
+.kayi-tr-sum__stat strong {
+	font-family: var(--kc-display);
+	font-weight: 400;
+	font-size: 26px;
+	line-height: 1.1;
+}
+
+.kayi-tr-sum__msg {
+	flex: 1 1 180px;
+	font-size: 14px;
+	line-height: 1.4;
+	color: var(--kc-gold);
+}
+
+.kayi-tr-preview {
+	margin-top: 24px !important;
+}
+
+.kayi-tr-gate {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 18px;
+	max-width: 720px;
+	margin-top: clamp(40px, 5vw, 72px) !important;
+	padding: clamp(28px, 4vw, 48px);
+	border: 1px solid #e4e4e7;
+}
+
+.kayi-tr-gate p {
+	font-size: 17px;
+	line-height: 1.55;
+	color: #55555c;
+}
+
+@media (max-width: 1024px) {
+	.kayi-tr-item {
+		grid-template-columns: 72px minmax(0, 1fr);
+	}
+
+	.kayi-tr-item__img img {
+		width: 72px;
+		height: 72px;
+	}
+
+	.kayi-tr-item__qty {
+		grid-column: 1 / -1;
+	}
+}
+
+@media (max-width: 900px) {
+	.kayi-tr-split {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-tr-split > .kayi-lp-copy {
+		position: static;
+	}
+}
+
+@media (max-width: 781px) {
+	.kayi-tr-form__grid {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.kayi-tradebar span {
+		display: none;
+	}
+
+	.kayi-tr-qty {
+		min-width: 64px;
+	}
+
+	.kayi-tr-sum {
+		bottom: 8px;
+	}
+
+	.kayi-tr-sum__inner {
+		gap: 10px 20px;
+		padding: 12px 14px;
+	}
+
+	.kayi-tr-sum__stat strong {
+		font-size: 21px;
+	}
+
+	.kayi-tr-sum__msg {
+		flex-basis: 100%;
+		order: 4;
+	}
+
+	.kayi-tr-sum .kayi-tr-submit {
+		flex: 1 1 100%;
+		order: 5;
+		min-height: 50px;
+	}
+}

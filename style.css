@@ -54,6 +54,9 @@ Text Domain: twentytwentyfive-child
   max-width: 100vw !important;
   margin-left: calc(50% - 50vw) !important;
   margin-right: calc(50% - 50vw) !important;
+  /* Sit flush against the section above — no block gap (GSAP's pin-spacer
+     copies this margin, which showed as a white strip). */
+  margin-top: 0 !important;
   left: 0 !important;
   right: 0 !important;
 }
@@ -256,6 +259,46 @@ Text Domain: twentytwentyfive-child
   .js-pinned-slider__dot {
     width: 6px;
     height: 6px;
+  }
+
+  /* Apple-style timer: the active dot stretches into a pill that fills up
+     over the slide's duration (fill width is animated by JS). */
+  .js-pinned-slider__dots.is-mobile-nav .js-pinned-slider__dot {
+    border-radius: 999px;
+    transition: width 0.4s ease, background 0.3s ease;
+  }
+
+  .js-pinned-slider__dots.is-mobile-nav .js-pinned-slider__dot.is-active {
+    width: 28px;
+    transform: none;
+    background: rgba(255, 255, 255, 0.4);
+  }
+
+  .js-pinned-slider__dot-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0;
+    min-width: 6px;
+    border-radius: inherit;
+    background: #ffffff;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .js-pinned-slider__dot.is-active .js-pinned-slider__dot-fill {
+    opacity: 1;
+  }
+
+  /* Play / pause toggle — shows the icon for the action it will take */
+  .js-pinned-slider__play-btn .js-pinned-slider__icon-play,
+  .js-pinned-slider__play-btn.is-paused .js-pinned-slider__icon-pause {
+    display: none;
+  }
+
+  .js-pinned-slider__play-btn.is-paused .js-pinned-slider__icon-play {
+    display: block;
   }
 }
 

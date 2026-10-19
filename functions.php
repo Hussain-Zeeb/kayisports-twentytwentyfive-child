@@ -29,28 +29,6 @@ add_action( 'wp_enqueue_scripts', function() {
     if ( file_exists( $smooth_scroll_path ) ) {
         wp_enqueue_script( 'twentytwentyfive-child-smooth-scroll', $smooth_scroll_uri, array(), filemtime( $smooth_scroll_path ), true );
     }
-
-    // Load WooCommerce's own single-product gallery assets (flexslider, zoom,
-    // photoswipe) on shop/category archives too, since we reuse that gallery
-    // markup inside the product loop via woocommerce_show_product_images().
-    // Category archives only — the shop page (archive-product.html) uses plain product cards.
-    if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
-        if ( wp_style_is( 'woocommerce-general', 'registered' ) ) {
-            wp_enqueue_style( 'woocommerce-general' );
-        }
-
-        foreach ( array( 'flexslider', 'photoswipe-ui-default', 'photoswipe', 'zoom-vendor', 'wc-single-product' ) as $handle ) {
-            if ( wp_script_is( $handle, 'registered' ) ) {
-                wp_enqueue_script( $handle );
-            }
-        }
-
-        foreach ( array( 'photoswipe', 'photoswipe-default-skin' ) as $handle ) {
-            if ( wp_style_is( $handle, 'registered' ) ) {
-                wp_enqueue_style( $handle );
-            }
-        }
-    }
 });
 
 /* Loader disabled — uncomment to re-enable
@@ -284,6 +262,193 @@ add_shortcode( 'kayi_category_banner', function( $atts ) {
     <?php
     return ob_get_clean();
 } );
+
+// ── Archive header (Adidas-style) ─────────────────────────────────────────────
+// [kayi_archive_header] — no hero image or intro text: bold uppercase title with
+// the product count.
+add_shortcode( 'kayi_archive_header', function() {
+    if ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ) {
+        $term  = get_queried_object();
+        $title = $term instanceof WP_Term ? $term->name : '';
+    } elseif ( function_exists( 'is_shop' ) && is_shop() ) {
+        $title = woocommerce_page_title( false );
+    } else {
+        return '';
+    }
+
+    $count = (int) $GLOBALS['wp_query']->found_posts;
+
+    ob_start();
+    ?>
+    <div class="kayi-archive-header">
+        <h1 class="kayi-archive-header__title"><?php echo esc_html( $title ); ?> <span class="kayi-archive-header__count">[<?php echo esc_html( number_format_i18n( $count ) ); ?>]</span></h1>
+    </div>
+    <?php
+    return ob_get_clean();
+} );
+
+// ── Category → landing page banner ────────────────────────────────────────────
+// [kayi_category_landing] (category template, between the title and the grid):
+// a "Find out more" card linking to the category's product landing page, e.g.
+// Focus Pads → /focus-pads/. Set per category under Products › Categories
+// ("Landing page", optional title and text); sub-categories inherit from their
+// parent. The image is the landing page's featured image; the text falls back
+// to its excerpt.
+function kayi_category_landing_term( $term ) {
+    while ( $term instanceof WP_Term ) {
+        if ( (int) get_term_meta( $term->term_id, 'kayi_landing_page', true ) ) {
+            return $term;
+        }
+        $term = $term->parent ? get_term( $term->parent, 'product_cat' ) : null;
+    }
+    return null;
+}
+
+add_shortcode( 'kayi_category_landing', function() {
+    if ( ! function_exists( 'is_product_category' ) || ! is_product_category() ) {
+        return '';
+    }
+
+    $source = kayi_category_landing_term( get_queried_object() );
+    $page   = $source ? get_post( (int) get_term_meta( $source->term_id, 'kayi_landing_page', true ) ) : null;
+    if ( ! $page || 'publish' !== $page->post_status ) {
+        return '';
+    }
+
+    $title = get_term_meta( $source->term_id, 'kayi_landing_title', true );
+    $text  = get_term_meta( $source->term_id, 'kayi_landing_text', true );
+    $title = $title ? $title : sprintf( __( 'Find out more about our %s', 'twentytwentyfive-child' ), strtolower( $source->name ) );
+    $text  = $text ? $text : get_the_excerpt( $page );
+    $image = get_post_thumbnail_id( $page );
+
+    ob_start();
+    ?>
+    <aside class="kayi-catlink" aria-label="<?php esc_attr_e( 'Product guide', 'twentytwentyfive-child' ); ?>">
+        <?php if ( $image ) : ?>
+            <div class="kayi-catlink__media"><?php echo wp_get_attachment_image( $image, 'medium', false, array( 'alt' => '', 'loading' => 'eager' ) ); ?></div>
+        <?php endif; ?>
+        <div class="kayi-catlink__copy">
+            <p class="kayi-catlink__eyebrow"><?php esc_html_e( 'Before you buy', 'twentytwentyfive-child' ); ?></p>
+            <p class="kayi-catlink__title"><?php echo esc_html( $title ); ?></p>
+            <?php if ( $text ) : ?>
+                <p class="kayi-catlink__text"><?php echo esc_html( $text ); ?></p>
+            <?php endif; ?>
+        </div>
+        <a class="kayi-catlink__btn" href="<?php echo esc_url( get_permalink( $page ) ); ?>"><?php esc_html_e( 'Find out more', 'twentytwentyfive-child' ); ?></a>
+    </aside>
+    <?php
+    return trim( preg_replace( '/>\s+</', '><', ob_get_clean() ) );
+} );
+
+// Block templates expand shortcodes before rendering blocks, so the Shortcode
+// block would then run wpautop over the banner and wrap its button in a <p>.
+// Pass the banner through as it is.
+add_filter( 'render_block_core/shortcode', function( $content, $block ) {
+    $html = trim( $block['innerHTML'] ?? '' );
+    if ( 0 === strpos( $html, '<aside class="kayi-catlink"' ) || '[kayi_category_landing]' === $html ) {
+        return do_shortcode( $html );
+    }
+    return $content;
+}, 10, 2 );
+
+// Category screen fields for the banner above.
+function kayi_category_landing_fields( $term = null ) {
+    $id    = $term instanceof WP_Term ? $term->term_id : 0;
+    $page  = $id ? (int) get_term_meta( $id, 'kayi_landing_page', true ) : 0;
+    $title = $id ? get_term_meta( $id, 'kayi_landing_title', true ) : '';
+    $text  = $id ? get_term_meta( $id, 'kayi_landing_text', true ) : '';
+    $pages = wp_dropdown_pages( array(
+        'name'              => 'kayi_landing_page',
+        'id'                => 'kayi_landing_page',
+        'selected'          => $page,
+        'show_option_none'  => __( '— None (inherit from parent) —', 'twentytwentyfive-child' ),
+        'option_none_value' => 0,
+        'echo'              => false,
+    ) );
+    $rows = array(
+        array( 'kayi_landing_page', __( 'Landing page', 'twentytwentyfive-child' ), $pages, __( 'Shows a "Find out more" banner on this category (and its sub-categories) linking to this page.', 'twentytwentyfive-child' ) ),
+        array( 'kayi_landing_title', __( 'Banner title', 'twentytwentyfive-child' ), '<input type="text" name="kayi_landing_title" id="kayi_landing_title" value="' . esc_attr( $title ) . '">', __( 'Optional. Defaults to "Find out more about our …".', 'twentytwentyfive-child' ) ),
+        array( 'kayi_landing_text', __( 'Banner text', 'twentytwentyfive-child' ), '<textarea name="kayi_landing_text" id="kayi_landing_text" rows="3">' . esc_textarea( $text ) . '</textarea>', __( 'Optional. Defaults to the landing page excerpt.', 'twentytwentyfive-child' ) ),
+    );
+    foreach ( $rows as $row ) {
+        if ( $term ) {
+            printf( '<tr class="form-field"><th scope="row"><label for="%1$s">%2$s</label></th><td>%3$s<p class="description">%4$s</p></td></tr>', esc_attr( $row[0] ), esc_html( $row[1] ), $row[2], esc_html( $row[3] ) );
+        } else {
+            printf( '<div class="form-field"><label for="%1$s">%2$s</label>%3$s<p>%4$s</p></div>', esc_attr( $row[0] ), esc_html( $row[1] ), $row[2], esc_html( $row[3] ) );
+        }
+    }
+}
+add_action( 'product_cat_add_form_fields', function() { kayi_category_landing_fields(); } );
+add_action( 'product_cat_edit_form_fields', function( $term ) { kayi_category_landing_fields( $term ); } );
+
+function kayi_category_landing_save( $term_id ) {
+    if ( ! isset( $_POST['kayi_landing_page'] ) || ! current_user_can( 'manage_product_terms' ) ) {
+        return;
+    }
+    update_term_meta( $term_id, 'kayi_landing_page', absint( $_POST['kayi_landing_page'] ) );
+    update_term_meta( $term_id, 'kayi_landing_title', sanitize_text_field( wp_unslash( $_POST['kayi_landing_title'] ?? '' ) ) );
+    update_term_meta( $term_id, 'kayi_landing_text', sanitize_textarea_field( wp_unslash( $_POST['kayi_landing_text'] ?? '' ) ) );
+}
+add_action( 'created_product_cat', 'kayi_category_landing_save' );
+add_action( 'edited_product_cat', 'kayi_category_landing_save' );
+
+// Filter tabs for the shop and category pages: [kayi_category_filter]. Options
+// are the category's sub-categories, or the top-level categories on the shop
+// page and on categories without children (e.g. Sale). Each tab links to "#slug,descendant-slug,…"; kayi.js matches those
+// against the product_cat-{slug} classes on the cards, hides options that match
+// nothing (or everything), and turns the tabs into a bottom sheet on phones.
+add_shortcode( 'kayi_category_filter', function() {
+    if ( ! function_exists( 'is_shop' ) || ! ( is_shop() || is_product_taxonomy() ) ) {
+        return '';
+    }
+
+    $term    = is_product_category() ? get_queried_object() : null;
+    $options = array();
+
+    if ( $term instanceof WP_Term ) {
+        $options = get_terms( array(
+            'taxonomy'   => 'product_cat',
+            'parent'     => $term->term_id,
+            'hide_empty' => true,
+        ) );
+    }
+
+    if ( is_wp_error( $options ) || ! $options ) {
+        $options = get_terms( array(
+            'taxonomy'   => 'product_cat',
+            'parent'     => 0,
+            'hide_empty' => true,
+            'exclude'    => array_filter( array( $term instanceof WP_Term ? $term->term_id : 0, (int) get_option( 'default_product_cat' ) ) ),
+        ) );
+    }
+
+    if ( is_wp_error( $options ) || ! $options ) {
+        return '';
+    }
+
+    $tabs = array( '<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#all">' . esc_html__( 'All', 'twentytwentyfive-child' ) . '</a></div>' );
+
+    foreach ( $options as $option ) {
+        $slugs = array( $option->slug );
+        foreach ( get_term_children( $option->term_id, 'product_cat' ) as $child_id ) {
+            $child = get_term( $child_id, 'product_cat' );
+            if ( $child instanceof WP_Term ) {
+                $slugs[] = $child->slug;
+            }
+        }
+
+        $tabs[] = '<div class="wp-block-button"><a class="wp-block-button__link wp-element-button" href="#' . esc_attr( implode( ',', $slugs ) ) . '">' . esc_html( $option->name ) . '</a></div>';
+    }
+
+    return '<div class="wp-block-buttons kayi-c-tabs has-sheet" data-sheet-title="' . esc_attr__( 'Filter', 'twentytwentyfive-child' ) . '">' . implode( '', $tabs ) . '</div>';
+} );
+
+// The shop and category pages filter in the browser (see [kayi_category_filter]),
+// so load the whole range on one page instead of WooCommerce's default 16.
+add_filter( 'loop_shop_per_page', function( $per_page ) {
+    return ( function_exists( 'is_shop' ) && ( is_shop() || is_product_taxonomy() ) ) ? 48 : $per_page;
+}, 20 );
+
 // ── Mega menu content ─────────────────────────────────────────────────────────
 // Each top-level Navigation submenu that links to a product category gets a
 // "Shop all …" heading and up to three image tiles (its sub-categories), so the
@@ -356,5 +521,17 @@ add_filter( 'render_block_core/navigation-submenu', function( $block_content, $b
     return $block_content;
 }, 10, 2 );
 
+// [kayi_product_price id="199"] — a product's live price (sale price included),
+// for landing pages such as the head guards page.
+add_shortcode( 'kayi_product_price', function( $atts ) {
+    $atts    = shortcode_atts( array( 'id' => 0 ), $atts );
+    $product = function_exists( 'wc_get_product' ) ? wc_get_product( absint( $atts['id'] ) ) : null;
+    return $product ? '<span class="kayi-price">' . $product->get_price_html() . '</span>' : '';
+} );
+
 // Contact form shortcode [kayi_contact_form] + "Enquiries" admin screen.
 require_once get_stylesheet_directory() . '/inc/contact-form.php';
+require_once get_stylesheet_directory() . '/inc/brand.php';
+
+// Trade accounts for gyms and clubs: pricing tiers, bulk order form, quotes.
+require_once get_stylesheet_directory() . '/inc/trade.php';

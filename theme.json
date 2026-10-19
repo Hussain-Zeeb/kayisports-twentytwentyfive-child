@@ -1,10 +1,142 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/theme.json",
 	"version": 3,
+	"settings": {
+		"color": {
+			"palette": [
+				{ "name": "White", "slug": "base", "color": "#FFFFFF" },
+				{ "name": "Black", "slug": "contrast", "color": "#0B0B0C" },
+				{ "name": "Gold", "slug": "accent-1", "color": "#C9A24A" },
+				{ "name": "Cream", "slug": "accent-2", "color": "#F3EFE7" },
+				{ "name": "Deep gold", "slug": "accent-3", "color": "#6E5520" },
+				{ "name": "Grey", "slug": "accent-4", "color": "#6B6B73" },
+				{ "name": "Charcoal", "slug": "accent-5", "color": "#141417" },
+				{ "name": "Hairline", "slug": "accent-6", "color": "color-mix(in srgb, currentColor 18%, transparent)" }
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"name": "Barlow",
+					"slug": "barlow",
+					"fontFamily": "Barlow, system-ui, sans-serif",
+					"fontFace": [
+						{ "fontFamily": "Barlow", "fontStyle": "normal", "fontWeight": "400", "fontDisplay": "swap", "src": [ "file:./assets/fonts/barlow-400.woff2" ] },
+						{ "fontFamily": "Barlow", "fontStyle": "normal", "fontWeight": "500", "fontDisplay": "swap", "src": [ "file:./assets/fonts/barlow-500.woff2" ] },
+						{ "fontFamily": "Barlow", "fontStyle": "normal", "fontWeight": "600", "fontDisplay": "swap", "src": [ "file:./assets/fonts/barlow-600.woff2" ] },
+						{ "fontFamily": "Barlow", "fontStyle": "normal", "fontWeight": "700", "fontDisplay": "swap", "src": [ "file:./assets/fonts/barlow-700.woff2" ] }
+					]
+				},
+				{
+					"name": "Barlow Condensed",
+					"slug": "barlow-condensed",
+					"fontFamily": "\"Barlow Condensed\", \"Arial Narrow\", sans-serif",
+					"fontFace": [
+						{ "fontFamily": "Barlow Condensed", "fontStyle": "normal", "fontWeight": "500", "fontDisplay": "swap", "src": [ "file:./assets/fonts/barlow-condensed-500.woff2" ] },
+						{ "fontFamily": "Barlow Condensed", "fontStyle": "normal", "fontWeight": "600", "fontDisplay": "swap", "src": [ "file:./assets/fonts/barlow-condensed-600.woff2" ] },
+						{ "fontFamily": "Barlow Condensed", "fontStyle": "normal", "fontWeight": "700", "fontDisplay": "swap", "src": [ "file:./assets/fonts/barlow-condensed-700.woff2" ] }
+					]
+				},
+				{
+					"name": "Anton",
+					"slug": "anton",
+					"fontFamily": "Anton, Impact, \"Arial Narrow\", sans-serif",
+					"fontFace": [
+						{ "fontFamily": "Anton", "fontStyle": "normal", "fontWeight": "400", "fontDisplay": "swap", "src": [ "file:./assets/fonts/anton-400.woff2" ] }
+					]
+				}
+			]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var:preset|color|base",
+			"text": "var:preset|color|contrast"
+		},
+		"typography": {
+			"fontFamily": "var:preset|font-family|barlow",
+			"fontSize": "var:preset|font-size|medium",
+			"fontWeight": "400",
+			"letterSpacing": "0",
+			"lineHeight": "1.55"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontFamily": "var:preset|font-family|anton",
+					"fontWeight": "400",
+					"letterSpacing": "0.5px",
+					"lineHeight": "1",
+					"textTransform": "uppercase"
+				}
+			},
+			"h1": { "typography": { "fontSize": "clamp(2.75rem, 1.6rem + 4vw, 5.5rem)", "lineHeight": "0.92" } },
+			"h2": { "typography": { "fontSize": "clamp(2.25rem, 1.5rem + 2.6vw, 4rem)", "lineHeight": "0.95" } },
+			"h3": { "typography": { "fontSize": "clamp(1.5rem, 1.2rem + 1vw, 2.125rem)" } },
+			"h4": { "typography": { "fontSize": "var:preset|font-size|large" } },
+			"h5": { "typography": { "fontSize": "var:preset|font-size|medium", "letterSpacing": "1px" } },
+			"h6": { "typography": { "fontFamily": "var:preset|font-family|barlow-condensed", "fontSize": "var:preset|font-size|small", "fontWeight": "700", "letterSpacing": "2px" } },
+			"button": {
+				"border": { "radius": "0" },
+				"color": {
+					"background": "var:preset|color|contrast",
+					"text": "var:preset|color|base"
+				},
+				"spacing": { "padding": { "top": "1rem", "bottom": "1rem", "left": "1.75rem", "right": "1.75rem" } },
+				"typography": {
+					"fontFamily": "var:preset|font-family|barlow-condensed",
+					"fontSize": "1rem",
+					"fontWeight": "700",
+					"letterSpacing": "2px",
+					"lineHeight": "1.2",
+					"textTransform": "uppercase"
+				},
+				":hover": {
+					"color": {
+						"background": "var:preset|color|accent-1",
+						"text": "var:preset|color|contrast"
+					}
+				}
+			},
+			"link": {
+				"color": { "text": "currentColor" },
+				":hover": { "color": { "text": "var:preset|color|accent-3" } }
+			}
+		},
+		"blocks": {
+			"core/navigation": {
+				"typography": {
+					"fontFamily": "var:preset|font-family|barlow-condensed",
+					"fontWeight": "600",
+					"letterSpacing": "1.5px",
+					"textTransform": "uppercase"
+				}
+			},
+			"core/post-terms": {
+				"typography": {
+					"fontFamily": "var:preset|font-family|barlow-condensed",
+					"fontWeight": "600",
+					"letterSpacing": "1.5px",
+					"textTransform": "uppercase"
+				}
+			},
+			"core/search": {
+				"css": "& .wp-block-search__input{border-radius:0;border-color:var(--wp--preset--color--accent-6);}",
+				"elements": {
+					"button": { "border": { "radius": "0" } }
+				}
+			}
+		}
+	},
 	"customTemplates": [
 		{
 			"name": "page-landing",
 			"title": "Landing page (full width, no title)",
+			"postTypes": [ "page" ]
+		},
+		{
+			"name": "page-home",
+			"title": "Homepage (full width, black & gold sections)",
 			"postTypes": [ "page" ]
 		}
 	]

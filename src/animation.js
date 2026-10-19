@@ -234,7 +234,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
       var numSlides = slides.length;
 
       if (isMobile) {
-        initMobileCarousel(slider, track, slides, dotsContainer, numSlides);
+        initMobileCarousel(slider, track, slides, dotsContainer, numSlides, reduceMotion);
       } else {
         initDesktopSlider(slider, track, slides, dotsContainer, numSlides, reduceMotion);
       }
@@ -272,11 +272,22 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
   }
 
   // ---------------------------------------------------------------------------
-  // Mobile carousel — no pinning, prev/next chevron buttons, full-height slides
+  // Mobile carousel — no pinning, prev/next chevron buttons, full-height slides.
+  // Autoplays like apple.com: each slide shows for SLIDE_DURATION seconds while
+  // the active dot fills up, then moves on (looping). Pauses when off-screen or
+  // when the pause button is tapped; starts paused for reduced-motion users.
   // ---------------------------------------------------------------------------
 
-  function initMobileCarousel(slider, track, slides, dotsContainer, numSlides) {
+  var SLIDE_DURATION = 5; // seconds per slide on mobile
+
+  var PAUSE_ICON = '<svg class="js-pinned-slider__icon-pause" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><rect x="6" y="5" width="4" height="14" rx="1"></rect><rect x="14" y="5" width="4" height="14" rx="1"></rect></svg>';
+  var PLAY_ICON = '<svg class="js-pinned-slider__icon-play" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"></path></svg>';
+
+  function initMobileCarousel(slider, track, slides, dotsContainer, numSlides, reduceMotion) {
     var current = 0;
+    var userPaused = reduceMotion;
+    var inView = false;
+    var timer = null;
 
     // Stack slides vertically, show only the active one
     gsap.set(track, { width: "100%", x: 0 });
@@ -317,6 +328,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
         dot.className = "js-pinned-slider__dot" + (i === 0 ? " is-active" : "");
         dot.setAttribute("aria-label", "Go to slide " + (i + 1));
         dot.addEventListener("click", function () { goTo(i); });
+        var fill = document.createElement("span");
+        fill.className = "js-pinned-slider__dot-fill";
+        dot.appendChild(fill);
         dotsWrap.appendChild(dot);
       });
 
@@ -325,13 +339,24 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
       nextBtn.setAttribute("aria-label", "Next slide");
       nextBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><polyline points="9 18 15 12 9 6"></polyline></svg>';
 
+      var playBtn = document.createElement("button");
+      playBtn.type = "button";
+      playBtn.className = "js-pinned-slider__nav-btn js-pinned-slider__play-btn";
+      playBtn.innerHTML = PAUSE_ICON + PLAY_ICON;
+
       dotsContainer.appendChild(prevBtn);
       dotsContainer.appendChild(dotsWrap);
       dotsContainer.appendChild(nextBtn);
+      dotsContainer.appendChild(playBtn);
 
       // Attach listeners here while prevBtn/nextBtn are in scope
       prevBtn.addEventListener("click", function () { goTo(current - 1); });
       nextBtn.addEventListener("click", function () { goTo(current + 1); });
+      playBtn.addEventListener("click", function () {
+        userPaused = !userPaused;
+        updatePlayBtn();
+        syncTimer();
+      });
     }
 
     // Query dots AFTER they have been injected into the DOM
@@ -341,6 +366,44 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
       dots.forEach(function (dot, i) {
         dot.classList.toggle("is-active", i === index);
       });
+    }
+
+    function updatePlayBtn() {
+      if (!playBtn) return;
+      playBtn.classList.toggle("is-paused", userPaused);
+      playBtn.setAttribute("aria-label", userPaused ? "Play slideshow" : "Pause slideshow");
+    }
+
+    // (Re)start the countdown for the current slide — the active dot's fill
+    // grows from empty to full, then we advance (wrapping back to the start).
+    function startTimer() {
+      if (timer) timer.kill();
+      var fills = dotsContainer ? dotsContainer.querySelectorAll(".js-pinned-slider__dot-fill") : [];
+      gsap.set(fills, { width: "0%" });
+      timer = gsap.fromTo(fills[current] || {}, { width: "0%" }, {
+        width: "100%",
+        duration: SLIDE_DURATION,
+        ease: "none",
+        paused: true,
+        onComplete: function () { goTo((current + 1) % numSlides); },
+      });
+      syncTimer();
+    }
+
+    function syncTimer() {
+      if (!timer) return;
+      if (inView && !userPaused) timer.play();
+      else timer.pause();
+    }
+
+    // Only count down while the slider is actually on screen
+    if ("IntersectionObserver" in window) {
+      new IntersectionObserver(function (entries) {
+        inView = entries[0].isIntersecting;
+        syncTimer();
+      }, { threshold: 0.5 }).observe(slider);
+    } else {
+      inView = true;
     }
 
     function goTo(index) {
@@ -369,7 +432,11 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
       current = index;
       updateDots(current);
+      startTimer();
     }
+
+    updatePlayBtn();
+    startTimer();
 
     // Touch swipe support — only mostly-horizontal swipes change slide, so
     // scrolling the page past the slider never flips it by accident.
@@ -579,12 +646,140 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // Smooth accordions — animates the core Details block open/closed (FAQ and
+  // product-page accordions). Clicking again mid-animation reverses smoothly.
+  // ---------------------------------------------------------------------------
+
+  function initSmoothAccordions() {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    var items = document.querySelectorAll(
+      ".kayi-accordions details, .kayi-product__accordions details"
+    );
+
+    items.forEach(function (details) {
+      var summary = details.querySelector(":scope > summary");
+      if (!summary || typeof details.animate !== "function") return;
+
+      var animation = null;
+      var isClosing = false;
+      var timing = { duration: 380, easing: "cubic-bezier(0.2, 0.7, 0.2, 1)" };
+
+      // Border widths aren't part of scrollHeight but are part of height.
+      function borders() {
+        return details.offsetHeight - details.clientHeight;
+      }
+
+      function run(from, to, openWhenDone) {
+        if (animation) animation.cancel();
+        animation = details.animate({ height: [from, to] }, timing);
+        animation.onfinish = function () {
+          details.open = openWhenDone;
+          animation = null;
+          isClosing = false;
+          details.style.height = "";
+          details.style.overflow = "";
+          // Page height changed — keep scroll-triggered animations in sync.
+          ScrollTrigger.refresh();
+        };
+      }
+
+      summary.addEventListener("click", function (e) {
+        e.preventDefault();
+        details.style.overflow = "hidden";
+        var from = details.offsetHeight + "px";
+
+        if (isClosing || !details.open) {
+          // Open: render the content, then grow to its full height.
+          isClosing = false;
+          details.style.height = from;
+          details.open = true;
+          requestAnimationFrame(function () {
+            run(from, details.scrollHeight + borders() + "px", true);
+          });
+        } else {
+          // Close: shrink to just the question, then collapse the content.
+          isClosing = true;
+          run(from, summary.offsetHeight + borders() + "px", false);
+        }
+      });
+    });
+  }
+
+  // ---------------------------------------------------------------------------
+  // Category carousel (.kayi-carousel)
+  // ---------------------------------------------------------------------------
+  // The track is a native scroll-snap scroller (swipe/trackpad work as is); this
+  // adds Apple-style prev/next buttons underneath that move one card at a time.
+  // ---------------------------------------------------------------------------
+
+  var CHEVRON_PATHS = { prev: "15 18 9 12 15 6", next: "9 18 15 12 9 6" };
+
+  function initCarousels() {
+    var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    document.querySelectorAll(".kayi-carousel").forEach(function (carousel, index) {
+      var track = carousel.querySelector(".kayi-carousel__track");
+      if (!track || track.children.length < 2) return;
+
+      if (!track.id) track.id = "kayi-carousel-" + (index + 1);
+      track.setAttribute("tabindex", "0");
+      track.setAttribute("role", "region");
+      track.setAttribute("aria-label", "Shop by category");
+
+      var nav = document.createElement("div");
+      nav.className = "kayi-carousel__nav alignwide";
+
+      function makeButton(dir) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "kayi-carousel__btn kayi-carousel__btn--" + dir;
+        btn.setAttribute("aria-label", dir === "prev" ? "Previous" : "Next");
+        btn.setAttribute("aria-controls", track.id);
+        btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true"><polyline points="' + CHEVRON_PATHS[dir] + '"></polyline></svg>';
+        btn.addEventListener("click", function () {
+          var card = track.children[0].getBoundingClientRect().width;
+          var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+          track.scrollBy({ left: (dir === "prev" ? -1 : 1) * (card + gap), behavior: reduceMotion ? "auto" : "smooth" });
+        });
+        return btn;
+      }
+
+      var prevBtn = makeButton("prev");
+      var nextBtn = makeButton("next");
+      nav.appendChild(prevBtn);
+      nav.appendChild(nextBtn);
+      track.insertAdjacentElement("afterend", nav);
+
+      var ticking = false;
+      function update() {
+        ticking = false;
+        var max = track.scrollWidth - track.clientWidth;
+        nav.hidden = max <= 1;
+        prevBtn.disabled = track.scrollLeft <= 1;
+        nextBtn.disabled = track.scrollLeft >= max - 1;
+      }
+      function requestUpdate() {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(update);
+      }
+
+      track.addEventListener("scroll", requestUpdate, { passive: true });
+      window.addEventListener("resize", requestUpdate);
+      update();
+    });
+  }
+
   window.DZAnimations = {
     initHomepageLoader,
     initFadeInAnimations,
     initRevealWallAnimations,
     initScrubAnimations,
     initPinnedScrollSlider,
+    initSmoothAccordions,
+    initCarousels,
     animateIn,
   };
 
@@ -595,5 +790,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
     ScrollTrigger.refresh();
     initRevealWallAnimations();
     initScrubAnimations();
+    initSmoothAccordions();
+    initCarousels();
   });
 })();

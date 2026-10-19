@@ -9,6 +9,18 @@
     let lastScrollY = window.scrollY;
     let ticking = false;
 
+    // Publish where the header sits so other sticky elements (e.g. the product
+    // gallery) can line up underneath it. The offset is the admin bar, if any.
+    function publishHeaderSize() {
+      const offset = parseFloat(getComputedStyle(header).top) || 0;
+      const root = document.documentElement.style;
+      root.setProperty('--kayi-header-offset', offset + 'px');
+      root.setProperty('--kayi-header-bottom', offset + header.offsetHeight + 'px');
+    }
+
+    publishHeaderSize();
+    window.addEventListener('resize', publishHeaderSize);
+
     function updateHeader() {
       const currentScrollY = window.scrollY;
       const scrollingDown = currentScrollY > lastScrollY;
@@ -176,8 +188,72 @@
     }, { passive: true });
   }
 
+  // ── Phone menu (core overlay) ──────────────────────────────────────────────
+  // Tapping a category row expands/collapses its links (first link is
+  // "Shop all …"), Adidas-style, instead of showing every sub-menu at once.
+  function initMobileMenu() {
+    var nav = document.querySelector('header.wp-block-template-part .wp-block-navigation');
+    if (!nav) return;
+    var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    function isOverlayOpen() {
+      return !!nav.querySelector('.wp-block-navigation__responsive-container.is-menu-open');
+    }
+
+    function animateHeight(el, from, to, done) {
+      if (reduceMotion || typeof el.animate !== 'function') {
+        done();
+        return;
+      }
+      var a = el.animate({ height: [from + 'px', to + 'px'] }, { duration: 300, easing: 'cubic-bezier(0.2, 0.7, 0.2, 1)' });
+      a.onfinish = done;
+    }
+
+    function setOpen(item, open) {
+      var sub = item.querySelector(':scope > .wp-block-navigation__submenu-container');
+      var link = item.querySelector(':scope > .wp-block-navigation-item__content');
+      if (!sub) return;
+      if (link) link.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+      if (open) {
+        item.classList.add('dz-m-open');
+        animateHeight(sub, 0, sub.scrollHeight, function () {});
+      } else {
+        animateHeight(sub, sub.offsetHeight, 0, function () {
+          item.classList.remove('dz-m-open');
+        });
+      }
+    }
+
+    nav.addEventListener('click', function (e) {
+      if (!isOverlayOpen()) return;
+      var link = e.target.closest('.wp-block-navigation__container > .has-child > .wp-block-navigation-item__content');
+      if (!link) return;
+      e.preventDefault();
+      var item = link.parentElement;
+      var opening = !item.classList.contains('dz-m-open');
+
+      // One category open at a time.
+      nav.querySelectorAll('.wp-block-navigation__container > .has-child.dz-m-open').forEach(function (other) {
+        if (other !== item) setOpen(other, false);
+      });
+      setOpen(item, opening);
+    });
+
+    // Start collapsed each time the menu is closed.
+    var closeBtn = nav.querySelector('.wp-block-navigation__responsive-container-close');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', function () {
+        nav.querySelectorAll('.dz-m-open').forEach(function (item) {
+          item.classList.remove('dz-m-open');
+        });
+      });
+    }
+  }
+
   document.addEventListener('DOMContentLoaded', function () {
     initStickyHeader();
     initMegaMenu();
+    initMobileMenu();
   });
 })();
